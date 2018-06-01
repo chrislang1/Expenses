@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  SubscriptionViewController.swift
 //  Subscriptions
 //
 //  Created by Chris Lang on 31/5/18.
@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SubscriptionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var expensesView: UIView!
     @IBOutlet weak var tableView: UITableView!
@@ -22,9 +22,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        //Remove Navigation Bar Border
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         
+        //Set Table View Delegate and DataSource + Row Height
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
@@ -35,6 +37,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //Register .xib cell
         tableView.register(UINib(nibName: "SubscriptionCell", bundle: nil), forCellReuseIdentifier: "subscriptionCell")
         
+        //Filler Subscription Items
         let netflix = Subscription(context: context)
         netflix.name = "Netflix"
         netflix.price = 20.00
@@ -74,14 +77,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return cell
     }
     
-    
+    //Setup Expenses View
     func expensesViewSetup(){
+        expensesView.layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.94).cgColor
         expensesView.clipsToBounds = false
         expensesView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor
         expensesView.layer.shadowPath = UIBezierPath(roundedRect: expensesView.bounds, cornerRadius: 10).cgPath
         expensesView.layer.shadowOpacity = 1
         expensesView.layer.shadowRadius = 2
         expensesView.layer.shadowOffset = CGSize.zero
+    }
+    
+    func expensesLabelSetup(){
+        //Update Labels in Expense View
     }
 
 }
