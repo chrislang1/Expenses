@@ -1,5 +1,5 @@
 //
-//  SubscriptionViewController.swift
+//  ExpensesViewController.swift
 //  Subscriptions
 //
 //  Created by Chris Lang on 31/5/18.
@@ -9,12 +9,13 @@
 import UIKit
 import CoreData
 
-class SubscriptionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ExpensesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NewExpenseDelegate {
 
+    
     @IBOutlet weak var expensesView: UIView!
     @IBOutlet weak var tableView: UITableView!
     
-    var subscriptionArray = [Subscription]()
+    var expenseArray = [Expense]()
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -37,32 +38,35 @@ class SubscriptionViewController: UIViewController, UITableViewDelegate, UITable
         //Register .xib cell
         tableView.register(UINib(nibName: "SubscriptionCell", bundle: nil), forCellReuseIdentifier: "subscriptionCell")
         
-        //Filler Subscription Items
-        let netflix = Subscription(context: context)
-        netflix.name = "Netflix"
-        netflix.price = 20.00
+//        //Filler Subscription Items
+//        let netflix = Expense(context: context)
+//        netflix.name = "Netflix"
+//        netflix.price = 14.00
+//        netflix.periodLength = 1
+//        netflix.periodType = "Month(s)"
+//        expenseArray.append(netflix)
+//
+//        let appleMusic = Expense(context: context)
+//        appleMusic.name = "Apple Music"
+//        appleMusic.price = 18.00
+//        appleMusic.periodLength = 1
+//        appleMusic.periodType = "Month(s)"
+//        expenseArray.append(appleMusic)
         
-        subscriptionArray.append(netflix)
-        
-        let appleMusic = Subscription(context: context)
-        appleMusic.name = "Apple Music"
-        appleMusic.price = 18.00
-        
-        subscriptionArray.append(appleMusic)
-        
+        loadExpenses()
         expensesViewSetup()
         
     }
 
     //MARK: - Table View Methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return subscriptionArray.count
+        return expenseArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "subscriptionCell", for: indexPath) as! SubscriptionCell
         
-        let subscription = subscriptionArray[indexPath.row]
+        let subscription = expenseArray[indexPath.row]
         cell.nameLabel.text = subscription.name!
         
         let currencyFormatter = NumberFormatter()
@@ -90,6 +94,46 @@ class SubscriptionViewController: UIViewController, UITableViewDelegate, UITable
     
     func expensesLabelSetup(){
         //Update Labels in Expense View
+    }
+    
+    //MARK: - New Expense Delegete Methods
+    func addNewExpense(name: String, cost: Double, numberOfPeriods: Int, periodLength: String) {
+        let expense = Expense(context: context)
+        expense.name = name
+        expense.price = cost
+        expense.periodLength = Int16(numberOfPeriods)
+        expense.periodType = periodLength
+        
+        expenseArray.append(expense)
+        saveExpenses()
+        tableView.reloadData()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToAddExpense" {
+            let destinationNavigationController = segue.destination as! UINavigationController
+            let destinationVC = destinationNavigationController.topViewController as! AddExpenseViewController
+            
+            destinationVC.delegate = self
+        }
+    }
+    
+    //MARK: - Load and Save Methods
+    func loadExpenses(with request: NSFetchRequest<Expense> = Expense.fetchRequest()){
+        do{
+            expenseArray = try context.fetch(request)
+        } catch {
+            print("Error fetching data from context \(error)")
+        }
+    }
+    
+    func saveExpenses(){
+        do{
+            try context.save()
+        } catch {
+            print("Error saving context \(error)")
+        }
+        
     }
 
 }

@@ -30,9 +30,13 @@ class SubscriptionCell: UITableViewCell {
 
         // Configure the view for the selected state
         if selected == true {
-            backView.backgroundColor = .lightGray
+            backView.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
+            priceLabel.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
+            nameLabel.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
         } else {
             backView.backgroundColor = .white
+            priceLabel.textColor = .black
+            nameLabel.textColor = .black
         }
     }
     
