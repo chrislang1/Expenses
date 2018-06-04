@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8339D1EF20C3C2C1000787C9 /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8339D1EE20C3C2C1000787C9 /* Expense.swift */; };
 		835A2FBC20C01866004960D7 /* SubscriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A2FBA20C01866004960D7 /* SubscriptionCell.swift */; };
 		835A2FBD20C01866004960D7 /* SubscriptionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 835A2FBB20C01866004960D7 /* SubscriptionCell.xib */; };
 		835A2FBF20C0DAAC004960D7 /* AddExpenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A2FBE20C0DAAC004960D7 /* AddExpenseViewController.swift */; };
@@ -20,7 +19,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8339D1EE20C3C2C1000787C9 /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
 		835A2FBA20C01866004960D7 /* SubscriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionCell.swift; sourceTree = "<group>"; };
 		835A2FBB20C01866004960D7 /* SubscriptionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SubscriptionCell.xib; sourceTree = "<group>"; };
 		835A2FBE20C0DAAC004960D7 /* AddExpenseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpenseViewController.swift; sourceTree = "<group>"; };
@@ -105,7 +103,6 @@
 			isa = PBXGroup;
 			children = (
 				839DE49E20BFF4F000FB4E4D /* Subscriptions.xcdatamodeld */,
-				8339D1EE20C3C2C1000787C9 /* Expense.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -191,7 +188,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8339D1EF20C3C2C1000787C9 /* Expense.swift in Sources */,
 				835A2FBF20C0DAAC004960D7 /* AddExpenseViewController.swift in Sources */,
 				839DE4A020BFF4F000FB4E4D /* Subscriptions.xcdatamodeld in Sources */,
 				839DE49A20BFF4F000FB4E4D /* ExpensesViewController.swift in Sources */,

@@ -9,13 +9,18 @@
 import UIKit
 import CoreData
 
-class ExpensesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NewExpenseDelegate {
+class ExpensesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NewExpenseDelegate, EditExpenseDelegate {
 
     
+    @IBOutlet weak var totalExpensesPriceLabel: UILabel!
+    @IBOutlet weak var expensePeriodLabel: UILabel!
     @IBOutlet weak var expensesView: UIView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var editBarButton: UIBarButtonItem!
+    
     
     var expenseArray = [Expense]()
+    var selectedExpense: Int?
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -55,7 +60,7 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         
         loadExpenses()
         expensesViewSetup()
-        
+        expensesLabelSetup()
     }
 
     //MARK: - Table View Methods
@@ -81,7 +86,23 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         return cell
     }
     
-    //Setup Expenses View
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "goToEditExpense", sender: self)
+    }
+    
+    //MARK: - Set Table View to Edit Mode
+    
+    @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
+        if (self.tableView.isEditing == true) {
+            self.tableView.isEditing = false
+            self.editBarButton.title = "Edit"
+        } else if (self.tableView.isEditing == false) {
+            self.tableView.isEditing = true
+            self.editBarButton.title = "Done"
+        }
+    }
+    
+    //MARK: - Setup Expenses View
     func expensesViewSetup(){
         expensesView.layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.94).cgColor
         expensesView.clipsToBounds = false
@@ -94,6 +115,19 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
     
     func expensesLabelSetup(){
         //Update Labels in Expense View
+        var totalPrice = Double()
+        for index in expenseArray.indices {
+            totalPrice += expenseArray[index].yearPrice
+        }
+        
+        let currencyFormatter = NumberFormatter()
+        currencyFormatter.usesGroupingSeparator = true
+        currencyFormatter.numberStyle = .currency
+        // localize to your grouping and decimal separator
+        currencyFormatter.locale = Locale.current
+        let price = totalPrice/12
+        totalExpensesPriceLabel.text = currencyFormatter.string(from: NSNumber(value: price))
+        
     }
     
     //MARK: - New Expense Delegete Methods
@@ -104,18 +138,65 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         expense.periodLength = Int16(numberOfPeriods)
         expense.periodType = periodLength
         
+        expense.yearPrice = setPricePerYear(cost: cost, numberOfPeriods: numberOfPeriods, periodLength: periodLength)
+        
         expenseArray.append(expense)
         saveExpenses()
+        expensesLabelSetup()
         tableView.reloadData()
     }
     
+    func setPricePerYear (cost: Double, numberOfPeriods: Int, periodLength: String) -> Double {
+        var periodTypePerYear: Double?
+        switch periodLength {
+        case "Day(s)":
+            periodTypePerYear = 365
+        case "Week(s)":
+            periodTypePerYear = 52
+        case "Fortnight(s)":
+            periodTypePerYear = 26
+        case "Month(s)":
+            periodTypePerYear = 12
+        case "Year(s)":
+            periodTypePerYear = 1
+        default:
+            periodTypePerYear = nil
+        }
+        
+        return cost * (periodTypePerYear!/Double(numberOfPeriods))
+    }
+    
+    //MARK: - Update Expense Delegete Method
+    func updateExpense(expense: Expense) {
+        expense.yearPrice = setPricePerYear(cost: expense.price, numberOfPeriods: Int(expense.periodLength), periodLength: expense.periodType!)
+        saveExpenses()
+        tableView.reloadData()
+        expensesLabelSetup()
+    }
+    
+    //MARK: - Prepare for Segue Method
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToAddExpense" {
             let destinationNavigationController = segue.destination as! UINavigationController
             let destinationVC = destinationNavigationController.topViewController as! AddExpenseViewController
             
             destinationVC.delegate = self
+            destinationVC.identifyingSegue = segue.identifier!
         }
+        
+        if segue.identifier == "goToEditExpense" {
+            let destinationNavigationController = segue.destination as! UINavigationController
+            let destinationVC = destinationNavigationController.topViewController as! AddExpenseViewController
+            
+            destinationVC.delegate2 = self
+            destinationVC.identifyingSegue = segue.identifier!
+            
+            if let indexPath = tableView.indexPathForSelectedRow {
+                destinationVC.selectedExpense = expenseArray[indexPath.row]
+                selectedExpense = indexPath.row
+            }
+        }
+        
     }
     
     //MARK: - Load and Save Methods
