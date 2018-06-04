@@ -14,6 +14,7 @@ protocol NewExpenseDelegate {
 
 protocol EditExpenseDelegate{
     func updateExpense(expense: Expense)
+    func deleteExpense(expense: Expense)
 }
 
 class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
@@ -26,6 +27,8 @@ class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPicker
 
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var costTextField: UITextField!
+    
+    @IBOutlet weak var deleteExpenseButton: UIButton!
     
     @IBOutlet weak var customPickerTextField: UITextField! // Invisible text field to cause picker view to present modally
     let customPeriodPickerView = UIPickerView()
@@ -63,6 +66,7 @@ class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPicker
         customPeriodLabel.layer.cornerRadius = 10
         customPeriodPickerView.layer.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         addDoneButtonOnKeyboard()
+        deleteExpenseButton.isHidden = true
         
         if identifyingSegue == "goToEditExpense" {
             nameTextField.text = selectedExpense!.name
@@ -87,15 +91,16 @@ class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPicker
             } else {
                 customPeriodLabel.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
                 customPeriodLabel.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
-                
+                selectedPeriod = 4
                 numberOfPeriods = numberArray[Int(selectedExpense!.periodLength)]
                 let periodLengthPosition = periodLengthArray.index(of: selectedExpense!.periodType!)
                 periodLength = periodLengthArray[periodLengthPosition!]
                 buttonString = "Every \(numberOfPeriods) \(periodLength)"
                 customPeriodLabel.text = buttonString
-                customPeriodPickerView.selectRow(numberOfPeriods-1, inComponent: 2, animated: true)
-                customPeriodPickerView.selectRow(periodLengthPosition!, inComponent: 3, animated: true)
+                customPeriodPickerView.selectRow(numberOfPeriods-1, inComponent: 1, animated: true)
+                customPeriodPickerView.selectRow(periodLengthPosition!, inComponent: 2, animated: true)
             }
+            deleteExpenseButton.isHidden = false
         }
         
     }
@@ -125,8 +130,6 @@ class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPicker
         default:
             periodLength = ""
         }
-        print(periodLength)
-
         
         numberOfPeriods = 1
         
@@ -220,8 +223,10 @@ class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPicker
             customPeriodLabel.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
             customPeriodLabel.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
             
-            numberOfPeriods = numberArray[0]
-            periodLength = periodLengthArray[0]
+            if customPeriodLabel.text == "Custom Period"{
+                numberOfPeriods = numberArray[0]
+                periodLength = periodLengthArray[0]
+            }
             buttonString = "Every \(numberOfPeriods) \(periodLength)"
             customPeriodLabel.text = buttonString
         }
@@ -242,7 +247,7 @@ class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPicker
         selectedExpense?.name = nameTextField.text
         selectedExpense?.price = Double(costTextField.text!)!
         selectedExpense?.periodLength = Int16(numberOfPeriods)
-        
+
         switch(selectedPeriod){
         case 0:
             periodLength = "Day(s)";
@@ -252,16 +257,17 @@ class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPicker
             periodLength = "Fortnight(s)";
         case 3:
             periodLength = "Month(s)";
+        case 4: break;
         default:
-            periodLength = ""
+            periodLength = "";
         }
         selectedExpense?.periodType = periodLength
     }
     
+    //MARK: - Done Button Method
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
-        
         //2 If we have a delegate set, call the delegate protocol method
-        if identifyingSegue == "goToNewExpense"{
+        if identifyingSegue == "goToAddExpense"{
             delegate?.addNewExpense(name: nameTextField.text!, cost: Double(costTextField.text!)!, numberOfPeriods: numberOfPeriods, periodLength: periodLength)
         } else if identifyingSegue == "goToEditExpense" {
             updateExpense()
@@ -269,6 +275,11 @@ class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPicker
         }
         
         //3 dismiss the New Container View Controller to go back to the ContainerList
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func deleteButtonPressed(_ sender: UIButton) {
+        delegate2?.deleteExpense(expense: selectedExpense!)
         dismiss(animated: true, completion: nil)
     }
     

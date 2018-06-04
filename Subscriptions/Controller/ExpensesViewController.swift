@@ -17,10 +17,13 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var expensesView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var editBarButton: UIBarButtonItem!
+    @IBOutlet weak var expensePeriodView: UIView!
     
+    @IBOutlet var expensePeirodButtons: [UIButton]!
     
     var expenseArray = [Expense]()
     var selectedExpense: Int?
+    var expenseViewY = CGFloat()
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -43,24 +46,16 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         //Register .xib cell
         tableView.register(UINib(nibName: "SubscriptionCell", bundle: nil), forCellReuseIdentifier: "subscriptionCell")
         
-//        //Filler Subscription Items
-//        let netflix = Expense(context: context)
-//        netflix.name = "Netflix"
-//        netflix.price = 14.00
-//        netflix.periodLength = 1
-//        netflix.periodType = "Month(s)"
-//        expenseArray.append(netflix)
-//
-//        let appleMusic = Expense(context: context)
-//        appleMusic.name = "Apple Music"
-//        appleMusic.price = 18.00
-//        appleMusic.periodLength = 1
-//        appleMusic.periodType = "Month(s)"
-//        expenseArray.append(appleMusic)
-        
         loadExpenses()
         expensesViewSetup()
         expensesLabelSetup()
+        
+        expenseViewY = UIScreen.main.bounds.height - 69
+        
+        //Set Expense Period Button
+        expensePeirodButtons[2].backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
+        expensePeirodButtons[2].setTitleColor(#colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1), for: .normal)
+        expensePeriodView.frame = CGRect(x: self.expensePeriodView.frame.origin.x, y: UIScreen.main.bounds.height, width: self.expensePeriodView.frame.width, height: self.expensePeriodView.frame.height)
     }
 
     //MARK: - Table View Methods
@@ -90,6 +85,25 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         performSegue(withIdentifier: "goToEditExpense", sender: self)
     }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            // Delete the row from the data source
+            context.delete(expenseArray[indexPath.row])
+            saveExpenses()
+            expenseArray.remove(at: indexPath.row)
+            expensesLabelSetup()
+            // Delete the row from the TableView
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+    
+//    func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to toIndexPath: IndexPath) {
+//        var rowToMove = expenseArray[fromIndexPath.row]
+//        expenseArray.remove(at: fromIndexPath.row)
+//        expenseArray.insert(rowToMove, at: toIndexPath.row)
+//        saveExpenses()
+//    }
+    
     //MARK: - Set Table View to Edit Mode
     
     @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
@@ -111,9 +125,12 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         expensesView.layer.shadowOpacity = 1
         expensesView.layer.shadowRadius = 2
         expensesView.layer.shadowOffset = CGSize.zero
+        
+        let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.expenseLabelTouched (_:)))
+        self.expensesView.addGestureRecognizer(gesture)
     }
     
-    func expensesLabelSetup(){
+    func expensesLabelSetup(per timePeriod: Double = 12, with label: String = "per month"){
         //Update Labels in Expense View
         var totalPrice = Double()
         for index in expenseArray.indices {
@@ -125,10 +142,47 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         currencyFormatter.numberStyle = .currency
         // localize to your grouping and decimal separator
         currencyFormatter.locale = Locale.current
-        let price = totalPrice/12
+        let price = totalPrice/timePeriod
         totalExpensesPriceLabel.text = currencyFormatter.string(from: NSNumber(value: price))
-        
+        expensePeriodLabel.text = label.lowercased()
     }
+    
+    @objc func expenseLabelTouched(_ sender: UITapGestureRecognizer){
+        UIView.animate(withDuration: 0.3) {
+            if self.expensePeriodView.isHidden == true{
+                let desiredY = UIScreen.main.bounds.height - CGFloat(180)
+                self.expensesView.frame = CGRect(x: self.expensesView.frame.origin.x, y: desiredY, width: self.expensesView.frame.width, height: self.expensesView.frame.height)
+                self.expensePeriodView.isHidden = false
+                self.expensePeriodView.frame = CGRect(x: self.expensePeriodView.frame.origin.x, y: UIScreen.main.bounds.height-120, width: self.expensePeriodView.frame.width, height: self.expensePeriodView.frame.height)
+            } else {
+                self.expensesView.frame = CGRect(x: self.expensesView.frame.origin.x, y: self.expenseViewY, width: self.expensesView.frame.width, height: self.expensesView.frame.height)
+                self.expensePeriodView.frame = CGRect(x: self.expensePeriodView.frame.origin.x, y: UIScreen.main.bounds.height, width: self.expensePeriodView.frame.width, height: self.expensePeriodView.frame.height)
+                self.expensePeriodView.isHidden = true
+            }
+        }
+    }
+    
+    //MARK: - Expense Time Period Method
+    
+    @IBAction func expencePeriodSelected(_ sender: UIButton) {
+        for index in expensePeirodButtons.indices {
+            if sender == expensePeirodButtons[index]{
+                expensePeirodButtons[index].backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
+                expensePeirodButtons[index].setTitleColor(#colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1), for: .normal)
+            } else {
+                expensePeirodButtons[index].backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1)
+                expensePeirodButtons[index].setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
+            }
+        }
+        let expensePeriod = Double(sender.tag)
+        expensesLabelSetup(per: expensePeriod, with: sender.title(for: .normal)!)
+        UIView.animate(withDuration: 0.3) {
+            self.expensePeriodView.frame = CGRect(x: self.expensePeriodView.frame.origin.x, y: UIScreen.main.bounds.height, width: self.expensePeriodView.frame.width, height: self.expensePeriodView.frame.height)
+            self.expensePeriodView.isHidden = true
+            self.expensesView.frame = CGRect(x: self.expensesView.frame.origin.x, y: self.expenseViewY, width: self.expensesView.frame.width, height: self.expensesView.frame.height)
+        }
+    }
+    
     
     //MARK: - New Expense Delegete Methods
     func addNewExpense(name: String, cost: Double, numberOfPeriods: Int, periodLength: String) {
@@ -137,7 +191,6 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         expense.price = cost
         expense.periodLength = Int16(numberOfPeriods)
         expense.periodType = periodLength
-        
         expense.yearPrice = setPricePerYear(cost: cost, numberOfPeriods: numberOfPeriods, periodLength: periodLength)
         
         expenseArray.append(expense)
@@ -162,14 +215,21 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         default:
             periodTypePerYear = nil
         }
-        
         return cost * (periodTypePerYear!/Double(numberOfPeriods))
     }
     
-    //MARK: - Update Expense Delegete Method
+    //MARK: - Update Expense Delegete Methods
     func updateExpense(expense: Expense) {
         expense.yearPrice = setPricePerYear(cost: expense.price, numberOfPeriods: Int(expense.periodLength), periodLength: expense.periodType!)
         saveExpenses()
+        tableView.reloadData()
+        expensesLabelSetup()
+    }
+    
+    func deleteExpense(expense: Expense){
+        context.delete(expenseArray[selectedExpense!])
+        saveExpenses()
+        expenseArray.remove(at: selectedExpense!)
         tableView.reloadData()
         expensesLabelSetup()
     }
