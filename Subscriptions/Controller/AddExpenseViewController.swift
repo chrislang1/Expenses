@@ -67,6 +67,9 @@ class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPicker
         customPeriodPickerView.layer.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         addDoneButtonOnKeyboard()
         deleteExpenseButton.isHidden = true
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        
         
         if identifyingSegue == "goToEditExpense" {
             nameTextField.text = selectedExpense!.name
@@ -92,7 +95,7 @@ class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPicker
                 customPeriodLabel.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
                 customPeriodLabel.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
                 selectedPeriod = 4
-                numberOfPeriods = numberArray[Int(selectedExpense!.periodLength)]
+                numberOfPeriods = numberArray[Int(selectedExpense!.periodLength - 1)]
                 let periodLengthPosition = periodLengthArray.index(of: selectedExpense!.periodType!)
                 periodLength = periodLengthArray[periodLengthPosition!]
                 buttonString = "Every \(numberOfPeriods) \(periodLength)"
@@ -103,6 +106,11 @@ class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPicker
             deleteExpenseButton.isHidden = false
         }
         
+    }
+    
+    //MARK: - Dismiss Keyboard
+    @objc func dismissKeyboard(){
+        view.endEditing(true)
     }
     
     //MARK: - Selected Buttons
