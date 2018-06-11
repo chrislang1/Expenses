@@ -22,7 +22,7 @@
 		835A2FBA20C01866004960D7 /* SubscriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionCell.swift; sourceTree = "<group>"; };
 		835A2FBB20C01866004960D7 /* SubscriptionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SubscriptionCell.xib; sourceTree = "<group>"; };
 		835A2FBE20C0DAAC004960D7 /* AddExpenseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpenseViewController.swift; sourceTree = "<group>"; };
-		839DE49420BFF4F000FB4E4D /* Subscriptions.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Subscriptions.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		839DE49420BFF4F000FB4E4D /* Expenses.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Expenses.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		839DE49720BFF4F000FB4E4D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		839DE49920BFF4F000FB4E4D /* ExpensesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesViewController.swift; sourceTree = "<group>"; };
 		839DE49C20BFF4F000FB4E4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -63,7 +63,7 @@
 		839DE49520BFF4F000FB4E4D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				839DE49420BFF4F000FB4E4D /* Subscriptions.app */,
+				839DE49420BFF4F000FB4E4D /* Expenses.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -119,9 +119,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		839DE49320BFF4F000FB4E4D /* Subscriptions */ = {
+		839DE49320BFF4F000FB4E4D /* Expenses */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 839DE4A920BFF4F300FB4E4D /* Build configuration list for PBXNativeTarget "Subscriptions" */;
+			buildConfigurationList = 839DE4A920BFF4F300FB4E4D /* Build configuration list for PBXNativeTarget "Expenses" */;
 			buildPhases = (
 				839DE49020BFF4F000FB4E4D /* Sources */,
 				839DE49120BFF4F000FB4E4D /* Frameworks */,
@@ -131,9 +131,9 @@
 			);
 			dependencies = (
 			);
-			name = Subscriptions;
+			name = Expenses;
 			productName = Subscriptions;
-			productReference = 839DE49420BFF4F000FB4E4D /* Subscriptions.app */;
+			productReference = 839DE49420BFF4F000FB4E4D /* Expenses.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -164,7 +164,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				839DE49320BFF4F000FB4E4D /* Subscriptions */,
+				839DE49320BFF4F000FB4E4D /* Expenses */,
 			);
 		};
 /* End PBXProject section */
@@ -380,7 +380,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		839DE4A920BFF4F300FB4E4D /* Build configuration list for PBXNativeTarget "Subscriptions" */ = {
+		839DE4A920BFF4F300FB4E4D /* Build configuration list for PBXNativeTarget "Expenses" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				839DE4AA20BFF4F300FB4E4D /* Debug */,

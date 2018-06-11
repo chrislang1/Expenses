@@ -16,7 +16,9 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var expensePeriodLabel: UILabel!
     @IBOutlet weak var expensesView: UIView!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var editBarButton: UIBarButtonItem!
+    @IBOutlet var editBarButton: UIBarButtonItem!
+    @IBOutlet var addBarButton: UIBarButtonItem!
+    
     @IBOutlet weak var expensePeriodView: UIView!
     @IBOutlet weak var expensePeriodViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var noExpensesView: UIView!
@@ -49,7 +51,7 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 74
         tableView.separatorStyle = .none
-        tableView.allowsSelectionDuringEditing = true
+        tableView.allowsMultipleSelectionDuringEditing = true
         
         //Register .xib cell
         tableView.register(UINib(nibName: "SubscriptionCell", bundle: nil), forCellReuseIdentifier: "subscriptionCell")
@@ -76,9 +78,11 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         if expenseArray.count == 0 {
             noExpensesView.isHidden = false
             tableView.isHidden = true
+            self.navigationItem.leftBarButtonItem = nil
         } else {
             noExpensesView.isHidden = true
             tableView.isHidden = false
+            self.navigationItem.leftBarButtonItem = self.editBarButton
         }
         
         if let index = self.tableView.indexPathForSelectedRow{
@@ -105,7 +109,6 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         
         let price = subscription.price
         cell.priceLabel.text = currencyFormatter.string(from: NSNumber(value: price))
-//        cell.selectionStyle = UITableViewCellSelectionStyle.default
         
         return cell
     }
@@ -115,20 +118,23 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
             DispatchQueue.main.async() { () -> Void in
                 self.performSegue(withIdentifier: "goToEditExpense", sender: self)
             }
-        } else if tableView.isEditing == true {
-            if tableView.cellForRow(at: indexPath)?.editingAccessoryType != .checkmark {
-                tableView.cellForRow(at: indexPath)?.editingAccessoryType = .checkmark
-            } else {
-                tableView.cellForRow(at: indexPath)?.editingAccessoryType = .none
-            }
         }
+//        else if tableView.isEditing == true {
+//            if tableView.cellForRow(at: indexPath)?.editingAccessoryType != .checkmark {
+//                tableView.cellForRow(at: indexPath)?.editingAccessoryType = .checkmark
+//            } else {
+//                tableView.cellForRow(at: indexPath)?.editingAccessoryType = .none
+//            }
+//        }
     }
-    
+
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        return .none
+        print("gets here")
+        return UITableViewCellEditingStyle.init(rawValue: 3)!
     }
     
 //    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+//        print(editingStyle)
 //        if editingStyle == .delete {
 //            // Delete the row from the data source
 //            context.delete(expenseArray[indexPath.row])
@@ -151,17 +157,18 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
         if (self.tableView.isEditing == true) {
-//            self.tableView.isEditing = false
             self.tableView.setEditing(false, animated: true)
             self.editBarButton.title = "Edit"
+            self.navigationItem.rightBarButtonItem = self.addBarButton
             expenseViewBottonConstraint.constant = 9
             removeExpenseConstraint.constant = -82
         } else if (self.tableView.isEditing == false) {
-//            self.tableView.isEditing = true
             self.tableView.setEditing(true, animated: true)
+            self.tableView.isEditing = true
             self.editBarButton.title = "Done"
             expenseViewBottonConstraint.constant = -93
             removeExpenseConstraint.constant = 9
+            self.navigationItem.rightBarButtonItem = nil
         }
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
@@ -172,10 +179,6 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
     func expensePeriodSetup(){
         expensePeirodButtons[2].backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
         expensePeirodButtons[2].setTitleColor(#colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1), for: .normal)
-//        self.expensePeriodView.frame = CGRect(x: self.expensePeriodView.frame.origin.x, y: self.expensePeriodView.frame.origin.y, width: self.expensePeriodView.frame.width, height: CGFloat(0))
-//        self.expensesView.layoutIfNeeded()
-//        self.expensePeriodView.isHidden = false
-        
     }
     
     //MARK: - Setup Expenses View
@@ -188,8 +191,16 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         expensesView.layer.shadowRadius = 2
         expensesView.layer.shadowOffset = CGSize.zero
         
-        let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.expenseLabelTouched (_:)))
-        self.expensesView.addGestureRecognizer(gesture)
+//        let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.expenseLabelTouched (_:)))
+//        self.expensesView.addGestureRecognizer(gesture)
+        
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(expenseLabelSwipe))
+        swipeUp.direction = .up
+        self.expensesView.addGestureRecognizer(swipeUp)
+        
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(expenseLabelSwipe))
+        swipeDown.direction = .down
+        self.expensesView.addGestureRecognizer(swipeDown)
     }
     
     func expensesLabelSetup(per timePeriod: Double = 12, with label: String = "per month"){
@@ -209,15 +220,29 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         expensePeriodLabel.text = label.lowercased()
     }
     
-    @objc func expenseLabelTouched(_ sender: UITapGestureRecognizer){
-        if periodSelectionHidden == true {
+//    @objc func expenseLabelTouched(_ sender: UITapGestureRecognizer){
+//        if periodSelectionHidden == true {
+//            self.expensePeriodViewTopConstraint.constant = -120
+//            expenseViewBottonConstraint.constant = 120
+//            periodSelectionHidden = false
+//        } else {
+//            self.expensePeriodViewTopConstraint.constant = 34
+//            expenseViewBottonConstraint.constant = 9
+//            periodSelectionHidden = true
+//        }
+//
+//        UIView.animate(withDuration: 0.3) {
+//            self.view.layoutIfNeeded()
+//        }
+//    }
+    
+    @objc func expenseLabelSwipe(gesture: UISwipeGestureRecognizer) {
+        if gesture.direction == UISwipeGestureRecognizerDirection.up {
             self.expensePeriodViewTopConstraint.constant = -120
             expenseViewBottonConstraint.constant = 120
-            periodSelectionHidden = false
-        } else {
+        } else if gesture.direction == UISwipeGestureRecognizerDirection.down {
             self.expensePeriodViewTopConstraint.constant = 34
             expenseViewBottonConstraint.constant = 9
-            periodSelectionHidden = true
         }
         
         UIView.animate(withDuration: 0.3) {
@@ -238,11 +263,6 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         }
         let expensePeriod = Double(sender.tag)
         expensesLabelSetup(per: expensePeriod, with: sender.title(for: .normal)!)
-//        UIView.animate(withDuration: 0.3) {
-//            self.expensePeriodViewTopConstraint.constant = 0
-//            self.periodSelectionHidden = true
-//            self.expensesView.frame = CGRect(x: self.expensesView.frame.origin.x, y: self.expenseViewY, width: self.expensesView.frame.width, height: self.expensesView.frame.height)
-//        }
     }
     
     

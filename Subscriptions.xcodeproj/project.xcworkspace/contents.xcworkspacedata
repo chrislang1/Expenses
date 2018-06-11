@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Subscriptions.xcodeproj">
+      location = "self:/Users/Chris/Documents/App Development/Personal/Subscriptions/Subscriptions.xcodeproj">
    </FileRef>
 </Workspace>

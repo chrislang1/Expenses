@@ -106,6 +106,12 @@ class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPicker
             deleteExpenseButton.isHidden = false
         }
         
+        let locale = Locale.current
+        let currencySymbol = locale.currencySymbol!
+        let currencyCode = locale.currencyCode!
+        
+        costTextField.placeholder = "Cost in \(currencySymbol)\(currencyCode)"
+        
     }
     
     //MARK: - Dismiss Keyboard
@@ -144,6 +150,7 @@ class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPicker
         customPeriodLabel.backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1)
         customPeriodLabel.textColor = .black
         customPeriodLabel.text = "Custom Period"
+        self.view.endEditing(true)
     }
     
     //MARK: - Toolbar Methods
