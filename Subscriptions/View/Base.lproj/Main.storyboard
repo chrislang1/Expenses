@@ -275,6 +275,7 @@
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="deleteButtonPressed:" destination="mA9-u0-UsT" eventType="touchUpInside" id="x6R-g7-IO3"/>
+                                    <action selector="touchUpRemoveButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fXr-hL-aNO"/>
                                 </connections>
                             </button>
                         </subviews>

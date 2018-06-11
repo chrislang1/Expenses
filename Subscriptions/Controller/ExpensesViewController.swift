@@ -163,6 +163,18 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         saveExpenses()
     }
     
+    @IBAction func touchUpRemoveButton(_ sender: Any) {
+        guard let indexPathsForSelectedRows = tableView.indexPathsForSelectedRows else { return }
+        indexPathsForSelectedRows.map { expenseArray[$0.row] }.forEach {
+            // Delete the row from the data source
+            context.delete($0)
+            saveExpenses()
+            expenseArray.remove(at: expenseArray.index(of: $0)!)
+            expensesLabelSetup()
+        }
+        tableView.deleteRows(at: indexPathsForSelectedRows, with: .fade)
+    }
+    
     //MARK: - Set Table View to Edit Mode
     
     @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
@@ -307,7 +319,7 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         default:
             periodTypePerYear = nil
         }
-        return cost * (periodTypePerYear!/Double(numberOfPeriods))
+        return cost * (periodTypePerYear!/Double(numberOfPeriods)) /// [Andy] never use force unwrapping
     }
     
     //MARK: - Update Expense Delegete Methods
