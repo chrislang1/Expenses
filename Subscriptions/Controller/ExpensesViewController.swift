@@ -96,20 +96,30 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "subscriptionCell", for: indexPath) as! SubscriptionCell
-        
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "subscriptionCell", for: indexPath) as! SubscriptionCell
+//
+//        let subscription = expenseArray[indexPath.row]
+//        cell.nameLabel.text = subscription.name!
+//
+//        let currencyFormatter = NumberFormatter()
+//        currencyFormatter.usesGroupingSeparator = true
+//        currencyFormatter.numberStyle = .currency
+//        // localize to your grouping and decimal separator
+//        currencyFormatter.locale = Locale.current
+//
+//        let price = subscription.price
+//        cell.priceLabel.text = currencyFormatter.string(from: NSNumber(value: price))
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: "subscription", for: indexPath)
         let subscription = expenseArray[indexPath.row]
-        cell.nameLabel.text = subscription.name!
-        
+        cell.textLabel?.text = subscription.name
         let currencyFormatter = NumberFormatter()
         currencyFormatter.usesGroupingSeparator = true
         currencyFormatter.numberStyle = .currency
         // localize to your grouping and decimal separator
         currencyFormatter.locale = Locale.current
-        
         let price = subscription.price
-        cell.priceLabel.text = currencyFormatter.string(from: NSNumber(value: price))
-        
+        cell.detailTextLabel?.text = currencyFormatter.string(from: NSNumber(value: price))
         return cell
     }
     
@@ -133,25 +143,25 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         return UITableViewCellEditingStyle.init(rawValue: 3)!
     }
     
-//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-//        print(editingStyle)
-//        if editingStyle == .delete {
-//            // Delete the row from the data source
-//            context.delete(expenseArray[indexPath.row])
-//            saveExpenses()
-//            expenseArray.remove(at: indexPath.row)
-//            expensesLabelSetup()
-//            // Delete the row from the TableView
-//            tableView.deleteRows(at: [indexPath], with: .fade)
-//        }
-//    }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        print(editingStyle)
+        if editingStyle == .delete {
+            // Delete the row from the data source
+            context.delete(expenseArray[indexPath.row])
+            saveExpenses()
+            expenseArray.remove(at: indexPath.row)
+            expensesLabelSetup()
+            // Delete the row from the TableView
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
     
-//    func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to toIndexPath: IndexPath) {
-//        var rowToMove = expenseArray[fromIndexPath.row]
-//        expenseArray.remove(at: fromIndexPath.row)
-//        expenseArray.insert(rowToMove, at: toIndexPath.row)
-//        saveExpenses()
-//    }
+    func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to toIndexPath: IndexPath) {
+        let rowToMove = expenseArray[fromIndexPath.row]
+        expenseArray.remove(at: fromIndexPath.row)
+        expenseArray.insert(rowToMove, at: toIndexPath.row)
+        saveExpenses()
+    }
     
     //MARK: - Set Table View to Edit Mode
     
