@@ -78,18 +78,19 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         if expenseArray.count == 0 {
             noExpensesView.isHidden = false
             tableView.isHidden = true
-            self.navigationItem.leftBarButtonItem = nil
+            navigationItem.leftBarButtonItem = nil
         } else {
             noExpensesView.isHidden = true
             tableView.isHidden = false
-            self.navigationItem.leftBarButtonItem = self.editBarButton
+            navigationItem.leftBarButtonItem = self.editBarButton
         }
         
-        if let index = self.tableView.indexPathForSelectedRow{
-            self.tableView.deselectRow(at: index, animated: true)
-            self.tableView.cellForRow(at: index)?.backgroundColor = .white
-            self.tableView.cellForRow(at: index)?.textLabel?.textColor = .black
-            self.tableView.cellForRow(at: index)?.detailTextLabel?.textColor = .black
+        if let index = tableView.indexPathForSelectedRow,
+            let cell = tableView.cellForRow(at: index) {
+            tableView.deselectRow(at: index, animated: true)
+            cell.backgroundColor = .white
+            cell.textLabel?.textColor = .black
+            cell.detailTextLabel?.textColor = .black
         }
     }
     
@@ -132,11 +133,11 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.isEditing != true {
-            tableView.cellForRow(at: indexPath)?.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-            tableView.cellForRow(at: indexPath)?.textLabel?.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
-            tableView.cellForRow(at: indexPath)?.detailTextLabel?.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
-            
+        if tableView.isEditing != true,
+            let cell = tableView.cellForRow(at: indexPath) {
+            cell.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
+            cell.textLabel?.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
+            cell.detailTextLabel?.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
             DispatchQueue.main.async() { () -> Void in
                 self.performSegue(withIdentifier: "goToEditExpense", sender: self)
             }
