@@ -10,9 +10,9 @@
 		835A2FBC20C01866004960D7 /* SubscriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A2FBA20C01866004960D7 /* SubscriptionCell.swift */; };
 		835A2FBD20C01866004960D7 /* SubscriptionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 835A2FBB20C01866004960D7 /* SubscriptionCell.xib */; };
 		835A2FBF20C0DAAC004960D7 /* AddExpenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835A2FBE20C0DAAC004960D7 /* AddExpenseViewController.swift */; };
+		839A128820CFE193004B3A9B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 839A128720CFE193004B3A9B /* Main.storyboard */; };
 		839DE49820BFF4F000FB4E4D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839DE49720BFF4F000FB4E4D /* AppDelegate.swift */; };
 		839DE49A20BFF4F000FB4E4D /* ExpensesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839DE49920BFF4F000FB4E4D /* ExpensesViewController.swift */; };
-		839DE49D20BFF4F000FB4E4D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 839DE49B20BFF4F000FB4E4D /* Main.storyboard */; };
 		839DE4A020BFF4F000FB4E4D /* Subscriptions.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 839DE49E20BFF4F000FB4E4D /* Subscriptions.xcdatamodeld */; };
 		839DE4A220BFF4F300FB4E4D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 839DE4A120BFF4F300FB4E4D /* Assets.xcassets */; };
 		839DE4A520BFF4F300FB4E4D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 839DE4A320BFF4F300FB4E4D /* LaunchScreen.storyboard */; };
@@ -22,10 +22,10 @@
 		835A2FBA20C01866004960D7 /* SubscriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionCell.swift; sourceTree = "<group>"; };
 		835A2FBB20C01866004960D7 /* SubscriptionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SubscriptionCell.xib; sourceTree = "<group>"; };
 		835A2FBE20C0DAAC004960D7 /* AddExpenseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpenseViewController.swift; sourceTree = "<group>"; };
+		839A128720CFE193004B3A9B /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		839DE49420BFF4F000FB4E4D /* Expenses.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Expenses.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		839DE49720BFF4F000FB4E4D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		839DE49920BFF4F000FB4E4D /* ExpensesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesViewController.swift; sourceTree = "<group>"; };
-		839DE49C20BFF4F000FB4E4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		839DE49F20BFF4F000FB4E4D /* Subscriptions.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Subscriptions.xcdatamodel; sourceTree = "<group>"; };
 		839DE4A120BFF4F300FB4E4D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		839DE4A420BFF4F300FB4E4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -93,7 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				835A2FB920C0183C004960D7 /* SubscriptionCell */,
-				839DE49B20BFF4F000FB4E4D /* Main.storyboard */,
+				839A128720CFE193004B3A9B /* Main.storyboard */,
 				839DE4A320BFF4F300FB4E4D /* LaunchScreen.storyboard */,
 			);
 			path = View;
@@ -175,9 +175,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				839DE4A520BFF4F300FB4E4D /* LaunchScreen.storyboard in Resources */,
+				839A128820CFE193004B3A9B /* Main.storyboard in Resources */,
 				839DE4A220BFF4F300FB4E4D /* Assets.xcassets in Resources */,
 				835A2FBD20C01866004960D7 /* SubscriptionCell.xib in Resources */,
-				839DE49D20BFF4F000FB4E4D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -199,14 +199,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		839DE49B20BFF4F000FB4E4D /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				839DE49C20BFF4F000FB4E4D /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		839DE4A320BFF4F300FB4E4D /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

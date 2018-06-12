@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 class ExpensesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NewExpenseDelegate, EditExpenseDelegate {
-
+    
     
     @IBOutlet weak var totalExpensesPriceLabel: UILabel!
     @IBOutlet weak var expensePeriodLabel: UILabel!
@@ -48,8 +48,8 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 74
+        tableView.rowHeight = 56
+        //        tableView.estimatedRowHeight = 74
         tableView.separatorStyle = .none
         tableView.allowsMultipleSelectionDuringEditing = true
         
@@ -87,15 +87,19 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         
         if let index = self.tableView.indexPathForSelectedRow{
             self.tableView.deselectRow(at: index, animated: true)
+            self.tableView.cellForRow(at: index)?.backgroundColor = .white
+            self.tableView.cellForRow(at: index)?.textLabel?.textColor = .black
+            self.tableView.cellForRow(at: index)?.detailTextLabel?.textColor = .black
         }
     }
-
+    
     //MARK: - Table View Methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return expenseArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+<<<<<<< HEAD
 //        let cell = tableView.dequeueReusableCell(withIdentifier: "subscriptionCell", for: indexPath) as! SubscriptionCell
 //
 //        let subscription = expenseArray[indexPath.row]
@@ -111,6 +115,25 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
 //        cell.priceLabel.text = currencyFormatter.string(from: NSNumber(value: price))
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "subscription", for: indexPath)
+=======
+        //        let cell = tableView.dequeueReusableCell(withIdentifier: "subscriptionCell", for: indexPath) as! SubscriptionCell
+        //
+        //        let subscription = expenseArray[indexPath.row]
+        //        cell.nameLabel.text = subscription.name!
+        //
+        //        let currencyFormatter = NumberFormatter()
+        //        currencyFormatter.usesGroupingSeparator = true
+        //        currencyFormatter.numberStyle = .currency
+        //        // localize to your grouping and decimal separator
+        //        currencyFormatter.locale = Locale.current
+        //
+        //        let price = subscription.price
+        //        cell.priceLabel.text = currencyFormatter.string(from: NSNumber(value: price))
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "subscription", for: indexPath)
+        cell.layer.cornerRadius = 10
+        cell.layer.masksToBounds = true
+>>>>>>> 30792c09e1100262318df8592191be3d00468750
         let subscription = expenseArray[indexPath.row]
         cell.textLabel?.text = subscription.name
         let currencyFormatter = NumberFormatter()
@@ -120,29 +143,32 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         currencyFormatter.locale = Locale.current
         let price = subscription.price
         cell.detailTextLabel?.text = currencyFormatter.string(from: NSNumber(value: price))
+<<<<<<< HEAD
+=======
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
+        cell.selectedBackgroundView = backgroundView
+>>>>>>> 30792c09e1100262318df8592191be3d00468750
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.isEditing != true {
+            tableView.cellForRow(at: indexPath)?.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
+            tableView.cellForRow(at: indexPath)?.textLabel?.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
+            tableView.cellForRow(at: indexPath)?.detailTextLabel?.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
+            
             DispatchQueue.main.async() { () -> Void in
                 self.performSegue(withIdentifier: "goToEditExpense", sender: self)
             }
         }
-//        else if tableView.isEditing == true {
-//            if tableView.cellForRow(at: indexPath)?.editingAccessoryType != .checkmark {
-//                tableView.cellForRow(at: indexPath)?.editingAccessoryType = .checkmark
-//            } else {
-//                tableView.cellForRow(at: indexPath)?.editingAccessoryType = .none
-//            }
-//        }
     }
-
+    
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        print("gets here")
         return UITableViewCellEditingStyle.init(rawValue: 3)!
     }
     
+<<<<<<< HEAD
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         print(editingStyle)
         if editingStyle == .delete {
@@ -156,6 +182,8 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
+=======
+>>>>>>> 30792c09e1100262318df8592191be3d00468750
     func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to toIndexPath: IndexPath) {
         let rowToMove = expenseArray[fromIndexPath.row]
         expenseArray.remove(at: fromIndexPath.row)
@@ -213,8 +241,8 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         expensesView.layer.shadowRadius = 2
         expensesView.layer.shadowOffset = CGSize.zero
         
-//        let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.expenseLabelTouched (_:)))
-//        self.expensesView.addGestureRecognizer(gesture)
+        //        let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.expenseLabelTouched (_:)))
+        //        self.expensesView.addGestureRecognizer(gesture)
         
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(expenseLabelSwipe))
         swipeUp.direction = .up
@@ -242,21 +270,21 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         expensePeriodLabel.text = label.lowercased()
     }
     
-//    @objc func expenseLabelTouched(_ sender: UITapGestureRecognizer){
-//        if periodSelectionHidden == true {
-//            self.expensePeriodViewTopConstraint.constant = -120
-//            expenseViewBottonConstraint.constant = 120
-//            periodSelectionHidden = false
-//        } else {
-//            self.expensePeriodViewTopConstraint.constant = 34
-//            expenseViewBottonConstraint.constant = 9
-//            periodSelectionHidden = true
-//        }
-//
-//        UIView.animate(withDuration: 0.3) {
-//            self.view.layoutIfNeeded()
-//        }
-//    }
+    //    @objc func expenseLabelTouched(_ sender: UITapGestureRecognizer){
+    //        if periodSelectionHidden == true {
+    //            self.expensePeriodViewTopConstraint.constant = -120
+    //            expenseViewBottonConstraint.constant = 120
+    //            periodSelectionHidden = false
+    //        } else {
+    //            self.expensePeriodViewTopConstraint.constant = 34
+    //            expenseViewBottonConstraint.constant = 9
+    //            periodSelectionHidden = true
+    //        }
+    //
+    //        UIView.animate(withDuration: 0.3) {
+    //            self.view.layoutIfNeeded()
+    //        }
+    //    }
     
     @objc func expenseLabelSwipe(gesture: UISwipeGestureRecognizer) {
         if gesture.direction == UISwipeGestureRecognizerDirection.up {
@@ -380,6 +408,6 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         }
         
     }
-
+    
 }
 

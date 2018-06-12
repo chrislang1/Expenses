@@ -34,6 +34,7 @@
                                             <segue destination="HTb-Op-R8W" kind="presentation" identifier="goToEditExpense" id="Jsv-PY-9EO"/>
                                         </connections>
                                     </tableViewCell>
+<<<<<<< HEAD:Subscriptions/View/Base.lproj/Main.storyboard
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="subscription" textLabel="Ozi-GA-pP5" detailTextLabel="XG5-aI-8ZL" style="IBUITableViewCellStyleValue1" id="7pd-D7-bxB">
                                         <rect key="frame" x="0.0" y="72" width="359" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
@@ -43,13 +44,28 @@
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ozi-GA-pP5">
                                                     <rect key="frame" x="15.000000000000004" y="11.999999999999998" width="34.333333333333336" height="20.333333333333332"/>
+=======
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="subscription" textLabel="Ozi-GA-pP5" detailTextLabel="XG5-aI-8ZL" rowHeight="64" style="IBUITableViewCellStyleValue1" id="7pd-D7-bxB">
+                                        <rect key="frame" x="0.0" y="72" width="359" height="64"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7pd-D7-bxB" id="nho-ed-0GY">
+                                            <rect key="frame" x="0.0" y="0.0" width="359" height="63.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ozi-GA-pP5">
+                                                    <rect key="frame" x="15.000000000000004" y="22" width="34.333333333333336" height="20.333333333333332"/>
+>>>>>>> 30792c09e1100262318df8592191be3d00468750:Subscriptions/View/Main.storyboard
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XG5-aI-8ZL">
+<<<<<<< HEAD:Subscriptions/View/Base.lproj/Main.storyboard
                                                     <rect key="frame" x="298.66666666666669" y="11.999999999999998" width="45.333333333333336" height="20.333333333333332"/>
+=======
+                                                    <rect key="frame" x="298.66666666666669" y="22" width="45.333333333333336" height="20.333333333333332"/>
+>>>>>>> 30792c09e1100262318df8592191be3d00468750:Subscriptions/View/Main.storyboard
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -57,6 +73,10 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+<<<<<<< HEAD:Subscriptions/View/Base.lproj/Main.storyboard
+=======
+                                        <color key="tintColor" red="0.60784313725490191" green="0.31764705882352939" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
+>>>>>>> 30792c09e1100262318df8592191be3d00468750:Subscriptions/View/Main.storyboard
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
