@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class ExpensesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NewExpenseDelegate, EditExpenseDelegate {
+class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseDelegate {
     
     
     @IBOutlet weak var totalExpensesPriceLabel: UILabel!
@@ -49,7 +49,6 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         self.tableView.dataSource = self
         
         tableView.rowHeight = 56
-        //        tableView.estimatedRowHeight = 74
         tableView.separatorStyle = .none
         tableView.allowsMultipleSelectionDuringEditing = true
         
@@ -94,66 +93,6 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    //MARK: - Table View Methods
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return expenseArray.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //        let cell = tableView.dequeueReusableCell(withIdentifier: "subscriptionCell", for: indexPath) as! SubscriptionCell
-        //
-        //        let subscription = expenseArray[indexPath.row]
-        //        cell.nameLabel.text = subscription.name!
-        //
-        //        let currencyFormatter = NumberFormatter()
-        //        currencyFormatter.usesGroupingSeparator = true
-        //        currencyFormatter.numberStyle = .currency
-        //        // localize to your grouping and decimal separator
-        //        currencyFormatter.locale = Locale.current
-        //
-        //        let price = subscription.price
-        //        cell.priceLabel.text = currencyFormatter.string(from: NSNumber(value: price))
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "subscription", for: indexPath)
-        cell.layer.cornerRadius = 10
-        cell.layer.masksToBounds = true
-        let subscription = expenseArray[indexPath.row]
-        cell.textLabel?.text = subscription.name
-        let currencyFormatter = NumberFormatter()
-        currencyFormatter.usesGroupingSeparator = true
-        currencyFormatter.numberStyle = .currency
-        // localize to your grouping and decimal separator
-        currencyFormatter.locale = Locale.current
-        let price = subscription.price
-        cell.detailTextLabel?.text = currencyFormatter.string(from: NSNumber(value: price))
-        let backgroundView = UIView()
-        backgroundView.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-        cell.selectedBackgroundView = backgroundView
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.isEditing != true,
-            let cell = tableView.cellForRow(at: indexPath) {
-            cell.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-            cell.textLabel?.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
-            cell.detailTextLabel?.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
-            DispatchQueue.main.async() { () -> Void in
-                self.performSegue(withIdentifier: "goToEditExpense", sender: self)
-            }
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        return UITableViewCellEditingStyle.init(rawValue: 3)!
-    }
-    
-    func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to toIndexPath: IndexPath) {
-        let rowToMove = expenseArray[fromIndexPath.row]
-        expenseArray.remove(at: fromIndexPath.row)
-        expenseArray.insert(rowToMove, at: toIndexPath.row)
-        saveExpenses()
-    }
     
     @IBAction func touchUpRemoveButton(_ sender: Any) {
         guard let indexPathsForSelectedRows = tableView.indexPathsForSelectedRows else { return }
@@ -168,7 +107,6 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     //MARK: - Set Table View to Edit Mode
-    
     @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
         if (self.tableView.isEditing == true) {
             self.tableView.setEditing(false, animated: true)
@@ -205,9 +143,6 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         expensesView.layer.shadowRadius = 2
         expensesView.layer.shadowOffset = CGSize.zero
         
-        //        let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.expenseLabelTouched (_:)))
-        //        self.expensesView.addGestureRecognizer(gesture)
-        
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(expenseLabelSwipe))
         swipeUp.direction = .up
         self.expensesView.addGestureRecognizer(swipeUp)
@@ -233,22 +168,6 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         totalExpensesPriceLabel.text = currencyFormatter.string(from: NSNumber(value: price))
         expensePeriodLabel.text = label.lowercased()
     }
-    
-    //    @objc func expenseLabelTouched(_ sender: UITapGestureRecognizer){
-    //        if periodSelectionHidden == true {
-    //            self.expensePeriodViewTopConstraint.constant = -120
-    //            expenseViewBottonConstraint.constant = 120
-    //            periodSelectionHidden = false
-    //        } else {
-    //            self.expensePeriodViewTopConstraint.constant = 34
-    //            expenseViewBottonConstraint.constant = 9
-    //            periodSelectionHidden = true
-    //        }
-    //
-    //        UIView.animate(withDuration: 0.3) {
-    //            self.view.layoutIfNeeded()
-    //        }
-    //    }
     
     @objc func expenseLabelSwipe(gesture: UISwipeGestureRecognizer) {
         if gesture.direction == UISwipeGestureRecognizerDirection.up {
@@ -373,5 +292,55 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         
     }
     
+}
+
+//MARK: - TableView Delegate and Data Source Methods
+extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return expenseArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "subscription", for: indexPath)
+        cell.layer.cornerRadius = 10
+        cell.layer.masksToBounds = true
+        let subscription = expenseArray[indexPath.row]
+        cell.textLabel?.text = subscription.name
+        let currencyFormatter = NumberFormatter()
+        currencyFormatter.usesGroupingSeparator = true
+        currencyFormatter.numberStyle = .currency
+        // localize to your grouping and decimal separator
+        currencyFormatter.locale = Locale.current
+        let price = subscription.price
+        cell.detailTextLabel?.text = currencyFormatter.string(from: NSNumber(value: price))
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
+        cell.selectedBackgroundView = backgroundView
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.isEditing != true,
+            let cell = tableView.cellForRow(at: indexPath) {
+            cell.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
+            cell.textLabel?.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
+            cell.detailTextLabel?.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
+            DispatchQueue.main.async() { () -> Void in
+                self.performSegue(withIdentifier: "goToEditExpense", sender: self)
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        return UITableViewCellEditingStyle.init(rawValue: 3)!
+    }
+    
+    func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to toIndexPath: IndexPath) {
+        let rowToMove = expenseArray[fromIndexPath.row]
+        expenseArray.remove(at: fromIndexPath.row)
+        expenseArray.insert(rowToMove, at: toIndexPath.row)
+        saveExpenses()
+    }
 }
 
