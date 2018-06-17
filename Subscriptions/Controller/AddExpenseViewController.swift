@@ -71,12 +71,14 @@ class AddExpenseViewController: UIViewController {
         view.addGestureRecognizer(tap)
         
         
-        if identifyingSegue == "goToEditExpense" {
-            nameTextField.text = selectedExpense!.name
-            costTextField.text = String(selectedExpense!.price)
+        if identifyingSegue == "goToEditExpense",
+            let selectedExpense = selectedExpense
+        {
+            nameTextField.text = selectedExpense.name
+            costTextField.text = String(selectedExpense.price)
             
-            if(selectedExpense?.periodLength == 1 && selectedExpense?.periodType != "Year(s)"){
-                switch(selectedExpense?.periodType!){
+            if(selectedExpense.periodLength == 1 && selectedExpense.periodType != "Year(s)") {
+                switch(selectedExpense.periodType) {
                 case "Day(s)":
                     selectedPeriod = 0
                 case "Week(s)":
@@ -88,20 +90,24 @@ class AddExpenseViewController: UIViewController {
                 default:
                     selectedPeriod = nil
                 }
-                if selectedPeriod != nil {
-                    periodSelected(periodButtons[selectedPeriod!])
+                if let selectedPeriod = selectedPeriod {
+                    periodSelected(periodButtons[selectedPeriod])
                 }
             } else {
                 customPeriodLabel.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
                 customPeriodLabel.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
                 selectedPeriod = 4
-                numberOfPeriods = numberArray[Int(selectedExpense!.periodLength - 1)]
-                let periodLengthPosition = periodLengthArray.index(of: selectedExpense!.periodType!)
-                periodLength = periodLengthArray[periodLengthPosition!]
-                buttonString = "Every \(numberOfPeriods) \(periodLength)"
-                customPeriodLabel.text = buttonString
-                customPeriodPickerView.selectRow(numberOfPeriods-1, inComponent: 1, animated: true)
-                customPeriodPickerView.selectRow(periodLengthPosition!, inComponent: 2, animated: true)
+                numberOfPeriods = numberArray[Int(selectedExpense.periodLength - 1)]
+                if let periodType = selectedExpense.periodType,
+                    let periodLengthPosition = periodLengthArray.index(of: periodType) {
+                    periodLength = periodLengthArray[periodLengthPosition]
+                    buttonString = "Every \(numberOfPeriods) \(periodLength)"
+                    customPeriodLabel.text = buttonString
+                    customPeriodPickerView.selectRow(numberOfPeriods-1, inComponent: 1, animated: true)
+                    customPeriodPickerView.selectRow(periodLengthPosition, inComponent: 2, animated: true)
+                } else {
+                    // What should we do?
+                }
             }
             deleteExpenseButton.isHidden = false
         }
