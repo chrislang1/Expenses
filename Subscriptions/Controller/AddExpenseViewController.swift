@@ -17,7 +17,7 @@ protocol EditExpenseDelegate{
     func deleteExpense(expense: Expense)
 }
 
-class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
+class AddExpenseViewController: UIViewController {
     
     var delegate: NewExpenseDelegate?
     var delegate2: EditExpenseDelegate?
@@ -187,71 +187,6 @@ class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPicker
         }
     }
     
-    //MARK: - PickerView Methods
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 3
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        switch(component) {
-        case 0:
-            return 1;
-        case 1:
-            return numberArray.count;
-        case 2:
-            return periodLengthArray.count;
-        default:
-            return 0
-        }
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        switch(component) {
-        case 0:
-            return "Every";
-        case 1:
-            return String(numberArray[row]);
-        case 2:
-            return periodLengthArray[row];
-        default:
-            return ""
-        }
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if component == 1 {
-            numberOfPeriods = numberArray[row]
-        } else if component == 2 {
-            periodLength = periodLengthArray[row]
-        }
-        buttonString = "Every \(numberOfPeriods) \(periodLength)"
-        customPeriodLabel.text = buttonString
-    }
-    
-    //MARK: - TextField Methods
-    func textFieldDidBeginEditing(_ textField: UITextField){
-        if textField == customPickerTextField {
-            for index in periodButtons.indices {
-                periodButtons[index].backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1)
-                periodButtons[index].setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
-            }
-            customPeriodLabel.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-            customPeriodLabel.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
-            
-            if customPeriodLabel.text == "Custom Period"{
-                numberOfPeriods = numberArray[0]
-                periodLength = periodLengthArray[0]
-            }
-            buttonString = "Every \(numberOfPeriods) \(periodLength)"
-            customPeriodLabel.text = buttonString
-        }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
     //MARK: - Navigation Buttons
     @IBAction func cancelButton(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
@@ -297,6 +232,74 @@ class AddExpenseViewController: UIViewController, UIPickerViewDelegate, UIPicker
         delegate2?.deleteExpense(expense: selectedExpense!)
         dismiss(animated: true, completion: nil)
     }
-    
 
+}
+
+//MARK: - PickerView Delegate and Data Source Methods
+extension AddExpenseViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 3
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        switch(component) {
+        case 0:
+            return 1;
+        case 1:
+            return numberArray.count;
+        case 2:
+            return periodLengthArray.count;
+        default:
+            return 0
+        }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        switch(component) {
+        case 0:
+            return "Every";
+        case 1:
+            return String(numberArray[row]);
+        case 2:
+            return periodLengthArray[row];
+        default:
+            return ""
+        }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if component == 1 {
+            numberOfPeriods = numberArray[row]
+        } else if component == 2 {
+            periodLength = periodLengthArray[row]
+        }
+        buttonString = "Every \(numberOfPeriods) \(periodLength)"
+        customPeriodLabel.text = buttonString
+    }
+}
+
+//MARK: - Text Field Delegate Methods
+extension AddExpenseViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField){
+        if textField == customPickerTextField {
+            for index in periodButtons.indices {
+                periodButtons[index].backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1)
+                periodButtons[index].setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
+            }
+            customPeriodLabel.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
+            customPeriodLabel.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
+            
+            if customPeriodLabel.text == "Custom Period"{
+                numberOfPeriods = numberArray[0]
+                periodLength = periodLengthArray[0]
+            }
+            buttonString = "Every \(numberOfPeriods) \(periodLength)"
+            customPeriodLabel.text = buttonString
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
