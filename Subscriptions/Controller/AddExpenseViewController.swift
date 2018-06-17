@@ -75,7 +75,7 @@ class AddExpenseViewController: UIViewController {
             nameTextField.text = selectedExpense!.name
             costTextField.text = String(selectedExpense!.price)
             
-            if(selectedExpense?.periodLength == 1 && selectedExpense!.periodType != "Year(s)"){
+            if(selectedExpense?.periodLength == 1 && selectedExpense?.periodType != "Year(s)"){
                 switch(selectedExpense?.periodType!){
                 case "Day(s)":
                     selectedPeriod = 0
@@ -216,16 +216,24 @@ class AddExpenseViewController: UIViewController {
     
     //MARK: - Done Button Method
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
-        //2 If we have a delegate set, call the delegate protocol method
-        if identifyingSegue == "goToAddExpense"{
-            delegate?.addNewExpense(name: nameTextField.text!, cost: Double(costTextField.text!)!, numberOfPeriods: numberOfPeriods, periodLength: periodLength)
-        } else if identifyingSegue == "goToEditExpense" {
-            updateExpense()
-            delegate2?.updateExpense(expense: selectedExpense!)
+        if selectedPeriod == nil || nameTextField.text?.isEmpty == true || costTextField.text?.isEmpty == true {
+            let alert = UIAlertController(title: "Expense Incomplete", message: "Please provide details for all fields.", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            
+            self.present(alert, animated: true)
+        } else {
+            //2 If we have a delegate set, call the delegate protocol method
+            if identifyingSegue == "goToAddExpense"{
+                delegate?.addNewExpense(name: nameTextField.text!, cost: Double(costTextField.text!)!, numberOfPeriods: numberOfPeriods, periodLength: periodLength)
+            } else if identifyingSegue == "goToEditExpense" {
+                updateExpense()
+                delegate2?.updateExpense(expense: selectedExpense!)
+            }
+            
+            //3 dismiss the New Container View Controller to go back to the ContainerList
+            dismiss(animated: true, completion: nil)
         }
-        
-        //3 dismiss the New Container View Controller to go back to the ContainerList
-        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func deleteButtonPressed(_ sender: UIButton) {
