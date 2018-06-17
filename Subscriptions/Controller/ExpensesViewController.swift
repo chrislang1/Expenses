@@ -209,6 +209,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         expense.yearPrice = setPricePerYear(cost: cost, numberOfPeriods: numberOfPeriods, periodLength: periodLength)
         
         expenseArray.append(expense)
+        indexExpenseArray()
         saveExpenses()
         expensesLabelSetup()
         tableView.reloadData()
@@ -243,10 +244,17 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     
     func deleteExpense(expense: Expense){
         context.delete(expenseArray[selectedExpense!])
-        saveExpenses()
         expenseArray.remove(at: selectedExpense!)
+        indexExpenseArray()
+        saveExpenses()
         tableView.reloadData()
         expensesLabelSetup()
+    }
+    
+    func indexExpenseArray(){
+        for index in expenseArray.indices {
+            expenseArray[index].arrayIndex = Int16(index)
+        }
     }
     
     //MARK: - Prepare for Segue Method
@@ -276,6 +284,8 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     
     //MARK: - Load and Save Methods
     func loadExpenses(with request: NSFetchRequest<Expense> = Expense.fetchRequest()){
+        let sort = NSSortDescriptor(key: "arrayIndex", ascending: true)
+        request.sortDescriptors = [sort]
         do{
             expenseArray = try context.fetch(request)
         } catch {
@@ -340,6 +350,7 @@ extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
         let rowToMove = expenseArray[fromIndexPath.row]
         expenseArray.remove(at: fromIndexPath.row)
         expenseArray.insert(rowToMove, at: toIndexPath.row)
+        indexExpenseArray()
         saveExpenses()
     }
 }
