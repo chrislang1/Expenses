@@ -33,6 +33,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     var selectedExpense: Int?
     var expenseViewY = CGFloat()
     var periodSelectionHidden = true
+    var periodLengthEnum = Expense.PeriodType.day
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -90,6 +91,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             cell.backgroundColor = .white
             cell.textLabel?.textColor = .black
             cell.detailTextLabel?.textColor = .black
+            tableView.reloadData()
         }
     }
     
@@ -200,13 +202,15 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     
     
     //MARK: - New Expense Delegete Methods
-    func addNewExpense(name: String, cost: Double, numberOfPeriods: Int, periodLength: String) {
+    func addNewExpense(name: String, cost: Double, numberOfPeriods: Double, periodLength: Int) {
         let expense = Expense(context: context)
         expense.name = name
         expense.price = cost
-        expense.periodLength = Int16(numberOfPeriods)
-        expense.periodType = periodLength
-        expense.yearPrice = setPricePerYear(cost: cost, numberOfPeriods: numberOfPeriods, periodLength: periodLength)
+        expense.periodLength = numberOfPeriods
+        
+        guard let periodLengthEnum = Expense.PeriodType(rawValue: periodLength) else {return}
+        expense.periodType = Int16(periodLength)
+        expense.yearPrice = cost * (periodLengthEnum.typePerYear/numberOfPeriods)
         
         expenseArray.append(expense)
         indexExpenseArray()
@@ -215,30 +219,11 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         tableView.reloadData()
     }
     
-    func setPricePerYear (cost: Double, numberOfPeriods: Int, periodLength: String) -> Double {
-        var periodTypePerYear: Double?
-        switch periodLength {
-        case "Day(s)":
-            periodTypePerYear = 365
-        case "Week(s)":
-            periodTypePerYear = 52
-        case "Fortnight(s)":
-            periodTypePerYear = 26
-        case "Month(s)":
-            periodTypePerYear = 12
-        case "Year(s)":
-            periodTypePerYear = 1
-        default:
-            periodTypePerYear = nil
-        }
-        return cost * (periodTypePerYear!/Double(numberOfPeriods)) /// [Andy] never use force unwrapping
-    }
-    
     //MARK: - Update Expense Delegete Methods
     func updateExpense(expense: Expense) {
-        expense.yearPrice = setPricePerYear(cost: expense.price, numberOfPeriods: Int(expense.periodLength), periodLength: expense.periodType!)
+        guard let periodLengthEnum = Expense.PeriodType(rawValue: Int(expense.periodType)) else {return}
+        expense.yearPrice = expense.price * (periodLengthEnum.typePerYear/expense.periodLength)
         saveExpenses()
-        tableView.reloadData()
         expensesLabelSetup()
     }
     

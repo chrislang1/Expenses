@@ -42,6 +42,16 @@ extension Expense {
             case .year: return "Year(s)"
             }
         }
+        
+        var typePerYear: Double {
+            switch self {
+            case .day: return 365
+            case .week: return 52
+            case .fortnight: return 26
+            case .month: return 12
+            case .year: return 1
+            }
+        }
     }
     
 }
