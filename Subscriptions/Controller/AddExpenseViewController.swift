@@ -40,6 +40,9 @@ class AddExpenseViewController: UIViewController {
     var buttonString = String()
     var periodTypeEnum = Expense.PeriodType(rawValue: 0)
     
+    let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
+    let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
+    
     @IBOutlet var periodButtons: [UIButton]!
     
     let periodLengthArray = ["Day(s)", "Week(s)", "Fortnight(s)", "Month(s)", "Year(s)"]
@@ -84,8 +87,8 @@ class AddExpenseViewController: UIViewController {
                 guard let selectedPeriod = periodTypeEnum?.rawValue else {return}
                 periodSelected(periodButtons[selectedPeriod])
             } else {
-                customPeriodLabel.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-                customPeriodLabel.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
+                customPeriodLabel.backgroundColor = backgroundColor
+                customPeriodLabel.textColor = textColor
                 selectedPeriod = 4
                 numberOfPeriods = numberArray[Int(selectedExpense.periodLength - 1)]
                 
@@ -117,8 +120,8 @@ class AddExpenseViewController: UIViewController {
         selectedPeriod = periodButtons.index(of: sender)!
             for index in periodButtons.indices {
                 if index == selectedPeriod {
-                    periodButtons[index].backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-                    periodButtons[index].setTitleColor(#colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1), for: .normal)
+                    periodButtons[index].backgroundColor = backgroundColor
+                    periodButtons[index].setTitleColor(textColor, for: .normal)
                 } else {
                     periodButtons[index].backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1)
                     periodButtons[index].setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
@@ -148,7 +151,7 @@ class AddExpenseViewController: UIViewController {
         
         let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
         let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.done, target: self, action: #selector(self.keyboardDoneButtonAction))
-        done.tintColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
+        done.tintColor = textColor
         
         var items = [UIBarButtonItem]()
         items.append(flexSpace)
@@ -272,8 +275,8 @@ extension AddExpenseViewController: UITextFieldDelegate {
                 periodButtons[index].backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1)
                 periodButtons[index].setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
             }
-            customPeriodLabel.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-            customPeriodLabel.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
+            customPeriodLabel.backgroundColor = backgroundColor
+            customPeriodLabel.textColor = textColor
             
             if customPeriodLabel.text == "Custom Period"{
                 numberOfPeriods = numberArray[0]

@@ -31,9 +31,11 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     
     var expenseArray = [Expense]()
     var selectedExpense: Int?
-    var expenseViewY = CGFloat()
     var periodSelectionHidden = true
     var periodLengthEnum = Expense.PeriodType.day
+    
+    let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
+    let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -60,8 +62,6 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         expensesViewSetup()
         expensesLabelSetup()
         
-        expenseViewY = UIScreen.main.bounds.height - 69
-        
         //Set Expense Period Button
         expensePeriodSetup()
         
@@ -75,15 +75,8 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if expenseArray.count == 0 {
-            noExpensesView.isHidden = false
-            tableView.isHidden = true
-            navigationItem.leftBarButtonItem = nil
-        } else {
-            noExpensesView.isHidden = true
-            tableView.isHidden = false
-            navigationItem.leftBarButtonItem = self.editBarButton
-        }
+        
+        checkExpenseArray()
         
         if let index = tableView.indexPathForSelectedRow,
             let cell = tableView.cellForRow(at: index) {
@@ -95,6 +88,17 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         }
     }
     
+    func checkExpenseArray(){
+        if expenseArray.count == 0 {
+            noExpensesView.isHidden = false
+            tableView.isHidden = true
+            navigationItem.leftBarButtonItem = nil
+        } else {
+            noExpensesView.isHidden = true
+            tableView.isHidden = false
+            navigationItem.leftBarButtonItem = self.editBarButton
+        }
+    }
     
     @IBAction func touchUpRemoveButton(_ sender: Any) {
         guard let indexPathsForSelectedRows = tableView.indexPathsForSelectedRows else { return }
@@ -116,6 +120,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             self.navigationItem.rightBarButtonItem = self.addBarButton
             expenseViewBottonConstraint.constant = 9
             removeExpenseConstraint.constant = -82
+            checkExpenseArray()
         } else if (self.tableView.isEditing == false) {
             self.tableView.setEditing(true, animated: true)
             self.tableView.isEditing = true
@@ -131,8 +136,8 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     
     //MARK: - Expense Period Setup
     func expensePeriodSetup(){
-        expensePeirodButtons[2].backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-        expensePeirodButtons[2].setTitleColor(#colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1), for: .normal)
+        expensePeirodButtons[2].backgroundColor = backgroundColor
+        expensePeirodButtons[2].setTitleColor(textColor, for: .normal)
     }
     
     //MARK: - Setup Expenses View
@@ -189,8 +194,8 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     @IBAction func expencePeriodSelected(_ sender: UIButton) {
         for index in expensePeirodButtons.indices {
             if sender == expensePeirodButtons[index]{
-                expensePeirodButtons[index].backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-                expensePeirodButtons[index].setTitleColor(#colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1), for: .normal)
+                expensePeirodButtons[index].backgroundColor = backgroundColor
+                expensePeirodButtons[index].setTitleColor(textColor, for: .normal)
             } else {
                 expensePeirodButtons[index].backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1)
                 expensePeirodButtons[index].setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
@@ -318,9 +323,9 @@ extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.isEditing != true,
             let cell = tableView.cellForRow(at: indexPath) {
-            cell.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-            cell.textLabel?.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
-            cell.detailTextLabel?.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
+            cell.backgroundColor = backgroundColor
+            cell.textLabel?.textColor = textColor
+            cell.detailTextLabel?.textColor = textColor
             DispatchQueue.main.async() { () -> Void in
                 self.performSegue(withIdentifier: "goToEditExpense", sender: self)
             }
