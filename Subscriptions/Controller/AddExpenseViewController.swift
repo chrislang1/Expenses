@@ -34,11 +34,11 @@ class AddExpenseViewController: UIViewController {
     let customPeriodPickerView = UIPickerView()
     @IBOutlet weak var customPeriodLabel: UILabel!
     
-    var selectedPeriod: Int?
+    var periodSelected = false
     var numberOfPeriods = Int()
     var periodLength = String()
     var buttonString = String()
-    var periodTypeEnum = Expense.PeriodType(rawValue: 0)
+    var periodType = Expense.PeriodType(rawValue: 0)
     
     let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
     let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
@@ -81,23 +81,22 @@ class AddExpenseViewController: UIViewController {
             nameTextField.text = selectedExpense.name
             costTextField.text = String(selectedExpense.price)
             
-            periodTypeEnum = Expense.PeriodType(rawValue: Int(selectedExpense.periodType))
-            
-            if(selectedExpense.periodLength == 1 && periodTypeEnum?.rawValue != 4) {
-                guard let selectedPeriod = periodTypeEnum?.rawValue else {return}
-                periodSelected(periodButtons[selectedPeriod])
-            } else {
-                customPeriodLabel.backgroundColor = backgroundColor
-                customPeriodLabel.textColor = textColor
-                selectedPeriod = 4
-                numberOfPeriods = numberArray[Int(selectedExpense.periodLength - 1)]
-                
-                guard let periodLengthPosition = periodLengthArray.index(of: (periodTypeEnum?.description)!) else {return}
-                periodLength = periodLengthArray[periodLengthPosition]
-                buttonString = "Every \(numberOfPeriods) \(periodLength)"
-                customPeriodLabel.text = buttonString
-                customPeriodPickerView.selectRow(numberOfPeriods-1, inComponent: 1, animated: true)
-                customPeriodPickerView.selectRow(periodLengthPosition, inComponent: 2, animated: true)
+            if let periodType = Expense.PeriodType(rawValue: Int(selectedExpense.periodType)){
+                self.periodType = periodType
+                if(Int(selectedExpense.periodLength) == 1 && periodType != .year) {
+                    periodSelected(periodButtons[periodType.rawValue])
+                } else {
+                    customPeriodLabel.backgroundColor = backgroundColor
+                    customPeriodLabel.textColor = textColor
+                    //selectedPeriod = 4
+                    numberOfPeriods = numberArray[Int(selectedExpense.periodLength - 1)]
+                    
+                    periodLength = periodType.description
+                    buttonString = "Every \(numberOfPeriods) \(periodLength)"
+                    customPeriodLabel.text = buttonString
+                    customPeriodPickerView.selectRow(numberOfPeriods-1, inComponent: 1, animated: true)
+                    customPeriodPickerView.selectRow(periodType.rawValue, inComponent: 2, animated: true)
+                }
             }
             deleteExpenseButton.isHidden = false
         }
@@ -117,7 +116,7 @@ class AddExpenseViewController: UIViewController {
     
     //MARK: - Selected Buttons
     @IBAction func periodSelected(_ sender: UIButton) {
-        selectedPeriod = periodButtons.index(of: sender)!
+        let selectedPeriod = periodButtons.index(of: sender)!
             for index in periodButtons.indices {
                 if index == selectedPeriod {
                     periodButtons[index].backgroundColor = backgroundColor
@@ -127,14 +126,16 @@ class AddExpenseViewController: UIViewController {
                     periodButtons[index].setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
                 }
             }
+        periodType = Expense.PeriodType(rawValue: selectedPeriod)
         
-        if selectedPeriod != nil {
-            periodTypeEnum = Expense.PeriodType(rawValue: selectedPeriod!)
-        } else {
-            print("no period selected")
-        }
+//        if selectedPeriod != nil {
+//            periodType = Expense.PeriodType(rawValue: selectedPeriod!)
+//        } else {
+//            print("no period selected")
+//        }
         
         numberOfPeriods = 1
+        periodSelected = true
         
         customPeriodLabel.backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1)
         customPeriodLabel.textColor = .black
@@ -171,7 +172,6 @@ class AddExpenseViewController: UIViewController {
         if costTextField.isFirstResponder == true {
             self.costTextField.resignFirstResponder()
         } else if customPickerTextField.isFirstResponder == true {
-            selectedPeriod = 4
             self.customPickerTextField.resignFirstResponder()
         }
     }
@@ -187,13 +187,13 @@ class AddExpenseViewController: UIViewController {
         selectedExpense?.price = Double(costTextField.text!)!
         selectedExpense?.periodLength = Double(numberOfPeriods)
 
-        guard let periodLengthPosition = periodLengthArray.index(of: (periodTypeEnum?.description)!) else {return}
+        guard let periodLengthPosition = periodLengthArray.index(of: (periodType?.description)!) else {return}
         selectedExpense?.periodType = Int16(periodLengthPosition)
     }
     
     //MARK: - Done Button Method
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
-        if selectedPeriod == nil || nameTextField.text?.isEmpty == true || costTextField.text?.isEmpty == true {
+        if periodSelected == false || nameTextField.text?.isEmpty == true || costTextField.text?.isEmpty == true {
             let alert = UIAlertController(title: "Expense Incomplete", message: "Please provide details for all fields.", preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -202,7 +202,7 @@ class AddExpenseViewController: UIViewController {
         } else {
             //2 If we have a delegate set, call the delegate protocol method
             if identifyingSegue == "goToAddExpense"{
-                delegate?.addNewExpense(name: nameTextField.text!, cost: Double(costTextField.text!)!, numberOfPeriods: Double(numberOfPeriods), periodLength: (periodTypeEnum?.rawValue)!)
+                delegate?.addNewExpense(name: nameTextField.text!, cost: Double(costTextField.text!)!, numberOfPeriods: Double(numberOfPeriods), periodLength: (periodType?.rawValue)!)
             } else if identifyingSegue == "goToEditExpense" {
                 updateExpense()
                 delegate2?.updateExpense(expense: selectedExpense!)
@@ -262,8 +262,9 @@ extension AddExpenseViewController: UIPickerViewDelegate, UIPickerViewDataSource
         var periodLengthTransform = periodLength.lowercased()
         let endIndex = periodLengthTransform.index(periodLengthTransform.endIndex, offsetBy: -3)
         periodLengthTransform = periodLengthTransform.substring(to: endIndex)
-        periodTypeEnum = Expense.PeriodType(typeString: periodLengthTransform)
+        periodType = Expense.PeriodType(typeString: periodLengthTransform)
         customPeriodLabel.text = buttonString
+        periodSelected = true
     }
 }
 

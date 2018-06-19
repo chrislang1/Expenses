@@ -32,7 +32,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     var expenseArray = [Expense]()
     var selectedExpense: Int?
     var periodSelectionHidden = true
-    var periodLengthEnum = Expense.PeriodType.day
+    var periodType = Expense.PeriodType.day
     
     let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
     let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
@@ -213,9 +213,9 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         expense.price = cost
         expense.periodLength = numberOfPeriods
         
-        guard let periodLengthEnum = Expense.PeriodType(rawValue: periodLength) else {return}
+        guard let periodType = Expense.PeriodType(rawValue: periodLength) else {return}
         expense.periodType = Int16(periodLength)
-        expense.yearPrice = cost * (periodLengthEnum.typePerYear/numberOfPeriods)
+        expense.yearPrice = cost * (periodType.countPerYear/numberOfPeriods)
         
         expenseArray.append(expense)
         indexExpenseArray()
@@ -226,8 +226,12 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     
     //MARK: - Update Expense Delegete Methods
     func updateExpense(expense: Expense) {
-        guard let periodLengthEnum = Expense.PeriodType(rawValue: Int(expense.periodType)) else {return}
-        expense.yearPrice = expense.price * (periodLengthEnum.typePerYear/expense.periodLength)
+        if let periodType = Expense.PeriodType(rawValue: Int(expense.periodType)){
+            expense.yearPrice = expense.price * (periodType.countPerYear/expense.periodLength)
+        } else {
+            periodType = .month
+            expense.yearPrice = expense.price * (periodType.countPerYear/expense.periodLength)
+        }
         saveExpenses()
         expensesLabelSetup()
     }
@@ -267,6 +271,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             if let indexPath = tableView.indexPathForSelectedRow {
                 destinationVC.selectedExpense = expenseArray[indexPath.row]
                 selectedExpense = indexPath.row
+                destinationVC.periodSelected = true
             }
         }
         

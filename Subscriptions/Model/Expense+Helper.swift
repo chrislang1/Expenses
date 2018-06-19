@@ -43,7 +43,7 @@ extension Expense {
             }
         }
         
-        var typePerYear: Double {
+        var countPerYear: Double {
             switch self {
             case .day: return 365
             case .week: return 52
