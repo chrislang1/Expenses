@@ -38,6 +38,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -136,8 +137,8 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     
     //MARK: - Expense Period Setup
     func expensePeriodSetup(){
-        expensePeirodButtons[2].backgroundColor = backgroundColor
-        expensePeirodButtons[2].setTitleColor(textColor, for: .normal)
+        let savedPeriod = defaults.integer(forKey: "SelectedPeriod")
+        expencePeriodSelected(expensePeirodButtons[savedPeriod])
     }
     
     //MARK: - Setup Expenses View
@@ -196,6 +197,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             if sender == expensePeirodButtons[index]{
                 expensePeirodButtons[index].backgroundColor = backgroundColor
                 expensePeirodButtons[index].setTitleColor(textColor, for: .normal)
+                defaults.set(Int(index), forKey: "SelectedPeriod")
             } else {
                 expensePeirodButtons[index].backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1)
                 expensePeirodButtons[index].setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
