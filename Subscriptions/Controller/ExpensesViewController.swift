@@ -31,10 +31,14 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     
     var expenseArray = [Expense]()
     var selectedExpense: Int?
-    var expenseViewY = CGFloat()
     var periodSelectionHidden = true
+    var periodType = Expense.PeriodType.day
+    
+    let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
+    let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,8 +63,6 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         expensesViewSetup()
         expensesLabelSetup()
         
-        expenseViewY = UIScreen.main.bounds.height - 69
-        
         //Set Expense Period Button
         expensePeriodSetup()
         
@@ -74,6 +76,20 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        checkExpenseArray()
+        
+        if let index = tableView.indexPathForSelectedRow,
+            let cell = tableView.cellForRow(at: index) {
+            tableView.deselectRow(at: index, animated: true)
+            cell.backgroundColor = .white
+            cell.textLabel?.textColor = .black
+            cell.detailTextLabel?.textColor = .black
+            tableView.reloadData()
+        }
+    }
+    
+    func checkExpenseArray(){
         if expenseArray.count == 0 {
             noExpensesView.isHidden = false
             tableView.isHidden = true
@@ -83,16 +99,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             tableView.isHidden = false
             navigationItem.leftBarButtonItem = self.editBarButton
         }
-        
-        if let index = tableView.indexPathForSelectedRow,
-            let cell = tableView.cellForRow(at: index) {
-            tableView.deselectRow(at: index, animated: true)
-            cell.backgroundColor = .white
-            cell.textLabel?.textColor = .black
-            cell.detailTextLabel?.textColor = .black
-        }
     }
-    
     
     @IBAction func touchUpRemoveButton(_ sender: Any) {
         guard let indexPathsForSelectedRows = tableView.indexPathsForSelectedRows else { return }
@@ -114,6 +121,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             self.navigationItem.rightBarButtonItem = self.addBarButton
             expenseViewBottonConstraint.constant = 9
             removeExpenseConstraint.constant = -82
+            checkExpenseArray()
         } else if (self.tableView.isEditing == false) {
             self.tableView.setEditing(true, animated: true)
             self.tableView.isEditing = true
@@ -129,8 +137,8 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     
     //MARK: - Expense Period Setup
     func expensePeriodSetup(){
-        expensePeirodButtons[2].backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-        expensePeirodButtons[2].setTitleColor(#colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1), for: .normal)
+        let savedPeriod = defaults.integer(forKey: "SelectedPeriod")
+        expencePeriodSelected(expensePeirodButtons[savedPeriod])
     }
     
     //MARK: - Setup Expenses View
@@ -187,8 +195,9 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     @IBAction func expencePeriodSelected(_ sender: UIButton) {
         for index in expensePeirodButtons.indices {
             if sender == expensePeirodButtons[index]{
-                expensePeirodButtons[index].backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-                expensePeirodButtons[index].setTitleColor(#colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1), for: .normal)
+                expensePeirodButtons[index].backgroundColor = backgroundColor
+                expensePeirodButtons[index].setTitleColor(textColor, for: .normal)
+                defaults.set(Int(index), forKey: "SelectedPeriod")
             } else {
                 expensePeirodButtons[index].backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1)
                 expensePeirodButtons[index].setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
@@ -200,13 +209,15 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     
     
     //MARK: - New Expense Delegete Methods
-    func addNewExpense(name: String, cost: Double, numberOfPeriods: Int, periodLength: String) {
+    func addNewExpense(name: String, cost: Double, numberOfPeriods: Double, periodLength: Int) {
         let expense = Expense(context: context)
         expense.name = name
         expense.price = cost
-        expense.periodLength = Int16(numberOfPeriods)
-        expense.periodType = periodLength
-        expense.yearPrice = setPricePerYear(cost: cost, numberOfPeriods: numberOfPeriods, periodLength: periodLength)
+        expense.periodLength = numberOfPeriods
+        
+        guard let periodType = Expense.PeriodType(rawValue: periodLength) else {return}
+        expense.periodType = Int16(periodLength)
+        expense.yearPrice = cost * (periodType.countPerYear/numberOfPeriods)
         
         expenseArray.append(expense)
         indexExpenseArray()
@@ -215,30 +226,15 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         tableView.reloadData()
     }
     
-    func setPricePerYear (cost: Double, numberOfPeriods: Int, periodLength: String) -> Double {
-        var periodTypePerYear: Double?
-        switch periodLength {
-        case "Day(s)":
-            periodTypePerYear = 365
-        case "Week(s)":
-            periodTypePerYear = 52
-        case "Fortnight(s)":
-            periodTypePerYear = 26
-        case "Month(s)":
-            periodTypePerYear = 12
-        case "Year(s)":
-            periodTypePerYear = 1
-        default:
-            periodTypePerYear = nil
-        }
-        return cost * (periodTypePerYear!/Double(numberOfPeriods)) /// [Andy] never use force unwrapping
-    }
-    
     //MARK: - Update Expense Delegete Methods
     func updateExpense(expense: Expense) {
-        expense.yearPrice = setPricePerYear(cost: expense.price, numberOfPeriods: Int(expense.periodLength), periodLength: expense.periodType!)
+        if let periodType = Expense.PeriodType(rawValue: Int(expense.periodType)){
+            expense.yearPrice = expense.price * (periodType.countPerYear/expense.periodLength)
+        } else {
+            periodType = .month
+            expense.yearPrice = expense.price * (periodType.countPerYear/expense.periodLength)
+        }
         saveExpenses()
-        tableView.reloadData()
         expensesLabelSetup()
     }
     
@@ -277,6 +273,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             if let indexPath = tableView.indexPathForSelectedRow {
                 destinationVC.selectedExpense = expenseArray[indexPath.row]
                 selectedExpense = indexPath.row
+                destinationVC.periodSelected = true
             }
         }
         
@@ -333,9 +330,9 @@ extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.isEditing != true,
             let cell = tableView.cellForRow(at: indexPath) {
-            cell.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-            cell.textLabel?.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
-            cell.detailTextLabel?.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
+            cell.backgroundColor = backgroundColor
+            cell.textLabel?.textColor = textColor
+            cell.detailTextLabel?.textColor = textColor
             DispatchQueue.main.async() { () -> Void in
                 self.performSegue(withIdentifier: "goToEditExpense", sender: self)
             }

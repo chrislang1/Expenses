@@ -23,19 +23,8 @@
                                 <rect key="frame" x="8" y="88" width="359" height="613"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SubscriptionCell" id="kLY-X3-Som" customClass="SubscriptionCell" customModule="Expenses" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="359" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kLY-X3-Som" id="KzM-5x-YT6">
-                                            <rect key="frame" x="0.0" y="0.0" width="359" height="43.666666666666664"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="HTb-Op-R8W" kind="presentation" identifier="goToEditExpense" id="Jsv-PY-9EO"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="subscription" textLabel="Ozi-GA-pP5" detailTextLabel="XG5-aI-8ZL" rowHeight="64" style="IBUITableViewCellStyleValue1" id="7pd-D7-bxB">
-                                        <rect key="frame" x="0.0" y="72" width="359" height="64"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="subscription" textLabel="Ozi-GA-pP5" detailTextLabel="XG5-aI-8ZL" rowHeight="64" style="IBUITableViewCellStyleValue1" id="7pd-D7-bxB">
+                                        <rect key="frame" x="0.0" y="28" width="359" height="64"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7pd-D7-bxB" id="nho-ed-0GY">
                                             <rect key="frame" x="0.0" y="0.0" width="359" height="63.666666666666664"/>
@@ -154,7 +143,6 @@
                                     <constraint firstItem="dec-AN-0SE" firstAttribute="leading" secondItem="fA8-g7-MVC" secondAttribute="leadingMargin" id="JNK-AT-92w"/>
                                     <constraint firstItem="P4p-am-f7i" firstAttribute="top" secondItem="fA8-g7-MVC" secondAttribute="topMargin" id="KZ6-G5-JKp"/>
                                     <constraint firstItem="P4p-am-f7i" firstAttribute="leading" secondItem="fA8-g7-MVC" secondAttribute="leadingMargin" id="VZn-MW-30C"/>
-                                    <constraint firstAttribute="width" constant="359" id="Ych-W8-TLe"/>
                                     <constraint firstItem="dZD-E5-SO5" firstAttribute="trailing" secondItem="fA8-g7-MVC" secondAttribute="trailingMargin" id="f9C-F4-8Pe"/>
                                     <constraint firstItem="dec-AN-0SE" firstAttribute="bottom" secondItem="fA8-g7-MVC" secondAttribute="bottom" id="wMY-gh-YGz"/>
                                 </constraints>
@@ -184,7 +172,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hRw-Ih-L3n">
-                                        <rect key="frame" x="162" y="8" width="35" height="4"/>
+                                        <rect key="frame" x="162.33333333333334" y="8" width="35" height="4"/>
                                         <color key="backgroundColor" red="0.76862745098039209" green="0.76862745098039209" blue="0.76862745098039209" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="4" id="jQN-DS-nE4"/>
@@ -294,6 +282,7 @@
                             <constraint firstItem="NqV-ag-c2e" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="deY-Se-Kn7"/>
                             <constraint firstItem="xzb-8s-28p" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="dfp-Aa-OZo"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="xzb-8s-28p" secondAttribute="trailing" constant="8" id="e8I-2O-nl5"/>
+                            <constraint firstAttribute="trailing" secondItem="fA8-g7-MVC" secondAttribute="trailing" constant="8" id="fIc-c2-ISg"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="WBD-5v-ImN" secondAttribute="bottom" constant="-82" id="iU7-lV-dI7"/>
                             <constraint firstItem="NqV-ag-c2e" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="man-Tk-TrW"/>
                         </constraints>
@@ -579,7 +568,7 @@
                         <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
-                            <color key="textColor" red="0.60784313725490191" green="0.31764705882352939" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="textColor" red="0.45882352941176469" green="0.28627450980392155" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -602,7 +591,7 @@
                         <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
-                            <color key="textColor" red="0.60784313725490191" green="0.31764705882352939" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="textColor" red="0.45882352941176469" green="0.28627450980392155" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -619,7 +608,4 @@
         <image name="AddNewExpense" width="90" height="88"/>
         <image name="DollarVector" width="56" height="106"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="Jsv-PY-9EO"/>
-    </inferredMetricsTieBreakers>
 </document>
