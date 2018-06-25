@@ -23,7 +23,7 @@
                                 <rect key="frame" x="8" y="88" width="359" height="613"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="subscription" textLabel="Ozi-GA-pP5" detailTextLabel="XG5-aI-8ZL" rowHeight="64" style="IBUITableViewCellStyleValue1" id="7pd-D7-bxB">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="subscription" textLabel="Ozi-GA-pP5" detailTextLabel="XG5-aI-8ZL" rowHeight="64" style="IBUITableViewCellStyleValue1" id="7pd-D7-bxB">
                                         <rect key="frame" x="0.0" y="28" width="359" height="64"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7pd-D7-bxB" id="nho-ed-0GY">
@@ -47,6 +47,9 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <color key="tintColor" red="0.60784313725490191" green="0.31764705882352939" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <segue destination="HTb-Op-R8W" kind="presentation" identifier="goToEditExpense" trigger="accessoryAction" id="cAL-Ix-Z8R"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -358,8 +361,42 @@
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oNy-HE-SdO">
+                                <rect key="frame" x="16" y="714" width="343" height="48"/>
+                                <color key="backgroundColor" red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="Coh-zv-hWH"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Remove Expense">
+                                    <color key="titleColor" red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="deleteButtonPressed:" destination="mA9-u0-UsT" eventType="touchUpInside" id="JPk-b4-Jy2"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Billing Date" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vgz-sS-ADv">
+                                <rect key="frame" x="16" y="224" width="343" height="48"/>
+                                <color key="backgroundColor" red="0.94901960780000005" green="0.95686274510000002" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="ZQl-2G-g41"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" returnKeyType="done"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="MeV-Nx-dhx">
-                                <rect key="frame" x="16" y="265" width="343" height="104"/>
+                                <rect key="frame" x="16" y="331" width="343" height="104"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="npi-rt-7Bw">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="48"/>
@@ -450,7 +487,7 @@
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose a Billing Period" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IsA-Vv-Z2R">
-                                <rect key="frame" x="16" y="219" width="225" height="48"/>
+                                <rect key="frame" x="16" y="283" width="225" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="NUU-SH-lPn"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="225" id="kYN-ED-81M"/>
@@ -460,7 +497,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Custom Period" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vp4-XW-9Xz">
-                                <rect key="frame" x="16" y="377" width="343" height="48"/>
+                                <rect key="frame" x="16" y="443" width="343" height="48"/>
                                 <color key="backgroundColor" red="0.94901960784313721" green="0.95686274509803915" blue="0.96470588235294119" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="YLP-8S-hUn"/>
@@ -470,7 +507,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aHS-Hz-6WH">
-                                <rect key="frame" x="16" y="377" width="343" height="48"/>
+                                <rect key="frame" x="16" y="443" width="343" height="48"/>
                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="s0L-xk-MQt"/>
@@ -479,25 +516,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oNy-HE-SdO">
-                                <rect key="frame" x="16" y="714" width="343" height="48"/>
-                                <color key="backgroundColor" red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="48" id="Coh-zv-hWH"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Remove Expense">
-                                    <color key="titleColor" red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="10"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="deleteButtonPressed:" destination="mA9-u0-UsT" eventType="touchUpInside" id="JPk-b4-Jy2"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -509,18 +527,21 @@
                             <constraint firstItem="XZ8-RA-uQP" firstAttribute="leading" secondItem="7QN-mR-W5P" secondAttribute="leading" constant="16" id="ErS-Dx-GAw"/>
                             <constraint firstItem="Vp4-XW-9Xz" firstAttribute="top" secondItem="MeV-Nx-dhx" secondAttribute="bottom" constant="8" id="K7j-ES-OH6"/>
                             <constraint firstItem="7QN-mR-W5P" firstAttribute="trailing" secondItem="oNy-HE-SdO" secondAttribute="trailing" constant="16" id="P1J-mY-tb2"/>
+                            <constraint firstItem="MeV-Nx-dhx" firstAttribute="top" secondItem="IsA-Vv-Z2R" secondAttribute="bottom" id="Qg8-jN-brm"/>
                             <constraint firstItem="aHS-Hz-6WH" firstAttribute="leading" secondItem="7QN-mR-W5P" secondAttribute="leading" constant="16" id="SXy-WQ-us7"/>
                             <constraint firstItem="Mf6-Kp-eiG" firstAttribute="top" secondItem="XZ8-RA-uQP" secondAttribute="bottom" constant="16" id="Vce-ue-f0r"/>
                             <constraint firstItem="XZ8-RA-uQP" firstAttribute="top" secondItem="7QN-mR-W5P" secondAttribute="top" constant="8" id="XBm-6Z-Dee"/>
                             <constraint firstItem="aHS-Hz-6WH" firstAttribute="centerY" secondItem="Vp4-XW-9Xz" secondAttribute="centerY" id="YOI-P6-MOF"/>
                             <constraint firstItem="aHS-Hz-6WH" firstAttribute="centerX" secondItem="Vp4-XW-9Xz" secondAttribute="centerX" id="ZCe-iR-WaX"/>
                             <constraint firstItem="aHS-Hz-6WH" firstAttribute="centerX" secondItem="Vp4-XW-9Xz" secondAttribute="centerX" id="ZxS-hZ-1fC"/>
+                            <constraint firstItem="Vgz-sS-ADv" firstAttribute="leading" secondItem="7QN-mR-W5P" secondAttribute="leading" constant="16" id="b55-vP-X1P"/>
                             <constraint firstItem="7QN-mR-W5P" firstAttribute="bottom" secondItem="oNy-HE-SdO" secondAttribute="bottom" constant="16" id="bFj-Sq-pa7"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="IsA-Vv-Z2R" secondAttribute="trailing" constant="20" symbolic="YES" id="eia-Dx-vft"/>
                             <constraint firstItem="7QN-mR-W5P" firstAttribute="trailing" secondItem="Vp4-XW-9Xz" secondAttribute="trailing" constant="16" id="ezg-RA-Qqy"/>
-                            <constraint firstItem="IsA-Vv-Z2R" firstAttribute="top" secondItem="Mf6-Kp-eiG" secondAttribute="bottom" constant="11" id="grD-Si-NGh"/>
-                            <constraint firstItem="MeV-Nx-dhx" firstAttribute="top" secondItem="Mf6-Kp-eiG" secondAttribute="bottom" constant="57" id="iVg-B6-ROZ"/>
+                            <constraint firstItem="IsA-Vv-Z2R" firstAttribute="top" secondItem="Vgz-sS-ADv" secondAttribute="bottom" constant="11" id="grD-Si-NGh"/>
                             <constraint firstItem="MeV-Nx-dhx" firstAttribute="leading" secondItem="7QN-mR-W5P" secondAttribute="leading" constant="16" id="nTt-9e-4aS"/>
+                            <constraint firstItem="7QN-mR-W5P" firstAttribute="trailing" secondItem="Vgz-sS-ADv" secondAttribute="trailing" constant="16" id="nWS-fk-Yq9"/>
+                            <constraint firstItem="Vgz-sS-ADv" firstAttribute="top" secondItem="Mf6-Kp-eiG" secondAttribute="bottom" constant="16" id="s9k-Eo-riz"/>
                             <constraint firstItem="7QN-mR-W5P" firstAttribute="trailing" secondItem="XZ8-RA-uQP" secondAttribute="trailing" constant="16" id="vPj-Tc-V9d"/>
                             <constraint firstItem="IsA-Vv-Z2R" firstAttribute="leading" secondItem="7QN-mR-W5P" secondAttribute="leading" constant="16" id="vu6-9S-YoY"/>
                             <constraint firstItem="7QN-mR-W5P" firstAttribute="trailing" secondItem="MeV-Nx-dhx" secondAttribute="trailing" constant="16" id="xrl-bF-p1y"/>
@@ -542,6 +563,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="billingDateTextField" destination="Vgz-sS-ADv" id="Mg6-97-wb0"/>
                         <outlet property="costTextField" destination="Mf6-Kp-eiG" id="Fo7-Ud-d9y"/>
                         <outlet property="customPeriodLabel" destination="Vp4-XW-9Xz" id="mfx-eH-fZk"/>
                         <outlet property="customPickerTextField" destination="aHS-Hz-6WH" id="kb6-AU-blR"/>
@@ -608,4 +630,7 @@
         <image name="AddNewExpense" width="90" height="88"/>
         <image name="DollarVector" width="56" height="106"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="cAL-Ix-Z8R"/>
+    </inferredMetricsTieBreakers>
 </document>

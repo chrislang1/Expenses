@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import UserNotifications
 
 class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseDelegate {
     
@@ -89,7 +90,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         }
     }
     
-    func checkExpenseArray(){
+    func checkExpenseArray() {
         if expenseArray.count == 0 {
             noExpensesView.isHidden = false
             tableView.isHidden = true
@@ -136,7 +137,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     }
     
     //MARK: - Expense Period Setup
-    func expensePeriodSetup(){
+    func expensePeriodSetup() {
         let savedPeriod = defaults.integer(forKey: "SelectedPeriod")
         expencePeriodSelected(expensePeirodButtons[savedPeriod])
     }
@@ -160,7 +161,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         self.expensesView.addGestureRecognizer(swipeDown)
     }
     
-    func expensesLabelSetup(per timePeriod: Double = 12, with label: String = "per month"){
+    func expensesLabelSetup(per timePeriod: Double = 12, with label: String = "per month") {
         //Update Labels in Expense View
         var totalPrice = Double()
         for index in expenseArray.indices {
@@ -209,7 +210,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     
     
     //MARK: - New Expense Delegete Methods
-    func addNewExpense(name: String, cost: Double, numberOfPeriods: Double, periodLength: Int) {
+    func addNewExpense(name: String, cost: Double, numberOfPeriods: Double, periodLength: Int, billingDate: Date?) {
         let expense = Expense(context: context)
         expense.name = name
         expense.price = cost
@@ -219,11 +220,46 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         expense.periodType = Int16(periodLength)
         expense.yearPrice = cost * (periodType.countPerYear/numberOfPeriods)
         
+        if let date = billingDate {
+            expense.billingDate = date
+            expense.nextBillingDate = checkDate(billingDate: date, periodLength: periodLength, numberOfPeriods: Int(numberOfPeriods))
+            setNotification(from: expense)
+        }
+        
         expenseArray.append(expense)
         indexExpenseArray()
         saveExpenses()
         expensesLabelSetup()
         tableView.reloadData()
+    }
+    
+    func checkDate(billingDate: Date, periodLength: Int, numberOfPeriods: Int) -> Date {
+        let currentDate = Date()
+        if billingDate > currentDate {
+            return billingDate
+        } else {
+            var dateComponents = DateComponents()
+            switch periodLength {
+            case 0:
+                dateComponents.day = numberOfPeriods
+            case 1:
+                dateComponents.day = numberOfPeriods*7
+            case 2:
+                dateComponents.day = numberOfPeriods*7*2
+            case 3:
+                dateComponents.month = numberOfPeriods
+            case 4:
+                dateComponents.year = numberOfPeriods
+            default:
+                dateComponents.day = numberOfPeriods
+            }
+            
+            if let nextDate = Calendar.current.date(byAdding: dateComponents, to: billingDate) {
+                return nextDate
+            } else {
+                return billingDate
+            }
+        }
     }
     
     //MARK: - Update Expense Delegete Methods
@@ -234,11 +270,17 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             periodType = .month
             expense.yearPrice = expense.price * (periodType.countPerYear/expense.periodLength)
         }
+        
+        if let date = expense.billingDate {
+            expense.nextBillingDate = checkDate(billingDate: date, periodLength: Int(expense.periodType), numberOfPeriods: Int(expense.periodLength))
+            updateNotification(from: expense)
+        }
+        
         saveExpenses()
         expensesLabelSetup()
     }
     
-    func deleteExpense(expense: Expense){
+    func deleteExpense(expense: Expense) {
         context.delete(expenseArray[selectedExpense!])
         expenseArray.remove(at: selectedExpense!)
         indexExpenseArray()
@@ -247,7 +289,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         expensesLabelSetup()
     }
     
-    func indexExpenseArray(){
+    func indexExpenseArray() {
         for index in expenseArray.indices {
             expenseArray[index].arrayIndex = Int16(index)
         }
@@ -280,7 +322,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     }
     
     //MARK: - Load and Save Methods
-    func loadExpenses(with request: NSFetchRequest<Expense> = Expense.fetchRequest()){
+    func loadExpenses(with request: NSFetchRequest<Expense> = Expense.fetchRequest()) {
         let sort = NSSortDescriptor(key: "arrayIndex", ascending: true)
         request.sortDescriptors = [sort]
         do{
@@ -290,13 +332,78 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         }
     }
     
-    func saveExpenses(){
+    func saveExpenses() {
         do{
             try context.save()
         } catch {
             print("Error saving context \(error)")
         }
         
+    }
+    
+    //MARK: - Notification Methods
+    func setNotification(from expense: Expense) {
+        let warningTime = 2
+        let content = UNMutableNotificationContent()
+        if let name = expense.name {
+            content.title = name
+            content.body = "\(name) is due in \(warningTime) days"
+        }
+        
+        var dateComponents = Calendar.current.dateComponents([.year, .month, .day], from: expense.nextBillingDate!)
+        dateComponents.day = dateComponents.day! - warningTime
+        dateComponents.hour = 9
+//        dateComponents.minute = 28
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+        
+        let request = UNNotificationRequest(identifier: expense.name!, content: content, trigger: trigger)
+        
+        // Schedule the request with the system.
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.add(request) { (error) in
+            if error != nil {
+                // Handle any errors.
+            }
+        }
+    }
+    
+    func updateNotification(from expense: Expense) {
+        let center = UNUserNotificationCenter.current()
+        var requestList = [UNNotificationRequest]()
+        center.getPendingNotificationRequests { (requests) in
+            requestList = requests
+            print(requestList)
+        }
+        
+        if requestList.count != 0 {
+            for index in requestList.indices {
+                if requestList[index].trigger?.description == expense.name {
+                    center.removePendingNotificationRequests(withIdentifiers: [expense.name!])
+                    setNotification(from: expense)
+                }
+            }
+        } else {
+            setNotification(from: expense)
+        }
+    }
+    
+    func nextNotification(from expense: Expense) {
+        let center = UNUserNotificationCenter.current()
+        var notificationList = [UNNotification]()
+        center.getDeliveredNotifications { (notifications) in
+            notificationList = notifications
+        }
+        
+        for index in notificationList.indices {
+            if notificationList[index].request.trigger?.description == expense.name {
+                center.removeDeliveredNotifications(withIdentifiers: [expense.name!])
+                expense.billingDate = expense.nextBillingDate
+                expense.nextBillingDate = checkDate(billingDate: expense.billingDate!, periodLength: Int(expense.periodType), numberOfPeriods: Int(expense.periodLength))
+                setNotification(from: expense)
+                saveExpenses()
+            }
+        }
     }
     
 }
