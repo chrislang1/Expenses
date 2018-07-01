@@ -45,6 +45,9 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        //Notification Delegate - Fix Later
+        UNUserNotificationCenter.current().delegate = self
+        
         //Remove Navigation Bar Border
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
@@ -318,7 +321,6 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
                 destinationVC.periodSelected = true
             }
         }
-        
     }
     
     //MARK: - Load and Save Methods
@@ -352,11 +354,11 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         
         var dateComponents = Calendar.current.dateComponents([.year, .month, .day], from: expense.nextBillingDate!)
         dateComponents.day = dateComponents.day! - warningTime
-        dateComponents.hour = 9
-//        dateComponents.minute = 28
+        dateComponents.hour = 18
+        dateComponents.minute = 5
         
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-        
+//        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
         let request = UNNotificationRequest(identifier: expense.name!, content: content, trigger: trigger)
         
         // Schedule the request with the system.
@@ -366,6 +368,11 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
                 // Handle any errors.
             }
         }
+        
+        //Print Request List for Testing
+        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: ({ (requests) in
+            print(requests)
+        }))
     }
     
     func updateNotification(from expense: Expense) {
@@ -379,7 +386,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         if requestList.count != 0 {
             for index in requestList.indices {
                 if requestList[index].trigger?.description == expense.name {
-                    center.removePendingNotificationRequests(withIdentifiers: [expense.name!])
+//                    center.removePendingNotificationRequests(withIdentifiers: [expense.name!])
                     setNotification(from: expense)
                 }
             }
@@ -458,4 +465,28 @@ extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
         saveExpenses()
     }
 }
+
+//MARK: - Notification Delegate Methods
+extension ExpensesViewController: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        for index in expenseArray.indices {
+            if response.notification.request.identifier == expenseArray[index].name {
+                updateNotification(from: expenseArray[index])
+            }
+        }
+        completionHandler()
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        for index in expenseArray.indices {
+            if notification.request.identifier == expenseArray[index].name {
+                updateNotification(from: expenseArray[index])
+            }
+        }
+        return
+    }
+    
+}
+
 
