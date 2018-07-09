@@ -35,15 +35,12 @@ class TotalCostViewController: UIViewController {
         view.addGestureRecognizer(gesture)
         expensesViewSetup()
         buttonSettingStackView.isHidden = true
-        print("new controller")
-
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         updateLabels()
-        print("appeared")
         
         UIView.animate(withDuration: 0.3) { [weak self] in
             let frame = self?.view.frame

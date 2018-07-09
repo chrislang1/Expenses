@@ -56,7 +56,6 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
         checkExpenseArray()
         setTotalCost()
         
@@ -191,7 +190,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         }
     }
     
-    //MARK: - Prepare for Segue Method
+    //MARK: - Segue Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if tableView.isEditing == false {
             if segue.identifier == "goToAddExpense" {
@@ -215,6 +214,14 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
                     destinationVC.periodSelected = true
                 }
             }
+        }
+    }
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == "goToEditExpense" {
+            return !tableView.isEditing
+        } else {
+            return true
         }
     }
     
