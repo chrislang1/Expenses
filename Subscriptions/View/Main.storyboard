@@ -109,7 +109,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="L8u-7c-3I0"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                 <state key="normal" title="Remove Expense">
                                     <color key="titleColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
@@ -245,7 +245,7 @@
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="48" id="6bW-1h-ahC"/>
                                                                 </constraints>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                                 <state key="normal" title="Per Day">
                                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 </state>
@@ -264,7 +264,7 @@
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="48" id="yNO-Wi-ty8"/>
                                                                 </constraints>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                                 <state key="normal" title="Per Week">
                                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 </state>
@@ -288,7 +288,7 @@
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="48" id="Kjj-cJ-UBJ"/>
                                                                 </constraints>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                                 <state key="normal" title="Per Month">
                                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 </state>
@@ -307,7 +307,7 @@
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="48" id="0jZ-bj-2wN"/>
                                                                 </constraints>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                                 <state key="normal" title="Per Year">
                                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 </state>
@@ -352,7 +352,7 @@
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="48" id="4TH-7U-1uE"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                         <state key="normal" title="Settings">
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         </state>
@@ -455,7 +455,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="48" id="7YN-b3-hLV"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                 <state key="normal" title="Daily">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -474,7 +474,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="48" id="BeU-Br-GED"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                 <state key="normal" title="Weekly">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -498,7 +498,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="48" id="y7Y-2P-ile"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                 <state key="normal" title="Fortnightly">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -517,7 +517,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="48" id="4Ii-s1-5oS"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                 <state key="normal" title="Monthly">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -550,7 +550,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="YLP-8S-hUn"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -570,7 +570,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="Coh-zv-hWH"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                 <state key="normal" title="Remove Expense">
                                     <color key="titleColor" red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
