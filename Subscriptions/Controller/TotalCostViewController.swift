@@ -23,6 +23,8 @@ class TotalCostViewController: UIViewController {
     var bottomPadding: CGFloat?
     var yComponent = CGFloat()
     let defaults = UserDefaults.standard
+    var expenseFrame = CGRect()
+    var periodFrame = CGRect()
     
     let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
     let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
@@ -31,9 +33,12 @@ class TotalCostViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        expenseFrame = expensesView.frame
+        periodFrame = periodButtonSettingsView.frame
+        
         let gesture = UIPanGestureRecognizer.init(target: self, action: #selector(panGesture))
         view.addGestureRecognizer(gesture)
-        expensesViewSetup()
+        //expensesViewSetup()
         buttonSettingStackView.isHidden = true
     }
     
@@ -43,21 +48,23 @@ class TotalCostViewController: UIViewController {
         updateLabels()
         
         UIView.animate(withDuration: 0.3) { [weak self] in
-            let frame = self?.view.frame
-            let expenseFrame = self?.expensesView.frame
-            let periodFrame = self?.periodButtonSettingsView.frame
-            self?.bottomPadding = self?.window?.safeAreaInsets.bottom
+            guard let self = self else {return}
+            let frame = self.view.frame
+            self.bottomPadding = self.window?.safeAreaInsets.bottom
             
-            if let bottomPadding = self?.bottomPadding {
-                self?.yComponent = UIScreen.main.bounds.height - 60 - bottomPadding
+            if let bottomPadding = self.bottomPadding {
+                self.yComponent = UIScreen.main.bounds.height - self.expenseFrame.height - bottomPadding
             } else {
-                self?.yComponent = UIScreen.main.bounds.height - 60
+                self.yComponent = UIScreen.main.bounds.height - self.expenseFrame.height
             }
             
-            self?.view.frame = CGRect(x: 0, y: (self?.yComponent)!, width: frame!.width, height: expenseFrame!.height + periodFrame!.height)
+            self.view.frame = CGRect(x: 0, y: self.yComponent, width: frame.width, height: self.expenseFrame.height + self.periodFrame.height)
         }
-        
-        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        expensesViewSetup()
     }
     
     @objc func panGesture(recognizer: UIPanGestureRecognizer){
@@ -66,7 +73,7 @@ class TotalCostViewController: UIViewController {
             let y = self.view.frame.minY
             
             if let parent = parent as? ExpensesViewController, let bottomPadding = bottomPadding {
-                let maxHeight = parent.view.frame.height - 246 - bottomPadding
+                let maxHeight = parent.view.frame.height - expenseFrame.height - periodFrame.height - bottomPadding
                 let maxTranslation = maxHeight - yComponent
                 if y+translation.y <= maxHeight {
                     self.view.frame = CGRect(x: 0, y: maxHeight, width: view.frame.width, height: view.frame.height)
