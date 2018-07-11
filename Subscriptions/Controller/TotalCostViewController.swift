@@ -93,13 +93,14 @@ class TotalCostViewController: UIViewController {
             
             recognizer.setTranslation(CGPoint(x: 0, y: 0), in: self.view)
         case .ended, .cancelled, .failed:
+            let velocity = recognizer.velocity(in: self.view).y
             let minY = self.view.frame.minY
             if let parent = parent as? ExpensesViewController, let bottomPadding = bottomPadding {
                 let maxHeight = parent.view.frame.height - expenseFrame.height - periodFrame.height - bottomPadding
                 let height = yComponent - maxHeight
                 let currentY = yComponent - minY
                 let snapToFrame: CGRect
-                if currentY > height/2 {
+                if (currentY > height/2 && velocity <= 0) || velocity <= -100 {
                     snapToFrame = CGRect(x: 0, y: maxHeight, width: view.frame.width, height: view.frame.height)
                     buttonSettingStackView.alpha = 1
                 } else {
