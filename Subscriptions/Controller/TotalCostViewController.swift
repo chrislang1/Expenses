@@ -105,9 +105,14 @@ class TotalCostViewController: UIViewController {
                     snapToFrame = CGRect(x: 0, y: yComponent, width: view.frame.width, height: view.frame.height)
                 }
                 // Animate to snap
-                UIView.animate(withDuration: 0.3) {
+                UIView.animate(withDuration: 0.3,
+                               delay: 0,
+                               usingSpringWithDamping: 0.5,
+                               initialSpringVelocity: 0,
+                               options: .allowUserInteraction,
+                               animations: {
                     self.view.frame = snapToFrame
-                }
+                }, completion: nil)
             }
             
         default:
