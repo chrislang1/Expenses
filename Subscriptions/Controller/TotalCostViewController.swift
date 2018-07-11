@@ -48,7 +48,7 @@ class TotalCostViewController: UIViewController {
         updateLabels()
         
         UIView.animate(withDuration: 0.3) { [weak self] in
-            guard let self = self else {return}
+            guard let `self` = self else {return}
             let frame = self.view.frame
             self.bottomPadding = self.window?.safeAreaInsets.bottom
             
@@ -68,7 +68,8 @@ class TotalCostViewController: UIViewController {
     }
     
     @objc func panGesture(recognizer: UIPanGestureRecognizer){
-        if recognizer.state == .changed {
+        switch recognizer.state {
+        case .changed:
             let translation = recognizer.translation(in: self.view)
             let y = self.view.frame.minY
             
@@ -91,6 +92,26 @@ class TotalCostViewController: UIViewController {
             }
             
             recognizer.setTranslation(CGPoint(x: 0, y: 0), in: self.view)
+        case .ended, .cancelled, .failed:
+            let minY = self.view.frame.minY
+            if let parent = parent as? ExpensesViewController, let bottomPadding = bottomPadding {
+                let maxHeight = parent.view.frame.height - expenseFrame.height - periodFrame.height - bottomPadding
+                let height = yComponent - maxHeight
+                let currentY = yComponent - minY
+                let snapToFrame: CGRect
+                if currentY > height/2 {
+                    snapToFrame = CGRect(x: 0, y: maxHeight, width: view.frame.width, height: view.frame.height)
+                } else {
+                    snapToFrame = CGRect(x: 0, y: yComponent, width: view.frame.width, height: view.frame.height)
+                }
+                // Animate to snap
+                UIView.animate(withDuration: 0.3) {
+                    self.view.frame = snapToFrame
+                }
+            }
+            
+        default:
+            break;
         }
         
     }
