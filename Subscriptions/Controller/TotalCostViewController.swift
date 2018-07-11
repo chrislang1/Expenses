@@ -101,8 +101,11 @@ class TotalCostViewController: UIViewController {
                 let snapToFrame: CGRect
                 if currentY > height/2 {
                     snapToFrame = CGRect(x: 0, y: maxHeight, width: view.frame.width, height: view.frame.height)
+                    buttonSettingStackView.alpha = 1
                 } else {
                     snapToFrame = CGRect(x: 0, y: yComponent, width: view.frame.width, height: view.frame.height)
+                    buttonSettingStackView.alpha = 0
+                    buttonSettingStackView.isHidden = true
                 }
                 // Animate to snap
                 UIView.animate(withDuration: 0.3,
