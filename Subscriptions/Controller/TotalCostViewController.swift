@@ -25,6 +25,7 @@ class TotalCostViewController: UIViewController {
     let defaults = UserDefaults.standard
     var expenseFrame = CGRect()
     var periodFrame = CGRect()
+    var animationDuration = TimeInterval()
     
     let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
     let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
@@ -109,7 +110,13 @@ class TotalCostViewController: UIViewController {
                     buttonSettingStackView.isHidden = true
                 }
                 // Animate to snap
-                UIView.animate(withDuration: 0.3,
+                if abs(velocity) > 100 {
+                    animationDuration = 0.5
+                } else {
+                    animationDuration = 0.3
+                }
+                
+                UIView.animate(withDuration: self.animationDuration,
                                delay: 0,
                                usingSpringWithDamping: 0.5,
                                initialSpringVelocity: 0,
