@@ -139,8 +139,9 @@ class TotalCostViewController: UIViewController {
         expensesView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor
         expensesView.layer.shadowPath = UIBezierPath(roundedRect: expensesView.bounds, cornerRadius: 10).cgPath
         expensesView.layer.shadowOpacity = 1
-        expensesView.layer.shadowRadius = 2
+        expensesView.layer.shadowRadius = 5
         expensesView.layer.shadowOffset = CGSize.zero
+        expensesView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         updateLabels()
     }
