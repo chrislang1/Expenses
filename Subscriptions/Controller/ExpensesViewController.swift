@@ -132,7 +132,6 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             self.tableView.setEditing(false, animated: true)
             self.editBarButton.title = "Edit"
             self.navigationItem.rightBarButtonItem = self.addBarButton
-            //expenseViewBottonConstraint.constant = 9
             removeExpenseConstraint.constant = -82
             checkExpenseArray()
             if let totalCostVC = totalCostVC {
@@ -141,9 +140,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             }
         } else if (self.tableView.isEditing == false) {
             self.tableView.setEditing(true, animated: true)
-            self.tableView.isEditing = true
             self.editBarButton.title = "Done"
-            //expenseViewBottonConstraint.constant = -93
             removeExpenseConstraint.constant = 9
             self.navigationItem.rightBarButtonItem = nil
             if let totalCostVC = totalCostVC {
