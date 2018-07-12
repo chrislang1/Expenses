@@ -14,6 +14,7 @@
 		839DE4A020BFF4F000FB4E4D /* Subscriptions.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 839DE49E20BFF4F000FB4E4D /* Subscriptions.xcdatamodeld */; };
 		839DE4A220BFF4F300FB4E4D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 839DE4A120BFF4F300FB4E4D /* Assets.xcassets */; };
 		839DE4A520BFF4F300FB4E4D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 839DE4A320BFF4F300FB4E4D /* LaunchScreen.storyboard */; };
+		83FEE0E220EDC42A0084D533 /* TotalCostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FEE0E120EDC42A0084D533 /* TotalCostViewController.swift */; };
 		A1B575B220D65C8C00E8BAB6 /* Expense+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B575B120D65C8C00E8BAB6 /* Expense+Helper.swift */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 		839DE4A120BFF4F300FB4E4D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		839DE4A420BFF4F300FB4E4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		839DE4A620BFF4F300FB4E4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		83FEE0E120EDC42A0084D533 /* TotalCostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalCostViewController.swift; sourceTree = "<group>"; };
 		A1B575B120D65C8C00E8BAB6 /* Expense+Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense+Helper.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -74,6 +76,7 @@
 			children = (
 				839DE49920BFF4F000FB4E4D /* ExpensesViewController.swift */,
 				835A2FBE20C0DAAC004960D7 /* AddExpenseViewController.swift */,
+				83FEE0E120EDC42A0084D533 /* TotalCostViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -180,6 +183,7 @@
 				839DE4A020BFF4F000FB4E4D /* Subscriptions.xcdatamodeld in Sources */,
 				A1B575B220D65C8C00E8BAB6 /* Expense+Helper.swift in Sources */,
 				839DE49A20BFF4F000FB4E4D /* ExpensesViewController.swift in Sources */,
+				83FEE0E220EDC42A0084D533 /* TotalCostViewController.swift in Sources */,
 				839DE49820BFF4F000FB4E4D /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

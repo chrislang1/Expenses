@@ -11,23 +11,14 @@ import CoreData
 
 class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseDelegate {
     
+    var totalCostVC: TotalCostViewController?
     
-    @IBOutlet weak var totalExpensesPriceLabel: UILabel!
-    @IBOutlet weak var expensePeriodLabel: UILabel!
-    @IBOutlet weak var expensesView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var editBarButton: UIBarButtonItem!
     @IBOutlet var addBarButton: UIBarButtonItem!
-    
-    @IBOutlet weak var expensePeriodView: UIView!
-    @IBOutlet weak var expensePeriodViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var noExpensesView: UIView!
     @IBOutlet weak var removeExpenseButton: UIButton!
-    
-    @IBOutlet weak var expenseViewBottonConstraint: NSLayoutConstraint!
     @IBOutlet weak var removeExpenseConstraint: NSLayoutConstraint!
-    
-    @IBOutlet var expensePeirodButtons: [UIButton]!
     
     var expenseArray = [Expense]()
     var selectedExpense: Int?
@@ -60,24 +51,13 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         tableView.register(UINib(nibName: "SubscriptionCell", bundle: nil), forCellReuseIdentifier: "subscriptionCell")
         
         loadExpenses()
-        expensesViewSetup()
-        expensesLabelSetup()
-        
-        //Set Expense Period Button
-        expensePeriodSetup()
-        
-        if expenseArray.count == 0 {
-            noExpensesView.isHidden = false
-            tableView.isHidden = true
-        } else {
-            noExpensesView.isHidden = true
-            tableView.isHidden = false
-        }
+        addTotalCostView()
+        checkExpenseArray()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
         checkExpenseArray()
+        setTotalCost()
         
         if let index = tableView.indexPathForSelectedRow,
             let cell = tableView.cellForRow(at: index) {
@@ -86,6 +66,29 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             cell.textLabel?.textColor = .black
             cell.detailTextLabel?.textColor = .black
             tableView.reloadData()
+        }
+    }
+    
+    //MARK: - Add Total Cost View to bottom of screen
+    func addTotalCostView(){
+        totalCostVC = storyboard?.instantiateViewController(withIdentifier: "TotalCostViewController") as? TotalCostViewController
+        if let totalCostVC = totalCostVC {
+        
+            self.addChildViewController(totalCostVC)
+            self.view.addSubview(totalCostVC.view)
+            totalCostVC.didMove(toParentViewController: self)
+            
+            let height = view.frame.height
+            let width = view.frame.width
+            totalCostVC.view.frame = CGRect(x: 0, y: self.view.frame.maxY, width: width, height: height)
+        
+            totalCostVC.expenseArray = expenseArray
+        }
+    }
+    
+    func setTotalCost(){
+        if let totalCostVC = totalCostVC {
+            totalCostVC.expenseArray = expenseArray
         }
     }
     
@@ -108,7 +111,10 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             context.delete($0)
             saveExpenses()
             expenseArray.remove(at: expenseArray.index(of: $0)!)
-            expensesLabelSetup()
+            if let totalCostVC = totalCostVC {
+                totalCostVC.expenseArray = expenseArray
+                totalCostVC.updateLabels()
+            }
         }
         tableView.deleteRows(at: indexPathsForSelectedRows, with: .fade)
     }
@@ -119,94 +125,28 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             self.tableView.setEditing(false, animated: true)
             self.editBarButton.title = "Edit"
             self.navigationItem.rightBarButtonItem = self.addBarButton
-            expenseViewBottonConstraint.constant = 9
+            //expenseViewBottonConstraint.constant = 9
             removeExpenseConstraint.constant = -82
             checkExpenseArray()
+            if let totalCostVC = totalCostVC {
+                totalCostVC.moveUp()
+                totalCostVC.updateLabels()
+            }
         } else if (self.tableView.isEditing == false) {
             self.tableView.setEditing(true, animated: true)
             self.tableView.isEditing = true
             self.editBarButton.title = "Done"
-            expenseViewBottonConstraint.constant = -93
+            //expenseViewBottonConstraint.constant = -93
             removeExpenseConstraint.constant = 9
             self.navigationItem.rightBarButtonItem = nil
-        }
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    //MARK: - Expense Period Setup
-    func expensePeriodSetup(){
-        let savedPeriod = defaults.integer(forKey: "SelectedPeriod")
-        expencePeriodSelected(expensePeirodButtons[savedPeriod])
-    }
-    
-    //MARK: - Setup Expenses View
-    func expensesViewSetup(){
-        expensesView.layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.94).cgColor
-        expensesView.clipsToBounds = false
-        expensesView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor
-        expensesView.layer.shadowPath = UIBezierPath(roundedRect: expensesView.bounds, cornerRadius: 10).cgPath
-        expensesView.layer.shadowOpacity = 1
-        expensesView.layer.shadowRadius = 2
-        expensesView.layer.shadowOffset = CGSize.zero
-        
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(expenseLabelSwipe))
-        swipeUp.direction = .up
-        self.expensesView.addGestureRecognizer(swipeUp)
-        
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(expenseLabelSwipe))
-        swipeDown.direction = .down
-        self.expensesView.addGestureRecognizer(swipeDown)
-    }
-    
-    func expensesLabelSetup(per timePeriod: Double = 12, with label: String = "per month"){
-        //Update Labels in Expense View
-        var totalPrice = Double()
-        for index in expenseArray.indices {
-            totalPrice += expenseArray[index].yearPrice
-        }
-        
-        let currencyFormatter = NumberFormatter()
-        currencyFormatter.usesGroupingSeparator = true
-        currencyFormatter.numberStyle = .currency
-        // localize to your grouping and decimal separator
-        currencyFormatter.locale = Locale.current
-        let price = totalPrice/timePeriod
-        totalExpensesPriceLabel.text = currencyFormatter.string(from: NSNumber(value: price))
-        expensePeriodLabel.text = label.lowercased()
-    }
-    
-    @objc func expenseLabelSwipe(gesture: UISwipeGestureRecognizer) {
-        if gesture.direction == UISwipeGestureRecognizerDirection.up {
-            self.expensePeriodViewTopConstraint.constant = -120
-            expenseViewBottonConstraint.constant = 120
-        } else if gesture.direction == UISwipeGestureRecognizerDirection.down {
-            self.expensePeriodViewTopConstraint.constant = 34
-            expenseViewBottonConstraint.constant = 9
-        }
-        
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    //MARK: - Expense Time Period Method
-    @IBAction func expencePeriodSelected(_ sender: UIButton) {
-        for index in expensePeirodButtons.indices {
-            if sender == expensePeirodButtons[index]{
-                expensePeirodButtons[index].backgroundColor = backgroundColor
-                expensePeirodButtons[index].setTitleColor(textColor, for: .normal)
-                defaults.set(Int(index), forKey: "SelectedPeriod")
-            } else {
-                expensePeirodButtons[index].backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1)
-                expensePeirodButtons[index].setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
+            if let totalCostVC = totalCostVC {
+                totalCostVC.moveDown()
             }
         }
-        let expensePeriod = Double(sender.tag)
-        expensesLabelSetup(per: expensePeriod, with: sender.title(for: .normal)!)
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
     }
-    
     
     //MARK: - New Expense Delegete Methods
     func addNewExpense(name: String, cost: Double, numberOfPeriods: Double, periodLength: Int) {
@@ -222,7 +162,6 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         expenseArray.append(expense)
         indexExpenseArray()
         saveExpenses()
-        expensesLabelSetup()
         tableView.reloadData()
     }
     
@@ -235,7 +174,6 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             expense.yearPrice = expense.price * (periodType.countPerYear/expense.periodLength)
         }
         saveExpenses()
-        expensesLabelSetup()
     }
     
     func deleteExpense(expense: Expense){
@@ -243,8 +181,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         expenseArray.remove(at: selectedExpense!)
         indexExpenseArray()
         saveExpenses()
-        tableView.reloadData()
-        expensesLabelSetup()
+        //tableView.reloadData()
     }
     
     func indexExpenseArray(){
@@ -253,30 +190,39 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         }
     }
     
-    //MARK: - Prepare for Segue Method
+    //MARK: - Segue Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToAddExpense" {
-            let destinationNavigationController = segue.destination as! UINavigationController
-            let destinationVC = destinationNavigationController.topViewController as! AddExpenseViewController
+        if tableView.isEditing == false {
+            if segue.identifier == "goToAddExpense" {
+                let destinationNavigationController = segue.destination as! UINavigationController
+                let destinationVC = destinationNavigationController.topViewController as! AddExpenseViewController
+                
+                destinationVC.delegate = self
+                destinationVC.identifyingSegue = segue.identifier!
+            }
             
-            destinationVC.delegate = self
-            destinationVC.identifyingSegue = segue.identifier!
-        }
-        
-        if segue.identifier == "goToEditExpense" {
-            let destinationNavigationController = segue.destination as! UINavigationController
-            let destinationVC = destinationNavigationController.topViewController as! AddExpenseViewController
-            
-            destinationVC.delegate2 = self
-            destinationVC.identifyingSegue = segue.identifier!
-            
-            if let indexPath = tableView.indexPathForSelectedRow {
-                destinationVC.selectedExpense = expenseArray[indexPath.row]
-                selectedExpense = indexPath.row
-                destinationVC.periodSelected = true
+            if segue.identifier == "goToEditExpense" {
+                let destinationNavigationController = segue.destination as! UINavigationController
+                let destinationVC = destinationNavigationController.topViewController as! AddExpenseViewController
+                
+                destinationVC.delegate2 = self
+                destinationVC.identifyingSegue = segue.identifier!
+                
+                if let indexPath = tableView.indexPathForSelectedRow {
+                    destinationVC.selectedExpense = expenseArray[indexPath.row]
+                    selectedExpense = indexPath.row
+                    destinationVC.periodSelected = true
+                }
             }
         }
-        
+    }
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == "goToEditExpense" {
+            return !tableView.isEditing
+        } else {
+            return true
+        }
     }
     
     //MARK: - Load and Save Methods

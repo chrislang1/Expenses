@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="GDK-n6-hWF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="GDK-n6-hWF">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14270.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,7 +22,7 @@
                                 <rect key="frame" x="8" y="88" width="359" height="613"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="subscription" textLabel="Ozi-GA-pP5" detailTextLabel="XG5-aI-8ZL" rowHeight="64" style="IBUITableViewCellStyleValue1" id="7pd-D7-bxB">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="subscription" textLabel="Ozi-GA-pP5" detailTextLabel="XG5-aI-8ZL" rowHeight="64" style="IBUITableViewCellStyleValue1" id="7pd-D7-bxB">
                                         <rect key="frame" x="0.0" y="28" width="359" height="64"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7pd-D7-bxB" id="nho-ed-0GY">
@@ -47,155 +46,12 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <color key="tintColor" red="0.60784313725490191" green="0.31764705882352939" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <segue destination="HTb-Op-R8W" kind="presentation" identifier="goToEditExpense" id="Whp-Cr-IKH"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fA8-g7-MVC">
-                                <rect key="frame" x="8" y="812" width="359" height="112"/>
-                                <subviews>
-                                    <button opaque="NO" tag="365" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P4p-am-f7i">
-                                        <rect key="frame" x="8" y="8" width="167" height="48"/>
-                                        <color key="backgroundColor" red="0.94901960780000005" green="0.95686274510000002" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="48" id="6bW-1h-ahC"/>
-                                            <constraint firstAttribute="width" constant="167" id="x7b-ny-NWy"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <state key="normal" title="Per Day">
-                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="10"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="expencePeriodSelected:" destination="BYZ-38-t0r" eventType="touchUpInside" id="aZG-8w-zpq"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" tag="52" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dZD-E5-SO5">
-                                        <rect key="frame" x="184" y="8" width="167" height="48"/>
-                                        <color key="backgroundColor" red="0.94901960780000005" green="0.95686274510000002" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="167" id="421-rn-L91"/>
-                                            <constraint firstAttribute="height" constant="48" id="yNO-Wi-ty8"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <state key="normal" title="Per Week">
-                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="10"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="expencePeriodSelected:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fMI-Xy-Vsz"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" tag="12" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dec-AN-0SE">
-                                        <rect key="frame" x="8" y="64" width="167" height="48"/>
-                                        <color key="backgroundColor" red="0.94901960780000005" green="0.95686274510000002" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="48" id="Kjj-cJ-UBJ"/>
-                                            <constraint firstAttribute="width" constant="167" id="Nvk-du-LpV"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <state key="normal" title="Per Month">
-                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="10"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="expencePeriodSelected:" destination="BYZ-38-t0r" eventType="touchUpInside" id="W3T-Zl-yuD"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MMF-rM-yh7">
-                                        <rect key="frame" x="184" y="64" width="167" height="48"/>
-                                        <color key="backgroundColor" red="0.94901960780000005" green="0.95686274510000002" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="48" id="0jZ-bj-2wN"/>
-                                            <constraint firstAttribute="width" constant="167" id="bEd-Df-IMa"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <state key="normal" title="Per Year">
-                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="10"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="expencePeriodSelected:" destination="BYZ-38-t0r" eventType="touchUpInside" id="q4e-xf-D2I"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstItem="MMF-rM-yh7" firstAttribute="trailing" secondItem="fA8-g7-MVC" secondAttribute="trailingMargin" id="33e-MW-eg3"/>
-                                    <constraint firstItem="MMF-rM-yh7" firstAttribute="bottom" secondItem="fA8-g7-MVC" secondAttribute="bottom" id="55a-jd-0sS"/>
-                                    <constraint firstItem="dZD-E5-SO5" firstAttribute="top" secondItem="fA8-g7-MVC" secondAttribute="topMargin" id="Aeq-HO-arD"/>
-                                    <constraint firstAttribute="height" constant="112" id="IDG-So-aBq"/>
-                                    <constraint firstItem="dec-AN-0SE" firstAttribute="leading" secondItem="fA8-g7-MVC" secondAttribute="leadingMargin" id="JNK-AT-92w"/>
-                                    <constraint firstItem="P4p-am-f7i" firstAttribute="top" secondItem="fA8-g7-MVC" secondAttribute="topMargin" id="KZ6-G5-JKp"/>
-                                    <constraint firstItem="P4p-am-f7i" firstAttribute="leading" secondItem="fA8-g7-MVC" secondAttribute="leadingMargin" id="VZn-MW-30C"/>
-                                    <constraint firstItem="dZD-E5-SO5" firstAttribute="trailing" secondItem="fA8-g7-MVC" secondAttribute="trailingMargin" id="f9C-F4-8Pe"/>
-                                    <constraint firstItem="dec-AN-0SE" firstAttribute="bottom" secondItem="fA8-g7-MVC" secondAttribute="bottom" id="wMY-gh-YGz"/>
-                                </constraints>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="61p-NR-F7j">
-                                <rect key="frame" x="8" y="709" width="359" height="60"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Expenses" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sjl-aD-Nca">
-                                        <rect key="frame" x="16" y="10" width="76" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="per month" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHD-XZ-5c5">
-                                        <rect key="frame" x="16" y="31" width="73" height="18"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
-                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="$100.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jOg-bU-wwc">
-                                        <rect key="frame" x="192" y="20" width="150" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hRw-Ih-L3n">
-                                        <rect key="frame" x="162.33333333333334" y="8" width="35" height="4"/>
-                                        <color key="backgroundColor" red="0.76862745098039209" green="0.76862745098039209" blue="0.76862745098039209" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="4" id="jQN-DS-nE4"/>
-                                            <constraint firstAttribute="width" constant="35" id="xci-Ub-f9I"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="5"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <gestureRecognizers/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="MlG-pu-nul"/>
-                                    <constraint firstItem="hRw-Ih-L3n" firstAttribute="centerX" secondItem="61p-NR-F7j" secondAttribute="centerX" id="WkW-ID-7BT"/>
-                                    <constraint firstItem="hRw-Ih-L3n" firstAttribute="top" secondItem="61p-NR-F7j" secondAttribute="top" constant="8" id="ury-yR-GF4"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NqV-ag-c2e">
                                 <rect key="frame" x="54.666666666666657" y="310" width="266" height="192"/>
                                 <subviews>
@@ -207,7 +63,7 @@
                                         </constraints>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DollarVector" translatesAutoresizingMaskIntoConstraints="NO" id="Bud-z0-tbm">
-                                        <rect key="frame" x="119" y="26" width="28" height="53"/>
+                                        <rect key="frame" x="119" y="25.666666666666686" width="28" height="53"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="53" id="N5f-hG-mcN"/>
                                             <constraint firstAttribute="width" constant="28" id="ysd-1C-7fZ"/>
@@ -253,7 +109,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="L8u-7c-3I0"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                 <state key="normal" title="Remove Expense">
                                     <color key="titleColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
@@ -270,11 +126,6 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="61p-NR-F7j" secondAttribute="bottom" constant="9" id="7dO-BN-TTe"/>
-                            <constraint firstItem="61p-NR-F7j" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="8jr-s6-ps6"/>
-                            <constraint firstItem="fA8-g7-MVC" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="34" id="ApQ-Tu-2eR"/>
-                            <constraint firstItem="fA8-g7-MVC" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="BkD-aD-EbI"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="61p-NR-F7j" secondAttribute="trailing" constant="8" id="MOv-q7-WAy"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="WBD-5v-ImN" secondAttribute="trailing" constant="16" id="TqD-UX-jgD"/>
                             <constraint firstItem="WBD-5v-ImN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="TwY-Cl-KPU"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="xzb-8s-28p" secondAttribute="bottom" constant="77" id="avL-ol-vRK"/>
@@ -282,7 +133,6 @@
                             <constraint firstItem="NqV-ag-c2e" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="deY-Se-Kn7"/>
                             <constraint firstItem="xzb-8s-28p" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="dfp-Aa-OZo"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="xzb-8s-28p" secondAttribute="trailing" constant="8" id="e8I-2O-nl5"/>
-                            <constraint firstAttribute="trailing" secondItem="fA8-g7-MVC" secondAttribute="trailing" constant="8" id="fIc-c2-ISg"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="WBD-5v-ImN" secondAttribute="bottom" constant="-82" id="iU7-lV-dI7"/>
                             <constraint firstItem="NqV-ag-c2e" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="man-Tk-TrW"/>
                         </constraints>
@@ -305,25 +155,219 @@
                     <connections>
                         <outlet property="addBarButton" destination="Dc9-of-uHg" id="NU9-z5-gjk"/>
                         <outlet property="editBarButton" destination="eYR-dZ-fHX" id="FGY-tW-Nlt"/>
-                        <outlet property="expensePeriodLabel" destination="fHD-XZ-5c5" id="Rp3-Os-vaW"/>
-                        <outlet property="expensePeriodView" destination="fA8-g7-MVC" id="NQh-HM-29R"/>
-                        <outlet property="expensePeriodViewTopConstraint" destination="ApQ-Tu-2eR" id="ADR-SJ-5ML"/>
-                        <outlet property="expenseViewBottonConstraint" destination="7dO-BN-TTe" id="zaj-qL-jK9"/>
-                        <outlet property="expensesView" destination="61p-NR-F7j" id="WgP-8V-7JG"/>
                         <outlet property="noExpensesView" destination="NqV-ag-c2e" id="m24-d7-4I2"/>
                         <outlet property="removeExpenseButton" destination="WBD-5v-ImN" id="WXR-zP-0A1"/>
                         <outlet property="removeExpenseConstraint" destination="iU7-lV-dI7" id="isa-d1-1SA"/>
                         <outlet property="tableView" destination="xzb-8s-28p" id="B6m-Kf-l3m"/>
-                        <outlet property="totalExpensesPriceLabel" destination="jOg-bU-wwc" id="Uyf-BM-mgx"/>
-                        <outletCollection property="expensePeirodButtons" destination="P4p-am-f7i" collectionClass="NSMutableArray" id="czB-Fl-N8D"/>
-                        <outletCollection property="expensePeirodButtons" destination="dZD-E5-SO5" collectionClass="NSMutableArray" id="btS-h1-gNb"/>
-                        <outletCollection property="expensePeirodButtons" destination="dec-AN-0SE" collectionClass="NSMutableArray" id="2t6-jX-qGX"/>
-                        <outletCollection property="expensePeirodButtons" destination="MMF-rM-yh7" collectionClass="NSMutableArray" id="lCP-S7-QKg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1076" y="132.68365817091455"/>
+        </scene>
+        <!--Total Cost View Controller-->
+        <scene sceneID="eHB-jb-E7j">
+            <objects>
+                <viewController storyboardIdentifier="TotalCostViewController" id="rVe-eN-KzW" customClass="TotalCostViewController" customModule="Expenses" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cU8-vd-dS4">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="61p-NR-F7j">
+                                <rect key="frame" x="0.0" y="44" width="375" height="60"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Expenses" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sjl-aD-Nca">
+                                        <rect key="frame" x="16" y="10" width="76" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="per month" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHD-XZ-5c5">
+                                        <rect key="frame" x="16" y="31" width="73" height="18"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="$100.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jOg-bU-wwc">
+                                        <rect key="frame" x="201" y="20" width="157" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hRw-Ih-L3n">
+                                        <rect key="frame" x="170" y="8" width="35" height="4"/>
+                                        <color key="backgroundColor" red="0.76862745098039209" green="0.76862745098039209" blue="0.76862745098039209" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="4" id="jQN-DS-nE4"/>
+                                            <constraint firstAttribute="width" constant="35" id="xci-Ub-f9I"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="2"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="MlG-pu-nul"/>
+                                    <constraint firstItem="hRw-Ih-L3n" firstAttribute="centerX" secondItem="61p-NR-F7j" secondAttribute="centerX" id="WkW-ID-7BT"/>
+                                    <constraint firstItem="hRw-Ih-L3n" firstAttribute="top" secondItem="61p-NR-F7j" secondAttribute="top" constant="8" id="ury-yR-GF4"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fA8-g7-MVC">
+                                <rect key="frame" x="0.0" y="104" width="375" height="120"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="BgY-11-lTx">
+                                        <rect key="frame" x="8" y="8" width="359" height="104"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="hVK-J4-fkr">
+                                                <rect key="frame" x="0.0" y="0.0" width="359" height="104"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Un4-16-bwf" userLabel="Day Week Stack View">
+                                                        <rect key="frame" x="0.0" y="0.0" width="359" height="48"/>
+                                                        <subviews>
+                                                            <button opaque="NO" tag="365" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P4p-am-f7i">
+                                                                <rect key="frame" x="0.0" y="0.0" width="175.66666666666666" height="48"/>
+                                                                <color key="backgroundColor" red="0.94901960780000005" green="0.95686274510000002" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="48" id="6bW-1h-ahC"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                                                <state key="normal" title="Per Day">
+                                                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                </state>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                        <integer key="value" value="10"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="expencePeriodSelected:" destination="rVe-eN-KzW" eventType="touchUpInside" id="Mha-bg-jtW"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" tag="52" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dZD-E5-SO5">
+                                                                <rect key="frame" x="183.66666666666663" y="0.0" width="175.33333333333337" height="48"/>
+                                                                <color key="backgroundColor" red="0.94901960780000005" green="0.95686274510000002" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="48" id="yNO-Wi-ty8"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                                                <state key="normal" title="Per Week">
+                                                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                </state>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                        <integer key="value" value="10"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="expencePeriodSelected:" destination="rVe-eN-KzW" eventType="touchUpInside" id="bhn-8j-Tqd"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="7vf-TE-6rU" userLabel="Month Year Stack View">
+                                                        <rect key="frame" x="0.0" y="56" width="359" height="48"/>
+                                                        <subviews>
+                                                            <button opaque="NO" tag="12" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dec-AN-0SE">
+                                                                <rect key="frame" x="0.0" y="0.0" width="175" height="48"/>
+                                                                <color key="backgroundColor" red="0.94901960780000005" green="0.95686274510000002" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="48" id="Kjj-cJ-UBJ"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                                                <state key="normal" title="Per Month">
+                                                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                </state>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                        <integer key="value" value="10"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="expencePeriodSelected:" destination="rVe-eN-KzW" eventType="touchUpInside" id="gVW-qf-5Wf"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MMF-rM-yh7">
+                                                                <rect key="frame" x="184" y="0.0" width="175" height="48"/>
+                                                                <color key="backgroundColor" red="0.94901960780000005" green="0.95686274510000002" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="48" id="0jZ-bj-2wN"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                                                <state key="normal" title="Per Year">
+                                                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                </state>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                        <integer key="value" value="10"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="expencePeriodSelected:" destination="rVe-eN-KzW" eventType="touchUpInside" id="1fP-Vm-eiA"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                    </stackView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="Un4-16-bwf" secondAttribute="trailing" id="5eT-Ch-JX2"/>
+                                                    <constraint firstItem="Un4-16-bwf" firstAttribute="leading" secondItem="hVK-J4-fkr" secondAttribute="leading" id="eXz-d4-MwV"/>
+                                                </constraints>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="BgY-11-lTx" secondAttribute="trailing" constant="8" id="9IQ-Ec-wvr"/>
+                                    <constraint firstAttribute="bottom" secondItem="BgY-11-lTx" secondAttribute="bottom" constant="8" id="Ldl-W6-W8c"/>
+                                    <constraint firstItem="BgY-11-lTx" firstAttribute="leading" secondItem="fA8-g7-MVC" secondAttribute="leading" constant="8" id="Ttc-dp-fmk"/>
+                                    <constraint firstItem="BgY-11-lTx" firstAttribute="top" secondItem="fA8-g7-MVC" secondAttribute="top" constant="8" id="yzl-bb-QQe"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="61p-NR-F7j" firstAttribute="leading" secondItem="7of-pr-yuH" secondAttribute="leading" id="1wo-U4-nt8"/>
+                            <constraint firstItem="7of-pr-yuH" firstAttribute="trailing" secondItem="61p-NR-F7j" secondAttribute="trailing" id="6E1-j4-Ktw"/>
+                            <constraint firstAttribute="trailing" secondItem="fA8-g7-MVC" secondAttribute="trailing" id="aZS-GX-qgU"/>
+                            <constraint firstItem="fA8-g7-MVC" firstAttribute="leading" secondItem="7of-pr-yuH" secondAttribute="leading" id="b3S-t7-GfF"/>
+                            <constraint firstItem="7of-pr-yuH" firstAttribute="trailing" secondItem="fA8-g7-MVC" secondAttribute="trailing" id="r5S-KR-DyV"/>
+                            <constraint firstItem="fA8-g7-MVC" firstAttribute="top" secondItem="61p-NR-F7j" secondAttribute="bottom" id="tud-ZT-Sf0"/>
+                            <constraint firstItem="61p-NR-F7j" firstAttribute="top" secondItem="7of-pr-yuH" secondAttribute="top" id="z8A-cN-5PN"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="7of-pr-yuH"/>
+                    </view>
+                    <connections>
+                        <outlet property="buttonSettingStackView" destination="BgY-11-lTx" id="7MP-wN-tgw"/>
+                        <outlet property="expensePeriodLabel" destination="fHD-XZ-5c5" id="Avo-QF-OyY"/>
+                        <outlet property="expensesView" destination="61p-NR-F7j" id="VM3-YY-Ht0"/>
+                        <outlet property="periodButtonSettingsView" destination="fA8-g7-MVC" id="9qI-ys-86m"/>
+                        <outlet property="totalExpensesPriceLabel" destination="jOg-bU-wwc" id="udp-26-KG9"/>
+                        <outletCollection property="expensePeriodButtons" destination="MMF-rM-yh7" collectionClass="NSMutableArray" id="ogg-Tf-mcz"/>
+                        <outletCollection property="expensePeriodButtons" destination="P4p-am-f7i" collectionClass="NSMutableArray" id="EAj-1q-ZUz"/>
+                        <outletCollection property="expensePeriodButtons" destination="dZD-E5-SO5" collectionClass="NSMutableArray" id="zBM-bk-shx"/>
+                        <outletCollection property="expensePeriodButtons" destination="dec-AN-0SE" collectionClass="NSMutableArray" id="kuP-KI-gkx"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Nnc-V0-j83" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1076" y="817.98029556650249"/>
         </scene>
         <!--New Expense-->
         <scene sceneID="BIx-N6-AHl">
@@ -370,7 +414,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="48" id="7YN-b3-hLV"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                 <state key="normal" title="Daily">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -389,7 +433,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="48" id="BeU-Br-GED"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                 <state key="normal" title="Weekly">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -413,7 +457,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="48" id="y7Y-2P-ile"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                 <state key="normal" title="Fortnightly">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -432,7 +476,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="48" id="4Ii-s1-5oS"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                 <state key="normal" title="Monthly">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
@@ -465,7 +509,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="YLP-8S-hUn"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -485,7 +529,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="Coh-zv-hWH"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                 <state key="normal" title="Remove Expense">
                                     <color key="titleColor" red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
@@ -606,6 +650,9 @@
     </scenes>
     <resources>
         <image name="AddNewExpense" width="90" height="88"/>
-        <image name="DollarVector" width="56" height="106"/>
+        <image name="DollarVector" width="28" height="53"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="Whp-Cr-IKH"/>
+    </inferredMetricsTieBreakers>
 </document>
