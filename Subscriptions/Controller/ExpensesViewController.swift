@@ -50,6 +50,9 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         //Register .xib cell
         tableView.register(UINib(nibName: "SubscriptionCell", bundle: nil), forCellReuseIdentifier: "subscriptionCell")
         
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(noExpensesViewTapped))
+        noExpensesView.addGestureRecognizer(gesture)
+        
         loadExpenses()
         addTotalCostView()
         checkExpenseArray()
@@ -102,6 +105,10 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             tableView.isHidden = false
             navigationItem.leftBarButtonItem = self.editBarButton
         }
+    }
+    
+    @objc func noExpensesViewTapped(){
+        performSegue(withIdentifier: "goToAddExpense", sender: self)
     }
     
     @IBAction func touchUpRemoveButton(_ sender: Any) {
