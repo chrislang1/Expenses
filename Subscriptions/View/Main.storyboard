@@ -229,10 +229,10 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fA8-g7-MVC">
-                                <rect key="frame" x="0.0" y="104" width="375" height="186"/>
+                                <rect key="frame" x="0.0" y="104" width="375" height="120"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="BgY-11-lTx">
-                                        <rect key="frame" x="8" y="8" width="359" height="170"/>
+                                        <rect key="frame" x="8" y="8" width="359" height="104"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="hVK-J4-fkr">
                                                 <rect key="frame" x="0.0" y="0.0" width="359" height="104"/>
@@ -327,49 +327,6 @@
                                                 <constraints>
                                                     <constraint firstAttribute="trailing" secondItem="Un4-16-bwf" secondAttribute="trailing" id="5eT-Ch-JX2"/>
                                                     <constraint firstItem="Un4-16-bwf" firstAttribute="leading" secondItem="hVK-J4-fkr" secondAttribute="leading" id="eXz-d4-MwV"/>
-                                                </constraints>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="bZV-a0-OFN" userLabel="Bar + Settings Stack View">
-                                                <rect key="frame" x="0.0" y="112" width="359" height="58"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O69-jm-mN7" userLabel="Bar">
-                                                        <rect key="frame" x="0.0" y="0.0" width="359" height="2"/>
-                                                        <color key="backgroundColor" red="0.76900000000000002" green="0.76900000000000002" blue="0.76900000000000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="2" id="KaM-xh-M3K"/>
-                                                        </constraints>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <nil key="textColor"/>
-                                                        <color key="highlightedColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                <integer key="value" value="1"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </label>
-                                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L6l-Nd-43V">
-                                                        <rect key="frame" x="0.0" y="10" width="359" height="48"/>
-                                                        <color key="backgroundColor" red="0.94901960780000005" green="0.95686274510000002" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="48" id="4TH-7U-1uE"/>
-                                                        </constraints>
-                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                                        <state key="normal" title="Settings">
-                                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                        </state>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                <integer key="value" value="10"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </button>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstAttribute="trailing" secondItem="O69-jm-mN7" secondAttribute="trailing" id="H79-Ez-G6g"/>
-                                                    <constraint firstItem="L6l-Nd-43V" firstAttribute="leading" secondItem="bZV-a0-OFN" secondAttribute="leading" id="dQi-cy-vA0"/>
-                                                    <constraint firstItem="O69-jm-mN7" firstAttribute="leading" secondItem="bZV-a0-OFN" secondAttribute="leading" id="m34-UF-eoJ"/>
-                                                    <constraint firstAttribute="trailing" secondItem="L6l-Nd-43V" secondAttribute="trailing" id="v0J-l5-Zoh"/>
                                                 </constraints>
                                             </stackView>
                                         </subviews>
