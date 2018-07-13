@@ -30,6 +30,9 @@ class AddExpenseViewController: UIViewController {
     
     @IBOutlet weak var deleteExpenseButton: UIButton!
     
+    @IBOutlet weak var cancelButton: UIBarButtonItem!
+    @IBOutlet weak var doneButton: UIBarButtonItem!
+    
     @IBOutlet weak var customPickerTextField: UITextField! // Invisible text field to cause picker view to present modally
     let customPeriodPickerView = UIPickerView()
     @IBOutlet weak var customPeriodLabel: UILabel!
@@ -60,6 +63,11 @@ class AddExpenseViewController: UIViewController {
         //Remove Navigation Bar Border
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
+        
+        //Set Button Font
+        let fontStyle = UIFont.systemFont(ofSize: 17.0, weight: .medium)
+        cancelButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle], for: .normal)
+        doneButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle], for: .normal)
         
         //Run Setup
         nameTextField.layer.cornerRadius = 10

@@ -21,9 +21,11 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     @IBOutlet weak var removeExpenseConstraint: NSLayoutConstraint!
     
     var expenseArray = [Expense]()
+    var editModeExpenseArray = [Expense]()
     var selectedExpense: Int?
     var periodSelectionHidden = true
     var periodType = Expense.PeriodType.day
+    let doneBarButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneBarButtonPressed))
     
     let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
     let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
@@ -147,7 +149,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             }
         } else if (self.tableView.isEditing == false) {
             self.tableView.setEditing(true, animated: true)
-            self.editBarButton.title = "Done"
+            self.editBarButton.title = "Cancel"
             removeExpenseConstraint.constant = 9
             self.navigationItem.rightBarButtonItem = nil
             if let totalCostVC = totalCostVC {
@@ -157,6 +159,10 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
+    }
+    
+    @objc func doneBarButtonPressed(){
+        
     }
     
     //MARK: - New Expense Delegete Methods

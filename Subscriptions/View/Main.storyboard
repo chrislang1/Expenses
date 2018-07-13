@@ -586,10 +586,12 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="cancelButton" destination="qc9-Sb-Mga" id="qyq-wM-Vjr"/>
                         <outlet property="costTextField" destination="Mf6-Kp-eiG" id="Fo7-Ud-d9y"/>
                         <outlet property="customPeriodLabel" destination="Vp4-XW-9Xz" id="mfx-eH-fZk"/>
                         <outlet property="customPickerTextField" destination="aHS-Hz-6WH" id="kb6-AU-blR"/>
                         <outlet property="deleteExpenseButton" destination="oNy-HE-SdO" id="d11-hj-kh2"/>
+                        <outlet property="doneButton" destination="4G8-cV-Plg" id="fPd-tp-yOf"/>
                         <outlet property="nameTextField" destination="XZ8-RA-uQP" id="Jt2-Wc-nQn"/>
                         <outletCollection property="periodButtons" destination="z5f-mV-tr9" collectionClass="NSMutableArray" id="5ef-is-1HO"/>
                         <outletCollection property="periodButtons" destination="nhO-yc-KuF" collectionClass="NSMutableArray" id="tig-3c-VWW"/>
