@@ -39,6 +39,11 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         
+        
+        let fontStyle = UIFont.systemFont(ofSize: 17.0, weight: .medium)
+        editBarButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle], for: .normal)
+        
+        
         //Set Table View Delegate and DataSource + Row Height
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -46,6 +51,8 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         tableView.rowHeight = 56
         tableView.separatorStyle = .none
         tableView.allowsMultipleSelectionDuringEditing = true
+        
+        
         
         //Register .xib cell
         tableView.register(UINib(nibName: "SubscriptionCell", bundle: nil), forCellReuseIdentifier: "subscriptionCell")

@@ -104,6 +104,7 @@ class TotalCostViewController: UIViewController {
                 if (currentY > height/2 && velocity <= 0) || velocity <= -100 {
                     snapToFrame = CGRect(x: 0, y: maxHeight, width: view.frame.width, height: view.frame.height)
                     buttonSettingStackView.alpha = 1
+                    buttonSettingStackView.isHidden = false
                 } else {
                     snapToFrame = CGRect(x: 0, y: yComponent, width: view.frame.width, height: view.frame.height)
                     buttonSettingStackView.alpha = 0
