@@ -25,7 +25,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     var selectedExpense: Int?
     var periodSelectionHidden = true
     var periodType = Expense.PeriodType.day
-    let doneBarButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneBarButtonPressed))
+    var doneBarButton = UIBarButtonItem()
     
     let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
     let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
@@ -44,7 +44,10 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         
         let fontStyle = UIFont.systemFont(ofSize: 17.0, weight: .medium)
         editBarButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle], for: .normal)
-        
+        let tempButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneBarButtonPressed))
+        doneBarButton = tempButton
+        doneBarButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle, NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.5137254902, green: 0.5137254902, blue: 0.5294117647, alpha: 1)], for: .normal)
+        doneBarButton.tintColor = #colorLiteral(red: 0.5137254902, green: 0.5137254902, blue: 0.5294117647, alpha: 1)
         
         //Set Table View Delegate and DataSource + Row Height
         self.tableView.delegate = self
@@ -53,8 +56,6 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         tableView.rowHeight = 56
         tableView.separatorStyle = .none
         tableView.allowsMultipleSelectionDuringEditing = true
-        
-        
         
         //Register .xib cell
         tableView.register(UINib(nibName: "SubscriptionCell", bundle: nil), forCellReuseIdentifier: "subscriptionCell")
@@ -125,14 +126,16 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         indexPathsForSelectedRows.map { expenseArray[$0.row] }.forEach {
             // Delete the row from the data source
             context.delete($0)
-            saveExpenses()
             expenseArray.remove(at: expenseArray.index(of: $0)!)
-            if let totalCostVC = totalCostVC {
-                totalCostVC.expenseArray = expenseArray
-                totalCostVC.updateLabels()
-            }
         }
         tableView.deleteRows(at: indexPathsForSelectedRows, with: .fade)
+        if tableView.isEditing == true, tableView.indexPathsForSelectedRows == nil {
+            removeExpenseConstraint.constant = -82
+            
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            }
+        }
     }
     
     //MARK: - Set Table View to Edit Mode
@@ -142,16 +145,19 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             self.editBarButton.title = "Edit"
             self.navigationItem.rightBarButtonItem = self.addBarButton
             removeExpenseConstraint.constant = -82
-            checkExpenseArray()
+            context.rollback()
+            expenseArray = editModeExpenseArray
             if let totalCostVC = totalCostVC {
+                totalCostVC.expenseArray = expenseArray
                 totalCostVC.moveUp()
                 totalCostVC.updateLabels()
             }
+            tableView.reloadData()      //Causing issues with the setEditing animation - will look at further
         } else if (self.tableView.isEditing == false) {
             self.tableView.setEditing(true, animated: true)
             self.editBarButton.title = "Cancel"
-            removeExpenseConstraint.constant = 9
-            self.navigationItem.rightBarButtonItem = nil
+            editModeExpenseArray = expenseArray
+            self.navigationItem.rightBarButtonItem = doneBarButton
             if let totalCostVC = totalCostVC {
                 totalCostVC.moveDown()
             }
@@ -159,10 +165,23 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
+
     }
     
     @objc func doneBarButtonPressed(){
-        
+        saveExpenses()
+        self.tableView.setEditing(false, animated: true)
+        self.editBarButton.title = "Edit"
+        self.navigationItem.rightBarButtonItem = self.addBarButton
+        removeExpenseConstraint.constant = -82
+        checkExpenseArray()
+        if let totalCostVC = totalCostVC {
+            totalCostVC.moveUp()
+            totalCostVC.updateLabels()
+        }
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
     }
     
     //MARK: - New Expense Delegete Methods
@@ -299,6 +318,22 @@ extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
             DispatchQueue.main.async() { () -> Void in
                 self.performSegue(withIdentifier: "goToEditExpense", sender: self)
             }
+        } else {
+            removeExpenseConstraint.constant = 9
+            
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        if tableView.isEditing == true, tableView.indexPathsForSelectedRows == nil {
+            removeExpenseConstraint.constant = -82
+            
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            }
         }
     }
     
@@ -311,7 +346,7 @@ extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
         expenseArray.remove(at: fromIndexPath.row)
         expenseArray.insert(rowToMove, at: toIndexPath.row)
         indexExpenseArray()
-        saveExpenses()
+        //saveExpenses()
     }
 }
 
