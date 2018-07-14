@@ -145,7 +145,7 @@
                                 <action selector="editButtonPressed:" destination="BYZ-38-t0r" id="tOb-sw-vxK"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="AddIcon" style="plain" id="Dc9-of-uHg">
+                        <barButtonItem key="rightBarButtonItem" image="AddIcon" id="Dc9-of-uHg">
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <segue destination="HTb-Op-R8W" kind="presentation" identifier="goToAddExpense" id="8CD-gI-P4c"/>
@@ -367,7 +367,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nnc-V0-j83" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1076" y="817.98029556650249"/>
+            <point key="canvasLocation" x="1093" y="1081"/>
         </scene>
         <!--New Expense-->
         <scene sceneID="BIx-N6-AHl">
