@@ -45,7 +45,7 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="tintColor" red="0.46000000000000002" green="0.28999999999999998" blue="0.95999999999999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <segue destination="HTb-Op-R8W" kind="presentation" identifier="goToEditExpense" id="Whp-Cr-IKH"/>
                                         </connections>
@@ -653,7 +653,7 @@
     <resources>
         <image name="AddIcon" width="18" height="18"/>
         <image name="AddNewExpense" width="90" height="88"/>
-        <image name="DollarVector" width="56" height="106"/>
+        <image name="DollarVector" width="37" height="70"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Whp-Cr-IKH"/>

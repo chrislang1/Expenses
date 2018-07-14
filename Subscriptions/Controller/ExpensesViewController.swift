@@ -309,16 +309,21 @@ extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
         let backgroundView = UIView()
         backgroundView.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         cell.selectedBackgroundView = backgroundView
+        cell.tintColor = #colorLiteral(red: 0.46, green: 0.29, blue: 0.96, alpha: 1)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.isEditing != true,
             let cell = tableView.cellForRow(at: indexPath) {
-            let backgroundView = UIView()
-            backgroundView.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-            cell.selectedBackgroundView = backgroundView
-            cell.backgroundColor = backgroundColor
+            let backgroundView = UIView(), holderView = UIView()
+            backgroundView.backgroundColor = backgroundColor
+            backgroundView.frame = CGRect(x: 8, y: 0, width: cell.frame.width - 16, height: cell.frame.height)
+            backgroundView.layer.cornerRadius = 10
+            holderView.addSubview(backgroundView)
+            cell.selectedBackgroundView = holderView
+            cell.backgroundView = holderView
+            cell.tintColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
             cell.textLabel?.textColor = textColor
             cell.detailTextLabel?.textColor = textColor
             DispatchQueue.main.async() { () -> Void in
