@@ -141,7 +141,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     //MARK: - Set Table View to Edit Mode
     @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
         if (self.tableView.isEditing == true) {
-            self.tableView.setEditing(false, animated: true)
+//            self.tableView.setEditing(false, animated: true)
             self.editBarButton.title = "Edit"
             self.navigationItem.rightBarButtonItem = self.addBarButton
             removeExpenseConstraint.constant = -82
@@ -152,7 +152,10 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
                 totalCostVC.moveUp()
                 totalCostVC.updateLabels()
             }
-            tableView.reloadData()      //Causing issues with the setEditing animation - will look at further
+            let indexSet = IndexSet.init(integer: 0)
+            tableView.reloadSections(indexSet, with: .right)
+            //tableView.reloadData()      //Causing issues with the setEditing animation
+            self.tableView.setEditing(false, animated: false)
         } else if (self.tableView.isEditing == false) {
             self.tableView.setEditing(true, animated: true)
             self.editBarButton.title = "Cancel"
@@ -304,7 +307,7 @@ extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
         let price = subscription.price
         cell.detailTextLabel?.text = currencyFormatter.string(from: NSNumber(value: price))
         let backgroundView = UIView()
-        backgroundView.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
+        backgroundView.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         cell.selectedBackgroundView = backgroundView
         return cell
     }
@@ -312,6 +315,9 @@ extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.isEditing != true,
             let cell = tableView.cellForRow(at: indexPath) {
+            let backgroundView = UIView()
+            backgroundView.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
+            cell.selectedBackgroundView = backgroundView
             cell.backgroundColor = backgroundColor
             cell.textLabel?.textColor = textColor
             cell.detailTextLabel?.textColor = textColor
@@ -320,7 +326,6 @@ extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
             }
         } else {
             removeExpenseConstraint.constant = 9
-            
             UIView.animate(withDuration: 0.3) {
                 self.view.layoutIfNeeded()
             }
