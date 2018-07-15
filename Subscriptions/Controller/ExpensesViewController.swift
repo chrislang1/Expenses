@@ -9,32 +9,29 @@
 import UIKit
 import CoreData
 
-class ExpensesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NewExpenseDelegate, EditExpenseDelegate {
+class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseDelegate {
     
+    var totalCostVC: TotalCostViewController?
     
-    @IBOutlet weak var totalExpensesPriceLabel: UILabel!
-    @IBOutlet weak var expensePeriodLabel: UILabel!
-    @IBOutlet weak var expensesView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var editBarButton: UIBarButtonItem!
     @IBOutlet var addBarButton: UIBarButtonItem!
-    
-    @IBOutlet weak var expensePeriodView: UIView!
-    @IBOutlet weak var expensePeriodViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var noExpensesView: UIView!
     @IBOutlet weak var removeExpenseButton: UIButton!
-    
-    @IBOutlet weak var expenseViewBottonConstraint: NSLayoutConstraint!
     @IBOutlet weak var removeExpenseConstraint: NSLayoutConstraint!
     
-    @IBOutlet var expensePeirodButtons: [UIButton]!
-    
     var expenseArray = [Expense]()
+    var editModeExpenseArray = [Expense]()
     var selectedExpense: Int?
-    var expenseViewY = CGFloat()
     var periodSelectionHidden = true
+    var periodType = Expense.PeriodType.day
+    var doneBarButton = UIBarButtonItem()
+    
+    let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
+    let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,114 +41,84 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         
+        
+        let fontStyle = UIFont.systemFont(ofSize: 17.0, weight: .medium)
+        editBarButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle], for: .normal)
+        let tempButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneBarButtonPressed))
+        doneBarButton = tempButton
+        doneBarButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle, NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.5137254902, green: 0.5137254902, blue: 0.5294117647, alpha: 1)], for: .normal)
+        doneBarButton.tintColor = #colorLiteral(red: 0.5137254902, green: 0.5137254902, blue: 0.5294117647, alpha: 1)
+        
         //Set Table View Delegate and DataSource + Row Height
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
         tableView.rowHeight = 56
-        //        tableView.estimatedRowHeight = 74
         tableView.separatorStyle = .none
         tableView.allowsMultipleSelectionDuringEditing = true
         
         //Register .xib cell
         tableView.register(UINib(nibName: "SubscriptionCell", bundle: nil), forCellReuseIdentifier: "subscriptionCell")
         
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(noExpensesViewTapped))
+        noExpensesView.addGestureRecognizer(gesture)
+        
         loadExpenses()
-        expensesViewSetup()
-        expensesLabelSetup()
-        
-        expenseViewY = UIScreen.main.bounds.height - 69
-        
-        //Set Expense Period Button
-        expensePeriodSetup()
-        
-        if expenseArray.count == 0 {
-            noExpensesView.isHidden = false
-            tableView.isHidden = true
-        } else {
-            noExpensesView.isHidden = true
-            tableView.isHidden = false
-        }
+        addTotalCostView()
+        checkExpenseArray()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        checkExpenseArray()
+        setTotalCost()
+        
+        if let index = tableView.indexPathForSelectedRow,
+            let cell = tableView.cellForRow(at: index) {
+            tableView.deselectRow(at: index, animated: true)
+            cell.backgroundColor = .white
+            cell.textLabel?.textColor = .black
+            cell.detailTextLabel?.textColor = .black
+            tableView.reloadData()
+        }
+    }
+    
+    //MARK: - Add Total Cost View to bottom of screen
+    func addTotalCostView(){
+        totalCostVC = storyboard?.instantiateViewController(withIdentifier: "TotalCostViewController") as? TotalCostViewController
+        if let totalCostVC = totalCostVC {
+        
+            self.addChildViewController(totalCostVC)
+            self.view.addSubview(totalCostVC.view)
+            totalCostVC.didMove(toParentViewController: self)
+            
+            let height = view.frame.height
+            let width = view.frame.width
+            totalCostVC.view.frame = CGRect(x: 0, y: self.view.frame.maxY, width: width, height: height)
+        
+            totalCostVC.expenseArray = expenseArray
+        }
+    }
+    
+    func setTotalCost(){
+        if let totalCostVC = totalCostVC {
+            totalCostVC.expenseArray = expenseArray
+        }
+    }
+    
+    func checkExpenseArray(){
         if expenseArray.count == 0 {
             noExpensesView.isHidden = false
             tableView.isHidden = true
-            self.navigationItem.leftBarButtonItem = nil
+            navigationItem.leftBarButtonItem = nil
         } else {
             noExpensesView.isHidden = true
             tableView.isHidden = false
-            self.navigationItem.leftBarButtonItem = self.editBarButton
-        }
-        
-        if let index = self.tableView.indexPathForSelectedRow{
-            self.tableView.deselectRow(at: index, animated: true)
-            self.tableView.cellForRow(at: index)?.backgroundColor = .white
-            self.tableView.cellForRow(at: index)?.textLabel?.textColor = .black
-            self.tableView.cellForRow(at: index)?.detailTextLabel?.textColor = .black
+            navigationItem.leftBarButtonItem = self.editBarButton
         }
     }
     
-    //MARK: - Table View Methods
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return expenseArray.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //        let cell = tableView.dequeueReusableCell(withIdentifier: "subscriptionCell", for: indexPath) as! SubscriptionCell
-        //
-        //        let subscription = expenseArray[indexPath.row]
-        //        cell.nameLabel.text = subscription.name!
-        //
-        //        let currencyFormatter = NumberFormatter()
-        //        currencyFormatter.usesGroupingSeparator = true
-        //        currencyFormatter.numberStyle = .currency
-        //        // localize to your grouping and decimal separator
-        //        currencyFormatter.locale = Locale.current
-        //
-        //        let price = subscription.price
-        //        cell.priceLabel.text = currencyFormatter.string(from: NSNumber(value: price))
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "subscription", for: indexPath)
-        cell.layer.cornerRadius = 10
-        cell.layer.masksToBounds = true
-        let subscription = expenseArray[indexPath.row]
-        cell.textLabel?.text = subscription.name
-        let currencyFormatter = NumberFormatter()
-        currencyFormatter.usesGroupingSeparator = true
-        currencyFormatter.numberStyle = .currency
-        // localize to your grouping and decimal separator
-        currencyFormatter.locale = Locale.current
-        let price = subscription.price
-        cell.detailTextLabel?.text = currencyFormatter.string(from: NSNumber(value: price))
-        let backgroundView = UIView()
-        backgroundView.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-        cell.selectedBackgroundView = backgroundView
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.isEditing != true {
-            tableView.cellForRow(at: indexPath)?.backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-            tableView.cellForRow(at: indexPath)?.textLabel?.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
-            tableView.cellForRow(at: indexPath)?.detailTextLabel?.textColor = #colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1)
-            
-            DispatchQueue.main.async() { () -> Void in
-                self.performSegue(withIdentifier: "goToEditExpense", sender: self)
-            }
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        return UITableViewCellEditingStyle.init(rawValue: 3)!
-    }
-    
-    func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to toIndexPath: IndexPath) {
-        let rowToMove = expenseArray[fromIndexPath.row]
-        expenseArray.remove(at: fromIndexPath.row)
-        expenseArray.insert(rowToMove, at: toIndexPath.row)
-        saveExpenses()
+    @objc func noExpensesViewTapped(){
+        performSegue(withIdentifier: "goToAddExpense", sender: self)
     }
     
     @IBAction func touchUpRemoveButton(_ sender: Any) {
@@ -159,203 +126,148 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         indexPathsForSelectedRows.map { expenseArray[$0.row] }.forEach {
             // Delete the row from the data source
             context.delete($0)
-            saveExpenses()
             expenseArray.remove(at: expenseArray.index(of: $0)!)
-            expensesLabelSetup()
         }
         tableView.deleteRows(at: indexPathsForSelectedRows, with: .fade)
+        if tableView.isEditing == true, tableView.indexPathsForSelectedRows == nil {
+            removeExpenseConstraint.constant = -82
+            
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            }
+        }
     }
     
     //MARK: - Set Table View to Edit Mode
-    
     @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
         if (self.tableView.isEditing == true) {
-            self.tableView.setEditing(false, animated: true)
+//            self.tableView.setEditing(false, animated: true)
             self.editBarButton.title = "Edit"
             self.navigationItem.rightBarButtonItem = self.addBarButton
-            expenseViewBottonConstraint.constant = 9
             removeExpenseConstraint.constant = -82
+            context.rollback()
+            expenseArray = editModeExpenseArray
+            if let totalCostVC = totalCostVC {
+                totalCostVC.expenseArray = expenseArray
+                totalCostVC.moveUp()
+                totalCostVC.updateLabels()
+            }
+            let indexSet = IndexSet.init(integer: 0)
+            tableView.reloadSections(indexSet, with: .right)
+            //tableView.reloadData()      //Causing issues with the setEditing animation
+            self.tableView.setEditing(false, animated: false)
         } else if (self.tableView.isEditing == false) {
             self.tableView.setEditing(true, animated: true)
-            self.tableView.isEditing = true
-            self.editBarButton.title = "Done"
-            expenseViewBottonConstraint.constant = -93
-            removeExpenseConstraint.constant = 9
-            self.navigationItem.rightBarButtonItem = nil
-        }
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    //MARK: - Expense Period Setup
-    func expensePeriodSetup(){
-        expensePeirodButtons[2].backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-        expensePeirodButtons[2].setTitleColor(#colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1), for: .normal)
-    }
-    
-    //MARK: - Setup Expenses View
-    func expensesViewSetup(){
-        expensesView.layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.94).cgColor
-        expensesView.clipsToBounds = false
-        expensesView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor
-        expensesView.layer.shadowPath = UIBezierPath(roundedRect: expensesView.bounds, cornerRadius: 10).cgPath
-        expensesView.layer.shadowOpacity = 1
-        expensesView.layer.shadowRadius = 2
-        expensesView.layer.shadowOffset = CGSize.zero
-        
-        //        let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.expenseLabelTouched (_:)))
-        //        self.expensesView.addGestureRecognizer(gesture)
-        
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(expenseLabelSwipe))
-        swipeUp.direction = .up
-        self.expensesView.addGestureRecognizer(swipeUp)
-        
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(expenseLabelSwipe))
-        swipeDown.direction = .down
-        self.expensesView.addGestureRecognizer(swipeDown)
-    }
-    
-    func expensesLabelSetup(per timePeriod: Double = 12, with label: String = "per month"){
-        //Update Labels in Expense View
-        var totalPrice = Double()
-        for index in expenseArray.indices {
-            totalPrice += expenseArray[index].yearPrice
-        }
-        
-        let currencyFormatter = NumberFormatter()
-        currencyFormatter.usesGroupingSeparator = true
-        currencyFormatter.numberStyle = .currency
-        // localize to your grouping and decimal separator
-        currencyFormatter.locale = Locale.current
-        let price = totalPrice/timePeriod
-        totalExpensesPriceLabel.text = currencyFormatter.string(from: NSNumber(value: price))
-        expensePeriodLabel.text = label.lowercased()
-    }
-    
-    //    @objc func expenseLabelTouched(_ sender: UITapGestureRecognizer){
-    //        if periodSelectionHidden == true {
-    //            self.expensePeriodViewTopConstraint.constant = -120
-    //            expenseViewBottonConstraint.constant = 120
-    //            periodSelectionHidden = false
-    //        } else {
-    //            self.expensePeriodViewTopConstraint.constant = 34
-    //            expenseViewBottonConstraint.constant = 9
-    //            periodSelectionHidden = true
-    //        }
-    //
-    //        UIView.animate(withDuration: 0.3) {
-    //            self.view.layoutIfNeeded()
-    //        }
-    //    }
-    
-    @objc func expenseLabelSwipe(gesture: UISwipeGestureRecognizer) {
-        if gesture.direction == UISwipeGestureRecognizerDirection.up {
-            self.expensePeriodViewTopConstraint.constant = -120
-            expenseViewBottonConstraint.constant = 120
-        } else if gesture.direction == UISwipeGestureRecognizerDirection.down {
-            self.expensePeriodViewTopConstraint.constant = 34
-            expenseViewBottonConstraint.constant = 9
-        }
-        
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    //MARK: - Expense Time Period Method
-    @IBAction func expencePeriodSelected(_ sender: UIButton) {
-        for index in expensePeirodButtons.indices {
-            if sender == expensePeirodButtons[index]{
-                expensePeirodButtons[index].backgroundColor = UIColor(red: 0.61, green: 0.32, blue: 0.88, alpha: 0.2)
-                expensePeirodButtons[index].setTitleColor(#colorLiteral(red: 0.6078431373, green: 0.3176470588, blue: 0.8784313725, alpha: 1), for: .normal)
-            } else {
-                expensePeirodButtons[index].backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1)
-                expensePeirodButtons[index].setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
+            self.editBarButton.title = "Cancel"
+            editModeExpenseArray = expenseArray
+            self.navigationItem.rightBarButtonItem = doneBarButton
+            if let totalCostVC = totalCostVC {
+                totalCostVC.moveDown()
             }
         }
-        let expensePeriod = Double(sender.tag)
-        expensesLabelSetup(per: expensePeriod, with: sender.title(for: .normal)!)
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+
     }
     
+    @objc func doneBarButtonPressed(){
+        saveExpenses()
+        self.tableView.setEditing(false, animated: true)
+        self.editBarButton.title = "Edit"
+        self.navigationItem.rightBarButtonItem = self.addBarButton
+        removeExpenseConstraint.constant = -82
+        checkExpenseArray()
+        if let totalCostVC = totalCostVC {
+            totalCostVC.moveUp()
+            totalCostVC.updateLabels()
+        }
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+    }
     
     //MARK: - New Expense Delegete Methods
-    func addNewExpense(name: String, cost: Double, numberOfPeriods: Int, periodLength: String) {
+    func addNewExpense(name: String, cost: Double, numberOfPeriods: Double, periodLength: Int) {
         let expense = Expense(context: context)
         expense.name = name
         expense.price = cost
-        expense.periodLength = Int16(numberOfPeriods)
-        expense.periodType = periodLength
-        expense.yearPrice = setPricePerYear(cost: cost, numberOfPeriods: numberOfPeriods, periodLength: periodLength)
+        expense.periodLength = numberOfPeriods
+        
+        guard let periodType = Expense.PeriodType(rawValue: periodLength) else {return}
+        expense.periodType = Int16(periodLength)
+        expense.yearPrice = cost * (periodType.countPerYear/numberOfPeriods)
         
         expenseArray.append(expense)
+        indexExpenseArray()
         saveExpenses()
-        expensesLabelSetup()
         tableView.reloadData()
-    }
-    
-    func setPricePerYear (cost: Double, numberOfPeriods: Int, periodLength: String) -> Double {
-        var periodTypePerYear: Double?
-        switch periodLength {
-        case "Day(s)":
-            periodTypePerYear = 365
-        case "Week(s)":
-            periodTypePerYear = 52
-        case "Fortnight(s)":
-            periodTypePerYear = 26
-        case "Month(s)":
-            periodTypePerYear = 12
-        case "Year(s)":
-            periodTypePerYear = 1
-        default:
-            periodTypePerYear = nil
-        }
-        return cost * (periodTypePerYear!/Double(numberOfPeriods)) /// [Andy] never use force unwrapping
     }
     
     //MARK: - Update Expense Delegete Methods
     func updateExpense(expense: Expense) {
-        expense.yearPrice = setPricePerYear(cost: expense.price, numberOfPeriods: Int(expense.periodLength), periodLength: expense.periodType!)
+        if let periodType = Expense.PeriodType(rawValue: Int(expense.periodType)){
+            expense.yearPrice = expense.price * (periodType.countPerYear/expense.periodLength)
+        } else {
+            periodType = .month
+            expense.yearPrice = expense.price * (periodType.countPerYear/expense.periodLength)
+        }
         saveExpenses()
-        tableView.reloadData()
-        expensesLabelSetup()
     }
     
     func deleteExpense(expense: Expense){
         context.delete(expenseArray[selectedExpense!])
-        saveExpenses()
         expenseArray.remove(at: selectedExpense!)
-        tableView.reloadData()
-        expensesLabelSetup()
+        indexExpenseArray()
+        saveExpenses()
+        //tableView.reloadData()
     }
     
-    //MARK: - Prepare for Segue Method
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToAddExpense" {
-            let destinationNavigationController = segue.destination as! UINavigationController
-            let destinationVC = destinationNavigationController.topViewController as! AddExpenseViewController
-            
-            destinationVC.delegate = self
-            destinationVC.identifyingSegue = segue.identifier!
+    func indexExpenseArray(){
+        for index in expenseArray.indices {
+            expenseArray[index].arrayIndex = Int16(index)
         }
-        
-        if segue.identifier == "goToEditExpense" {
-            let destinationNavigationController = segue.destination as! UINavigationController
-            let destinationVC = destinationNavigationController.topViewController as! AddExpenseViewController
+    }
+    
+    //MARK: - Segue Methods
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if tableView.isEditing == false {
+            if segue.identifier == "goToAddExpense" {
+                let destinationNavigationController = segue.destination as! UINavigationController
+                let destinationVC = destinationNavigationController.topViewController as! AddExpenseViewController
+                
+                destinationVC.delegate = self
+                destinationVC.identifyingSegue = segue.identifier!
+            }
             
-            destinationVC.delegate2 = self
-            destinationVC.identifyingSegue = segue.identifier!
-            
-            if let indexPath = tableView.indexPathForSelectedRow {
-                destinationVC.selectedExpense = expenseArray[indexPath.row]
-                selectedExpense = indexPath.row
+            if segue.identifier == "goToEditExpense" {
+                let destinationNavigationController = segue.destination as! UINavigationController
+                let destinationVC = destinationNavigationController.topViewController as! AddExpenseViewController
+                
+                destinationVC.delegate2 = self
+                destinationVC.identifyingSegue = segue.identifier!
+                
+                if let indexPath = tableView.indexPathForSelectedRow {
+                    destinationVC.selectedExpense = expenseArray[indexPath.row]
+                    selectedExpense = indexPath.row
+                    destinationVC.periodSelected = true
+                }
             }
         }
-        
+    }
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == "goToEditExpense" {
+            return !tableView.isEditing
+        } else {
+            return true
+        }
     }
     
     //MARK: - Load and Save Methods
     func loadExpenses(with request: NSFetchRequest<Expense> = Expense.fetchRequest()){
+        let sort = NSSortDescriptor(key: "arrayIndex", ascending: true)
+        request.sortDescriptors = [sort]
         do{
             expenseArray = try context.fetch(request)
         } catch {
@@ -372,5 +284,79 @@ class ExpensesViewController: UIViewController, UITableViewDelegate, UITableView
         
     }
     
+}
+
+//MARK: - TableView Delegate and Data Source Methods
+extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return expenseArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "subscription", for: indexPath)
+        cell.layer.cornerRadius = 10
+        cell.layer.masksToBounds = true
+        let subscription = expenseArray[indexPath.row]
+        cell.textLabel?.text = subscription.name
+        let currencyFormatter = NumberFormatter()
+        currencyFormatter.usesGroupingSeparator = true
+        currencyFormatter.numberStyle = .currency
+        // localize to your grouping and decimal separator
+        currencyFormatter.locale = Locale.current
+        let price = subscription.price
+        cell.detailTextLabel?.text = currencyFormatter.string(from: NSNumber(value: price))
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        cell.selectedBackgroundView = backgroundView
+        cell.tintColor = #colorLiteral(red: 0.46, green: 0.29, blue: 0.96, alpha: 1)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.isEditing != true,
+            let cell = tableView.cellForRow(at: indexPath) {
+            let backgroundView = UIView(), holderView = UIView()
+            backgroundView.backgroundColor = backgroundColor
+            backgroundView.frame = CGRect(x: 8, y: 0, width: cell.frame.width - 16, height: cell.frame.height)
+            backgroundView.layer.cornerRadius = 10
+            holderView.addSubview(backgroundView)
+            cell.selectedBackgroundView = holderView
+            cell.backgroundView = holderView
+            cell.tintColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            cell.textLabel?.textColor = textColor
+            cell.detailTextLabel?.textColor = textColor
+            DispatchQueue.main.async() { () -> Void in
+                self.performSegue(withIdentifier: "goToEditExpense", sender: self)
+            }
+        } else {
+            removeExpenseConstraint.constant = 9
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        if tableView.isEditing == true, tableView.indexPathsForSelectedRows == nil {
+            removeExpenseConstraint.constant = -82
+            
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        return UITableViewCellEditingStyle.init(rawValue: 3)!
+    }
+    
+    func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to toIndexPath: IndexPath) {
+        let rowToMove = expenseArray[fromIndexPath.row]
+        expenseArray.remove(at: fromIndexPath.row)
+        expenseArray.insert(rowToMove, at: toIndexPath.row)
+        indexExpenseArray()
+        //saveExpenses()
+    }
 }
 
