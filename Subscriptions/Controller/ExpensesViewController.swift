@@ -19,6 +19,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     @IBOutlet weak var noExpensesView: UIView!
     @IBOutlet weak var removeExpenseButton: UIButton!
     @IBOutlet weak var removeExpenseConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomColorView: UIView!
     
     var expenseArray = [Expense]()
     var editModeExpenseArray = [Expense]()
@@ -26,9 +27,10 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     var periodSelectionHidden = true
     var periodType = Expense.PeriodType.day
     var doneBarButton = UIBarButtonItem()
+    var theme = Theme.init(rawValue: 0) // for testing initially, need to set to userDefaults in proper build
     
-    let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
-    let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
+//    let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
+//    let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let defaults = UserDefaults.standard
@@ -41,6 +43,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         
+        tableView.layer.backgroundColor = theme?.applicationBackgroundColor
         
         let fontStyle = UIFont.systemFont(ofSize: 17.0, weight: .medium)
         editBarButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle], for: .normal)
@@ -71,15 +74,25 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     override func viewWillAppear(_ animated: Bool) {
         checkExpenseArray()
         setTotalCost()
+        updateTheme()
         
         if let index = tableView.indexPathForSelectedRow,
             let cell = tableView.cellForRow(at: index) {
             tableView.deselectRow(at: index, animated: true)
-            cell.backgroundColor = .white
-            cell.textLabel?.textColor = .black
-            cell.detailTextLabel?.textColor = .black
+            cell.backgroundColor = .clear
+            cell.textLabel?.textColor = theme?.expensesFontColor
+            cell.detailTextLabel?.textColor = theme?.expensesFontColor
             tableView.reloadData()
         }
+    }
+    
+    func updateTheme(){
+        view.layer.backgroundColor = theme?.applicationBackgroundColor
+        bottomColorView.layer.backgroundColor = theme?.totalCostViewColor
+        addBarButton.image = theme?.addBarButtonImage
+        removeExpenseButton.backgroundColor = theme?.deleteButtonColor
+        removeExpenseButton.setTitleColor(theme?.deleteButtonTextColor, for: .normal)
+        tableView.reloadData()
     }
     
     //MARK: - Add Total Cost View to bottom of screen
@@ -156,6 +169,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             tableView.reloadSections(indexSet, with: .right)
             //tableView.reloadData()      //Causing issues with the setEditing animation
             self.tableView.setEditing(false, animated: false)
+            bottomColorView.isHidden = false
         } else if (self.tableView.isEditing == false) {
             self.tableView.setEditing(true, animated: true)
             self.editBarButton.title = "Cancel"
@@ -164,6 +178,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             if let totalCostVC = totalCostVC {
                 totalCostVC.moveDown()
             }
+            bottomColorView.isHidden = true
         }
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
@@ -307,9 +322,11 @@ extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
         let price = subscription.price
         cell.detailTextLabel?.text = currencyFormatter.string(from: NSNumber(value: price))
         let backgroundView = UIView()
-        backgroundView.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        backgroundView.backgroundColor = .clear
         cell.selectedBackgroundView = backgroundView
         cell.tintColor = #colorLiteral(red: 0.46, green: 0.29, blue: 0.96, alpha: 1)
+        cell.textLabel?.textColor = theme?.expensesFontColor
+        cell.detailTextLabel?.textColor = theme?.expensesFontColor
         return cell
     }
     
@@ -317,15 +334,15 @@ extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
         if tableView.isEditing != true,
             let cell = tableView.cellForRow(at: indexPath) {
             let backgroundView = UIView(), holderView = UIView()
-            backgroundView.backgroundColor = backgroundColor
+            backgroundView.backgroundColor = theme?.selectedExpenseColor
             backgroundView.frame = CGRect(x: 8, y: 0, width: cell.frame.width - 16, height: cell.frame.height)
             backgroundView.layer.cornerRadius = 10
             holderView.addSubview(backgroundView)
             cell.selectedBackgroundView = holderView
             cell.backgroundView = holderView
             cell.tintColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-            cell.textLabel?.textColor = textColor
-            cell.detailTextLabel?.textColor = textColor
+            cell.textLabel?.textColor = theme?.selectedExpenseFontColor
+            cell.detailTextLabel?.textColor = theme?.selectedExpenseFontColor
             DispatchQueue.main.async() { () -> Void in
                 self.performSegue(withIdentifier: "goToEditExpense", sender: self)
             }

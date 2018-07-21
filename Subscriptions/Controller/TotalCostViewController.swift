@@ -16,6 +16,7 @@ class TotalCostViewController: UIViewController {
     @IBOutlet weak var periodButtonSettingsView: UIView!
     @IBOutlet weak var buttonSettingStackView: UIStackView!
     @IBOutlet var expensePeriodButtons: [UIButton]!
+    @IBOutlet weak var expenseTitleLabel: UILabel!
     
     var expenseArray = [Expense]()
     var startPosition: CGPoint?
@@ -26,6 +27,7 @@ class TotalCostViewController: UIViewController {
     var expenseFrame = CGRect()
     var periodFrame = CGRect()
     var animationDuration = TimeInterval()
+    var theme = Theme.init(rawValue: 0) // for testing initially, need to set to userDefaults in proper build
     
     let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
     let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
@@ -47,6 +49,8 @@ class TotalCostViewController: UIViewController {
         super.viewDidAppear(animated)
         
         updateLabels()
+        expensesView.layer.backgroundColor = theme?.totalCostViewColor
+        periodButtonSettingsView.layer.backgroundColor = theme?.totalCostViewColor
         
         UIView.animate(withDuration: 0.3) { [weak self] in
             guard let `self` = self else {return}
@@ -135,7 +139,7 @@ class TotalCostViewController: UIViewController {
     
     //MARK: - Setup Expenses View
     func expensesViewSetup(){
-        expensesView.layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
+        expensesView.layer.backgroundColor = theme?.totalCostViewColor
         expensesView.clipsToBounds = false
         expensesView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor
         expensesView.layer.shadowPath = UIBezierPath(roundedRect: expensesView.bounds, cornerRadius: 10).cgPath
@@ -167,18 +171,21 @@ class TotalCostViewController: UIViewController {
         let price = totalPrice/timePeriod
         totalExpensesPriceLabel.text = currencyFormatter.string(from: NSNumber(value: price))
         expensePeriodLabel.text = label.lowercased()
+        
+        totalExpensesPriceLabel.textColor = theme?.expensesFontColor
+        expenseTitleLabel.textColor = theme?.expensesFontColor
     }
     
     //MARK: - Expense Time Period Method
     @IBAction func expencePeriodSelected(_ sender: UIButton) {
         for index in expensePeriodButtons.indices {
             if sender == expensePeriodButtons[index]{
-                expensePeriodButtons[index].backgroundColor = backgroundColor
-                expensePeriodButtons[index].setTitleColor(textColor, for: .normal)
+                expensePeriodButtons[index].backgroundColor = theme?.selectedButtonColor
+                expensePeriodButtons[index].setTitleColor(theme?.selectedButtonTextColor, for: .normal)
                 defaults.set(Int(index), forKey: "SelectedPeriod")
             } else {
-                expensePeriodButtons[index].backgroundColor =  #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1)
-                expensePeriodButtons[index].setTitleColor( #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
+                expensePeriodButtons[index].backgroundColor =  theme?.buttonColor
+                expensePeriodButtons[index].setTitleColor(theme?.expensesFontColor, for: .normal)
             }
         }
         let expensePeriod = Double(sender.tag)

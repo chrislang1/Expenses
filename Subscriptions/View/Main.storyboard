@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,9 +17,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xPJ-56-IJw">
+                                <rect key="frame" x="0.0" y="762" width="375" height="50"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="pai-9q-049"/>
+                                </constraints>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="xzb-8s-28p">
                                 <rect key="frame" x="0.0" y="88" width="375" height="630"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="subscription" textLabel="Ozi-GA-pP5" detailTextLabel="XG5-aI-8ZL" rowHeight="64" style="IBUITableViewCellStyleValue1" id="7pd-D7-bxB">
                                         <rect key="frame" x="0.0" y="28" width="375" height="64"/>
@@ -45,6 +52,7 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <segue destination="HTb-Op-R8W" kind="presentation" identifier="goToEditExpense" id="Whp-Cr-IKH"/>
@@ -126,14 +134,17 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="xPJ-56-IJw" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="GF4-5O-a4r"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="WBD-5v-ImN" secondAttribute="trailing" constant="16" id="TqD-UX-jgD"/>
                             <constraint firstItem="WBD-5v-ImN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="TwY-Cl-KPU"/>
+                            <constraint firstItem="xPJ-56-IJw" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Uyn-aS-wPF"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="xzb-8s-28p" secondAttribute="bottom" constant="60" id="avL-ol-vRK"/>
                             <constraint firstItem="xzb-8s-28p" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="cmP-on-MhN"/>
                             <constraint firstItem="NqV-ag-c2e" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="deY-Se-Kn7"/>
                             <constraint firstItem="xzb-8s-28p" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="dfp-Aa-OZo"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="xzb-8s-28p" secondAttribute="trailing" id="e8I-2O-nl5"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="WBD-5v-ImN" secondAttribute="bottom" constant="-82" id="iU7-lV-dI7"/>
+                            <constraint firstAttribute="bottom" secondItem="xPJ-56-IJw" secondAttribute="bottom" id="kmP-YW-5dS"/>
                             <constraint firstItem="NqV-ag-c2e" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="man-Tk-TrW"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -154,6 +165,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="addBarButton" destination="Dc9-of-uHg" id="NU9-z5-gjk"/>
+                        <outlet property="bottomColorView" destination="xPJ-56-IJw" id="MY0-0v-RET"/>
                         <outlet property="editBarButton" destination="eYR-dZ-fHX" id="FGY-tW-Nlt"/>
                         <outlet property="noExpensesView" destination="NqV-ag-c2e" id="m24-d7-4I2"/>
                         <outlet property="removeExpenseButton" destination="WBD-5v-ImN" id="WXR-zP-0A1"/>
@@ -163,7 +175,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1076" y="132.68365817091455"/>
+            <point key="canvasLocation" x="1076" y="132.26600985221674"/>
         </scene>
         <!--Total Cost View Controller-->
         <scene sceneID="eHB-jb-E7j">
@@ -356,6 +368,7 @@
                     <connections>
                         <outlet property="buttonSettingStackView" destination="BgY-11-lTx" id="7MP-wN-tgw"/>
                         <outlet property="expensePeriodLabel" destination="fHD-XZ-5c5" id="Avo-QF-OyY"/>
+                        <outlet property="expenseTitleLabel" destination="sjl-aD-Nca" id="Y9e-Bj-9bt"/>
                         <outlet property="expensesView" destination="61p-NR-F7j" id="VM3-YY-Ht0"/>
                         <outlet property="periodButtonSettingsView" destination="fA8-g7-MVC" id="9qI-ys-86m"/>
                         <outlet property="totalExpensesPriceLabel" destination="jOg-bU-wwc" id="udp-26-KG9"/>
@@ -586,6 +599,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="billingPeriodLabel" destination="IsA-Vv-Z2R" id="LQg-Cq-uKj"/>
                         <outlet property="cancelButton" destination="qc9-Sb-Mga" id="qyq-wM-Vjr"/>
                         <outlet property="costTextField" destination="Mf6-Kp-eiG" id="Fo7-Ud-d9y"/>
                         <outlet property="customPeriodLabel" destination="Vp4-XW-9Xz" id="mfx-eH-fZk"/>
