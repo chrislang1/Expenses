@@ -578,6 +578,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
+                                            <action selector="feedbackButtonPressed:" destination="Tph-qo-caN" eventType="touchUpInside" id="mBM-EM-txI"/>
                                             <action selector="settingsButtonPressed:" destination="rVe-eN-KzW" eventType="touchUpInside" id="pf5-V2-QyX"/>
                                         </connections>
                                     </button>
@@ -597,6 +598,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
+                                            <action selector="rateButtonPressed:" destination="Tph-qo-caN" eventType="touchUpInside" id="UG7-HO-gV7"/>
                                             <action selector="settingsButtonPressed:" destination="rVe-eN-KzW" eventType="touchUpInside" id="6rE-Nu-Jox"/>
                                         </connections>
                                     </button>

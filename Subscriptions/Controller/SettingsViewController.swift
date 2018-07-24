@@ -135,4 +135,17 @@ class SettingsViewController: UIViewController {
         moveDown()
     }
     
+    @IBAction func feedbackButtonPressed(_ sender: UIButton) {
+        if let url = NSURL(string: "http://www.alexvanderzon.com/expenses/"){
+            UIApplication.shared.open(url as URL, options: [:], completionHandler: nil)
+        }
+    }
+    
+    @IBAction func rateButtonPressed(_ sender: UIButton) {
+        if let url = URL(string: "itms-apps://itunes.apple.com/app/id1401279619"){
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+    
+    
 }
