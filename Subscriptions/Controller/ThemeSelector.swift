@@ -62,7 +62,7 @@ enum Theme: Int, CustomStringConvertible {
     var totalCostViewColor: CGColor {
         switch self {
         case .light: return #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        case .dark: return #colorLiteral(red: 0.12, green: 0.12, blue: 0.12, alpha: 1)
+        case .dark: return #colorLiteral(red: 0.08, green: 0.08, blue: 0.08, alpha: 1) // colour darkened as simulator gave a brighter colour - increases button visability
         }
     }
     
@@ -121,10 +121,17 @@ enum Theme: Int, CustomStringConvertible {
         }
     }
     
+    var xIconImage: UIImage{
+        switch self {
+        case .light: return UIImage.init(named: "XIcon")!
+        case .dark: return UIImage.init(named: "XIconWhite")!
+        }
+    }
+    
     var textFieldColor: CGColor {
         switch self {
         case .light: return #colorLiteral(red: 0.95, green: 0.96, blue: 0.96, alpha: 1)
-        case .dark: return #colorLiteral(red: 0.17, green: 0.17, blue: 0.17, alpha: 1)
+        case .dark: return #colorLiteral(red: 0.12, green: 0.12, blue: 0.12, alpha: 1)
         }
     }
     

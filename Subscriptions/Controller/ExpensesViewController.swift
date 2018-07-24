@@ -9,9 +9,10 @@
 import UIKit
 import CoreData
 
-class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseDelegate {
+class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseDelegate, ShowSettingsViewDelegate, UpdateParentThemeDelegate {
     
     var totalCostVC: TotalCostViewController?
+    var settingsVC: SettingsViewController?
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var editBarButton: UIBarButtonItem!
@@ -27,7 +28,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     var periodSelectionHidden = true
     var periodType = Expense.PeriodType.day
     var doneBarButton = UIBarButtonItem()
-    var theme = Theme.init(rawValue: 0) // for testing initially, need to set to userDefaults in proper build
+    var theme = Theme.init(rawValue: 0)
     
 //    let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
 //    let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
@@ -38,7 +39,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
+        theme = Theme.init(rawValue: defaults.integer(forKey: "SelectedTheme")) ?? Theme.init(rawValue: 0)
         //Remove Navigation Bar Border
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
@@ -68,6 +69,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         
         loadExpenses()
         addTotalCostView()
+        addSettingsView()
         checkExpenseArray()
     }
     
@@ -86,12 +88,18 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         }
     }
     
+    func updateThemeFromUser() {
+        theme = Theme.init(rawValue: defaults.integer(forKey: "theme"))
+        updateTheme()
+    }
+    
     func updateTheme(){
         view.layer.backgroundColor = theme?.applicationBackgroundColor
         bottomColorView.layer.backgroundColor = theme?.totalCostViewColor
         addBarButton.image = theme?.addBarButtonImage
         removeExpenseButton.backgroundColor = theme?.deleteButtonColor
         removeExpenseButton.setTitleColor(theme?.deleteButtonTextColor, for: .normal)
+        tableView.layer.backgroundColor = theme?.applicationBackgroundColor
         tableView.reloadData()
     }
     
@@ -109,6 +117,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             totalCostVC.view.frame = CGRect(x: 0, y: self.view.frame.maxY, width: width, height: height)
         
             totalCostVC.expenseArray = expenseArray
+            totalCostVC.delegate = self
         }
     }
     
@@ -127,6 +136,22 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             noExpensesView.isHidden = true
             tableView.isHidden = false
             navigationItem.leftBarButtonItem = self.editBarButton
+        }
+    }
+    
+    //MARK: - Add Settings View to bottom of screen
+    func addSettingsView(){
+        settingsVC = storyboard?.instantiateViewController(withIdentifier: "SettingsViewController") as? SettingsViewController
+        if let settingsVC = settingsVC {
+            
+            self.addChildViewController(settingsVC)
+            self.view.addSubview(settingsVC.view)
+            settingsVC.didMove(toParentViewController: self)
+            
+            let height = view.frame.height
+            let width = view.frame.width
+            settingsVC.view.frame = CGRect(x: 0, y: self.view.frame.maxY, width: width, height: height)
+            settingsVC.delegate = self
         }
     }
     
@@ -253,6 +278,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
                 
                 destinationVC.delegate = self
                 destinationVC.identifyingSegue = segue.identifier!
+                destinationVC.theme = theme
             }
             
             if segue.identifier == "goToEditExpense" {
@@ -267,6 +293,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
                     selectedExpense = indexPath.row
                     destinationVC.periodSelected = true
                 }
+                destinationVC.theme = theme
             }
         }
     }
@@ -297,6 +324,24 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             print("Error saving context \(error)")
         }
         
+    }
+    
+    //MARK: - Bring Up Settings View
+    func showSettingsView() {
+        if let settingsVC = settingsVC {
+            settingsVC.moveUp()
+        }
+    }
+    
+    //Set Theme from Settings View
+    func updateUserTheme() {
+        let rawValue = defaults.integer(forKey: "SelectedTheme")
+        theme = Theme.init(rawValue: rawValue)
+        updateTheme()
+        if let totalCostVC = totalCostVC {
+            totalCostVC.theme = theme
+            totalCostVC.updateTheme()
+        }
     }
     
 }

@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol ShowSettingsViewDelegate {
+    func showSettingsView()
+}
+
 class TotalCostViewController: UIViewController {
 
     @IBOutlet weak var totalExpensesPriceLabel: UILabel!
@@ -17,6 +21,8 @@ class TotalCostViewController: UIViewController {
     @IBOutlet weak var buttonSettingStackView: UIStackView!
     @IBOutlet var expensePeriodButtons: [UIButton]!
     @IBOutlet weak var expenseTitleLabel: UILabel!
+    @IBOutlet weak var settingsButton: UIButton!
+    
     
     var expenseArray = [Expense]()
     var startPosition: CGPoint?
@@ -27,7 +33,9 @@ class TotalCostViewController: UIViewController {
     var expenseFrame = CGRect()
     var periodFrame = CGRect()
     var animationDuration = TimeInterval()
-    var theme = Theme.init(rawValue: 0) // for testing initially, need to set to userDefaults in proper build
+    var theme = Theme.init(rawValue: 0)
+    
+    var delegate: ShowSettingsViewDelegate?
     
     let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
     let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
@@ -48,9 +56,9 @@ class TotalCostViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        updateLabels()
-        expensesView.layer.backgroundColor = theme?.totalCostViewColor
-        periodButtonSettingsView.layer.backgroundColor = theme?.totalCostViewColor
+        theme = Theme.init(rawValue: defaults.integer(forKey: "SelectedTheme")) ?? Theme.init(rawValue: 0)
+        
+        updateTheme()
         
         UIView.animate(withDuration: 0.3) { [weak self] in
             guard let `self` = self else {return}
@@ -139,7 +147,6 @@ class TotalCostViewController: UIViewController {
     
     //MARK: - Setup Expenses View
     func expensesViewSetup(){
-        expensesView.layer.backgroundColor = theme?.totalCostViewColor
         expensesView.clipsToBounds = false
         expensesView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor
         expensesView.layer.shadowPath = UIBezierPath(roundedRect: expensesView.bounds, cornerRadius: 10).cgPath
@@ -148,6 +155,14 @@ class TotalCostViewController: UIViewController {
         expensesView.layer.shadowOffset = CGSize.zero
         expensesView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
+        updateTheme()
+    }
+    
+    func updateTheme(){
+        expensesView.layer.backgroundColor = theme?.totalCostViewColor
+        settingsButton.backgroundColor = theme?.buttonColor
+        settingsButton.setTitleColor(theme?.expensesFontColor, for: .normal)
+        periodButtonSettingsView.layer.backgroundColor = theme?.totalCostViewColor
         updateLabels()
     }
     
@@ -203,6 +218,18 @@ class TotalCostViewController: UIViewController {
     func moveUp(){
         UIView.animate(withDuration: 0.3) {
             self.view.frame = CGRect(x: 0, y: self.yComponent, width: self.view.frame.width, height: self.view.frame.height)
+        }
+    }
+    
+    //MARK: - Settings Button Action
+    @IBAction func settingsButtonPressed(_ sender: UIButton) {
+        if let delegate = delegate {
+            delegate.showSettingsView()
+            moveUp()
+            
+            UIView.animate(withDuration: 0.3) {
+                self.buttonSettingStackView.isHidden = true
+            }
         }
     }
 }
