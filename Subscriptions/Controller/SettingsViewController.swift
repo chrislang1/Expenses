@@ -8,9 +8,8 @@
 
 import UIKit
 
-protocol UpdateParentThemeDelegate {
+protocol UpdateThemeDelegate {
     func updateUserTheme()
-    func darkenView()
 }
 
 class SettingsViewController: UIViewController {
@@ -28,9 +27,9 @@ class SettingsViewController: UIViewController {
     
     @IBOutlet var themeButtons: [UIButton]!
     
-    var delegate: ExpensesViewController?
+    var delegate: TotalCostViewController?
     
-    var settingsViewFrame = CGRect()
+//    var settingsViewFrame = CGRect()
     var bottomPadding: CGFloat?
     let window = UIApplication.shared.keyWindow
     var yComponent = CGFloat()
@@ -42,31 +41,34 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        settingsViewFrame = settingsView.frame
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         theme = Theme.init(rawValue: defaults.integer(forKey: "SelectedTheme")) ?? Theme.init(rawValue: 0)
         updateThemeButtons(sender: themeButtons[defaults.integer(forKey: "SelectedTheme")])
         setupViewShadow()
         updateTheme()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+//        theme = Theme.init(rawValue: defaults.integer(forKey: "SelectedTheme")) ?? Theme.init(rawValue: 0)
+//        updateThemeButtons(sender: themeButtons[defaults.integer(forKey: "SelectedTheme")])
+//        setupViewShadow()
+//        updateTheme()
         
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            guard let `self` = self else {return}
-            let frame = self.view.frame
-            self.bottomPadding = self.window?.safeAreaInsets.bottom
-            
-            if let bottomPadding = self.bottomPadding {
-                if bottomPadding > CGFloat(0) {
-                    self.yComponent = UIScreen.main.bounds.height - self.settingsViewFrame.height
-                } else {
-                    self.yComponent = UIScreen.main.bounds.height - self.settingsViewFrame.height
-                    }
-            }
-            
-            self.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height, width: frame.width, height: self.settingsViewFrame.height)
-        }
+//        UIView.animate(withDuration: 0.3) { [weak self] in
+//            guard let `self` = self else {return}
+//            let frame = self.view.frame
+//            self.bottomPadding = self.window?.safeAreaInsets.bottom
+//
+//            if let bottomPadding = self.bottomPadding {
+//                if bottomPadding > CGFloat(0) {
+//                    self.yComponent = UIScreen.main.bounds.height - self.settingsViewFrame.height
+//                } else {
+//                    self.yComponent = UIScreen.main.bounds.height - self.settingsViewFrame.height
+//                    }
+//            }
+//
+//            self.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height, width: frame.width, height: self.settingsViewFrame.height)
+//        }
     }
     
     func setupViewShadow(){
@@ -82,9 +84,6 @@ class SettingsViewController: UIViewController {
     func moveUp(){
         UIView.animate(withDuration: 0.3) {
             self.view.frame = CGRect(x: 0, y: self.yComponent, width: self.view.frame.width, height: self.view.frame.height)
-            if let delegate = self.delegate {
-                delegate.darkenView()
-            }
         }
     }
     
@@ -126,10 +125,8 @@ class SettingsViewController: UIViewController {
         defaults.set(sender.tag, forKey: "SelectedTheme")
         updateTheme()
         updateThemeButtons(sender: sender)
-        
         if let delegate = delegate {
             delegate.updateUserTheme()
-            delegate.darkenView()
         }
         
         if UIApplication.shared.supportsAlternateIcons {
@@ -148,10 +145,7 @@ class SettingsViewController: UIViewController {
     }
     
     @IBAction func exitButtonPressed(_ sender: UIButton) {
-        if let delegate = delegate {
-            delegate.updateUserTheme()
-        }
-        moveDown()
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func feedbackButtonPressed(_ sender: UIButton) {

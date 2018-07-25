@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseDelegate, ShowSettingsViewDelegate, UpdateParentThemeDelegate {
+class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseDelegate {
     
     var totalCostVC: TotalCostViewController?
     var settingsVC: SettingsViewController?
@@ -76,7 +76,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         
         loadExpenses()
         addTotalCostView()
-        addSettingsView()
+        //addSettingsView()
         checkExpenseArray()
     }
     
@@ -132,7 +132,6 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             totalCostVC.view.frame = CGRect(x: 0, y: self.view.frame.maxY, width: width, height: height)
         
             totalCostVC.expenseArray = expenseArray
-            totalCostVC.delegate = self
         }
     }
     
@@ -166,7 +165,6 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             let height = view.frame.height
             let width = view.frame.width
             settingsVC.view.frame = CGRect(x: 0, y: self.view.frame.maxY, width: width, height: height)
-            settingsVC.delegate = self
         }
     }
     

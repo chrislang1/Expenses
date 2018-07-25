@@ -8,8 +8,8 @@
 
 import UIKit
 
-protocol ShowSettingsViewDelegate {
-    func showSettingsView()
+protocol updateParentThemeDelegate {
+    func updateParentTheme()
 }
 
 class TotalCostViewController: UIViewController {
@@ -37,7 +37,7 @@ class TotalCostViewController: UIViewController {
     var animationDuration = TimeInterval()
     var theme = Theme.init(rawValue: 0)
     
-    var delegate: ShowSettingsViewDelegate?
+//    var delegate: ShowSettingsViewDelegate?
     
     let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
     let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
@@ -166,7 +166,7 @@ class TotalCostViewController: UIViewController {
         settingsButton.setTitleColor(theme?.expensesFontColor, for: .normal)
         periodButtonSettingsView.layer.backgroundColor = theme?.totalCostViewColor
         panLabel.backgroundColor = theme?.panAndDividerColor
-        dividerLabel.backgroundColor = theme?.panAndDividerColor
+        dividerLabel.backgroundColor = theme?.buttonColor
         updateLabels()
     }
     
@@ -227,13 +227,27 @@ class TotalCostViewController: UIViewController {
     
     //MARK: - Settings Button Action
     @IBAction func settingsButtonPressed(_ sender: UIButton) {
-        if let delegate = delegate {
-            delegate.showSettingsView()
-            moveUp()
-            
             UIView.animate(withDuration: 0.3) {
                 self.buttonSettingStackView.isHidden = true
             }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationVC = segue.destination as! SettingsViewController
+        destinationVC.delegate = self
+        UIView.animate(withDuration: 0.3) {
+            self.moveUp()
         }
+    }
+}
+
+extension TotalCostViewController: UpdateThemeDelegate{
+    func updateUserTheme(){
+        theme = Theme.init(rawValue: defaults.integer(forKey: "SelectedTheme"))
+        updateTheme()
+        
+        let parentVC = parent as! ExpensesViewController
+        parentVC.theme = theme
+        parentVC.updateTheme()
     }
 }
