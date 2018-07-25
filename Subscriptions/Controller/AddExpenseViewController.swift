@@ -141,6 +141,12 @@ class AddExpenseViewController: UIViewController {
         addDoneButtonOnKeyboard()
         nameTextField.attributedPlaceholder = NSAttributedString(string: "Expense Name", attributes: [NSAttributedStringKey.foregroundColor: theme?.choosePeriodLabelColor ?? UIColor.lightGray])
         
+        switch theme?.rawValue {
+        case 0: return (navigationController?.navigationBar.barStyle = .default)!
+        case 1: return (navigationController?.navigationBar.barStyle = .black)!
+        default: return (navigationController?.navigationBar.barStyle = .default)!
+        }
+        
     }
     
     func checkDoneButton(){

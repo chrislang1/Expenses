@@ -135,6 +135,25 @@ enum Theme: Int, CustomStringConvertible {
         }
     }
     
+    var panAndDividerColor: UIColor {
+        switch self {
+        case .light: return #colorLiteral(red: 0.77, green: 0.77, blue: 0.77, alpha: 1)
+        case .dark: return #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.2)
+        }
+    }
+    
+    var selectorButtonColor: UIColor {
+        switch self {
+        case .light, .dark: return #colorLiteral(red: 0.95, green: 0.96, blue: 0.96, alpha: 0)
+        }
+    }
+    
+    var selectorButtonSelectedColor: UIColor {
+        switch self {
+        case .light, .dark: return #colorLiteral(red: 0.5388125777, green: 0.4061352313, blue: 0.9692879319, alpha: 1)
+        }
+    }
+    
     var description: String {
         switch self {
         case .light: return "Light"

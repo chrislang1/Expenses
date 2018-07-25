@@ -29,9 +29,8 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     var periodType = Expense.PeriodType.day
     var doneBarButton = UIBarButtonItem()
     var theme = Theme.init(rawValue: 0)
-    
-//    let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
-//    let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
+    var dimBackgroundView = UIView()
+    var dimNavigationView = UIView()
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let defaults = UserDefaults.standard
@@ -67,6 +66,14 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         let gesture = UITapGestureRecognizer(target: self, action: #selector(noExpensesViewTapped))
         noExpensesView.addGestureRecognizer(gesture)
         
+        //Setup dimming view
+        dimBackgroundView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        dimBackgroundView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        dimBackgroundView.alpha = 1
+        dimNavigationView.frame = CGRect(x: 0, y: 0, width: (navigationController?.view.frame.width)!, height: (navigationController?.view.frame.height)!)
+        dimNavigationView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        dimNavigationView.alpha = 1
+        
         loadExpenses()
         addTotalCostView()
         addSettingsView()
@@ -101,6 +108,14 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         removeExpenseButton.setTitleColor(theme?.deleteButtonTextColor, for: .normal)
         tableView.layer.backgroundColor = theme?.applicationBackgroundColor
         tableView.reloadData()
+//        self.view.willRemoveSubview(dimBackgroundView)
+//        dimBackgroundView.removeFromSuperview()
+        
+        switch theme?.rawValue {
+            case 0: return (navigationController?.navigationBar.barStyle = .default)!
+            case 1: return (navigationController?.navigationBar.barStyle = .black)!
+            default: return (navigationController?.navigationBar.barStyle = .default)!
+        }
     }
     
     //MARK: - Add Total Cost View to bottom of screen
@@ -342,6 +357,11 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             totalCostVC.theme = theme
             totalCostVC.updateTheme()
         }
+    }
+    
+    func darkenView(){
+        //view.insertSubview(dimBackgroundView, at: 2)
+        //self.view.backgroundColor = UIColor.black.withAlphaComponent(0.7)
     }
     
 }

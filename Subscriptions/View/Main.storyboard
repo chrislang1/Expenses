@@ -409,9 +409,11 @@
                     </view>
                     <connections>
                         <outlet property="buttonSettingStackView" destination="BgY-11-lTx" id="7MP-wN-tgw"/>
+                        <outlet property="dividerLabel" destination="F4J-1R-GJd" id="qAU-ay-7jU"/>
                         <outlet property="expensePeriodLabel" destination="fHD-XZ-5c5" id="Avo-QF-OyY"/>
                         <outlet property="expenseTitleLabel" destination="sjl-aD-Nca" id="Y9e-Bj-9bt"/>
                         <outlet property="expensesView" destination="61p-NR-F7j" id="VM3-YY-Ht0"/>
+                        <outlet property="panLabel" destination="hRw-Ih-L3n" id="6e1-ji-zk1"/>
                         <outlet property="periodButtonSettingsView" destination="fA8-g7-MVC" id="9qI-ys-86m"/>
                         <outlet property="settingsButton" destination="4W6-kq-JNU" id="hkF-pv-Xm0"/>
                         <outlet property="totalExpensesPriceLabel" destination="jOg-bU-wwc" id="udp-26-KG9"/>
@@ -482,27 +484,6 @@
                                             <action selector="exitButtonPressed:" destination="Tph-qo-caN" eventType="touchUpInside" id="8mT-hO-CM1"/>
                                         </connections>
                                     </button>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="eCc-eA-RXu">
-                                        <rect key="frame" x="238" y="185" width="121" height="29"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="121" id="Cea-at-aNi"/>
-                                            <constraint firstAttribute="height" constant="28" id="dag-te-Lfy"/>
-                                        </constraints>
-                                        <segments>
-                                            <segment title="Light"/>
-                                            <segment title="Dark"/>
-                                        </segments>
-                                        <color key="tintColor" red="0.46000000000000002" green="0.28999999999999998" blue="0.95999999999999996" alpha="1" colorSpace="calibratedRGB"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="5"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="themeToggleChanged:" destination="Tph-qo-caN" eventType="valueChanged" id="n1W-tm-Xky"/>
-                                        </connections>
-                                    </segmentedControl>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Interface Theme" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Bh-LH-aLw">
                                         <rect key="frame" x="16" y="175" width="129" height="48"/>
                                         <constraints>
@@ -602,6 +583,67 @@
                                             <action selector="settingsButtonPressed:" destination="rVe-eN-KzW" eventType="touchUpInside" id="6rE-Nu-Jox"/>
                                         </connections>
                                     </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3sz-1n-SnU">
+                                        <rect key="frame" x="206" y="178" width="152" height="42"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jl4-nM-U9c">
+                                                <rect key="frame" x="4" y="4" width="72" height="34"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="34" id="Lhc-BC-KKR"/>
+                                                    <constraint firstAttribute="width" constant="72" id="WEh-GE-Mya"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                                <state key="normal" title="Light">
+                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="6"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="themeToggleButtonChanged:" destination="Tph-qo-caN" eventType="touchUpInside" id="UYN-xL-UrS"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wtR-U0-7hn">
+                                                <rect key="frame" x="76" y="4" width="72" height="34"/>
+                                                <color key="backgroundColor" red="0.46000000000000002" green="0.28999999999999998" blue="0.95999999999999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="34" id="PsR-ar-lie"/>
+                                                    <constraint firstAttribute="width" constant="72" id="sth-GE-fC8"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                                <state key="normal" title="Dark">
+                                                    <color key="titleColor" red="0.94999999999999996" green="0.95999999999999996" blue="0.95999999999999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="6"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="themeToggleButtonChanged:" destination="Tph-qo-caN" eventType="touchUpInside" id="8ah-e0-69Q"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.94999999999999996" green="0.95999999999999996" blue="0.95999999999999996" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="Jl4-nM-U9c" secondAttribute="bottom" constant="4" id="0fw-8V-RZd"/>
+                                            <constraint firstAttribute="height" constant="42" id="5Kn-1p-yFb"/>
+                                            <constraint firstItem="Jl4-nM-U9c" firstAttribute="top" secondItem="3sz-1n-SnU" secondAttribute="top" constant="4" id="CnL-la-6F8"/>
+                                            <constraint firstItem="Jl4-nM-U9c" firstAttribute="leading" secondItem="3sz-1n-SnU" secondAttribute="leading" constant="4" id="RSm-6y-DKp"/>
+                                            <constraint firstAttribute="trailing" secondItem="wtR-U0-7hn" secondAttribute="trailing" constant="4" id="b4t-ER-YNa"/>
+                                            <constraint firstItem="wtR-U0-7hn" firstAttribute="top" secondItem="3sz-1n-SnU" secondAttribute="top" constant="4" id="pbz-Fb-C1o"/>
+                                            <constraint firstAttribute="bottom" secondItem="wtR-U0-7hn" secondAttribute="bottom" constant="4" id="sgc-AP-6Mu"/>
+                                            <constraint firstAttribute="width" constant="152" id="vNq-Vv-vpg"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="10"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <gestureRecognizers/>
@@ -625,10 +667,10 @@
                                     <constraint firstItem="DGR-QA-jlE" firstAttribute="top" secondItem="sKX-gK-n2P" secondAttribute="bottom" constant="8" id="cd9-nR-gXu"/>
                                     <constraint firstItem="z6Q-1J-TcU" firstAttribute="top" secondItem="HSU-8i-pYF" secondAttribute="top" constant="8" id="eIE-bP-c6K"/>
                                     <constraint firstAttribute="trailing" secondItem="BTP-JL-tT0" secondAttribute="trailing" constant="16" id="eZM-So-DIW"/>
+                                    <constraint firstAttribute="trailing" secondItem="3sz-1n-SnU" secondAttribute="trailing" constant="17" id="fdH-bV-IUE"/>
                                     <constraint firstItem="e9q-F0-gjN" firstAttribute="top" secondItem="HSU-8i-pYF" secondAttribute="top" constant="23" id="ftF-f3-tex"/>
                                     <constraint firstAttribute="trailing" secondItem="e9q-F0-gjN" secondAttribute="trailing" constant="16" id="mtH-HK-y52"/>
-                                    <constraint firstAttribute="trailing" secondItem="eCc-eA-RXu" secondAttribute="trailing" constant="16" id="oRy-jC-q0E"/>
-                                    <constraint firstItem="eCc-eA-RXu" firstAttribute="top" secondItem="BTP-JL-tT0" secondAttribute="bottom" constant="52" id="wNY-fM-g7N"/>
+                                    <constraint firstItem="3sz-1n-SnU" firstAttribute="top" secondItem="BTP-JL-tT0" secondAttribute="bottom" constant="45" id="pFc-91-csL"/>
                                     <constraint firstAttribute="trailing" secondItem="MbG-Oe-Fz6" secondAttribute="trailing" constant="16" id="wNp-bM-s0o"/>
                                     <constraint firstItem="z6Q-1J-TcU" firstAttribute="centerX" secondItem="HSU-8i-pYF" secondAttribute="centerX" id="yty-zi-vDy"/>
                                     <constraint firstItem="MbG-Oe-Fz6" firstAttribute="top" secondItem="DGR-QA-jlE" secondAttribute="bottom" constant="8" id="zn5-Lq-LKS"/>
@@ -653,13 +695,16 @@
                     <connections>
                         <outlet property="feedbackButton" destination="DGR-QA-jlE" id="gXt-za-iOR"/>
                         <outlet property="interfaceThemeLabel" destination="9Bh-LH-aLw" id="Wr5-sB-rQM"/>
+                        <outlet property="lightDarkSwitchView" destination="3sz-1n-SnU" id="zd2-IZ-z10"/>
+                        <outlet property="panLabel" destination="z6Q-1J-TcU" id="Qih-Us-j56"/>
                         <outlet property="rateButton" destination="MbG-Oe-Fz6" id="Vir-Qi-kqy"/>
                         <outlet property="settingsLabel" destination="odv-qf-L3M" id="s2u-2o-Sp8"/>
                         <outlet property="settingsView" destination="HSU-8i-pYF" id="DL7-In-Wr0"/>
                         <outlet property="sortExpensesByLabel" destination="GD6-cW-Hja" id="jNW-z7-S0m"/>
                         <outlet property="sortExpensesOptionLabel" destination="BTP-JL-tT0" id="CEk-cM-6Nz"/>
-                        <outlet property="themeSegmentedControl" destination="eCc-eA-RXu" id="tjs-ob-hDS"/>
                         <outlet property="xButton" destination="e9q-F0-gjN" id="NeC-6M-Bqn"/>
+                        <outletCollection property="themeButtons" destination="Jl4-nM-U9c" collectionClass="NSMutableArray" id="I2a-W5-S5l"/>
+                        <outletCollection property="themeButtons" destination="wtR-U0-7hn" collectionClass="NSMutableArray" id="lbj-bg-eYQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="En3-5v-O7K" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -10,6 +10,7 @@ import UIKit
 
 protocol UpdateParentThemeDelegate {
     func updateUserTheme()
+    func darkenView()
 }
 
 class SettingsViewController: UIViewController {
@@ -17,13 +18,15 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var settingsView: UIView!
     @IBOutlet weak var interfaceThemeLabel: UILabel!
     @IBOutlet weak var settingsLabel: UILabel!
-    @IBOutlet weak var themeSegmentedControl: UISegmentedControl!
     @IBOutlet weak var sortExpensesByLabel: UILabel!
     @IBOutlet weak var sortExpensesOptionLabel: UILabel!
     @IBOutlet weak var feedbackButton: UIButton!
     @IBOutlet weak var rateButton: UIButton!
     @IBOutlet weak var xButton: UIButton!
+    @IBOutlet weak var panLabel: UILabel!
+    @IBOutlet weak var lightDarkSwitchView: UIView!
     
+    @IBOutlet var themeButtons: [UIButton]!
     
     var delegate: ExpensesViewController?
     
@@ -45,7 +48,7 @@ class SettingsViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         theme = Theme.init(rawValue: defaults.integer(forKey: "SelectedTheme")) ?? Theme.init(rawValue: 0)
-        themeSegmentedControl.selectedSegmentIndex = defaults.integer(forKey: "SelectedTheme")
+        updateThemeButtons(sender: themeButtons[defaults.integer(forKey: "SelectedTheme")])
         setupViewShadow()
         updateTheme()
         
@@ -79,6 +82,9 @@ class SettingsViewController: UIViewController {
     func moveUp(){
         UIView.animate(withDuration: 0.3) {
             self.view.frame = CGRect(x: 0, y: self.yComponent, width: self.view.frame.width, height: self.view.frame.height)
+            if let delegate = self.delegate {
+                delegate.darkenView()
+            }
         }
     }
     
@@ -99,27 +105,37 @@ class SettingsViewController: UIViewController {
         rateButton.backgroundColor = theme?.buttonColor
         rateButton.setTitleColor(theme?.expensesFontColor, for: .normal)
         xButton.setImage(theme?.xIconImage, for: .normal)
+        panLabel.backgroundColor = theme?.panAndDividerColor
+        lightDarkSwitchView.backgroundColor = theme?.buttonColor
     }
     
-    @IBAction func themeToggleChanged(_ sender: UISegmentedControl) {
-        theme = Theme.init(rawValue: sender.selectedSegmentIndex)
-        defaults.set(sender.selectedSegmentIndex, forKey: "SelectedTheme")
-        updateTheme()
-        
-        if sender.selectedSegmentIndex != 0 {
-            
+    func updateThemeButtons(sender: UIButton){
+        for index in themeButtons.indices{
+            if themeButtons[index] == sender{
+                themeButtons[index].backgroundColor = theme?.selectorButtonSelectedColor
+                themeButtons[index].setTitleColor(.white, for: .normal)
+            } else {
+                themeButtons[index].backgroundColor = .clear
+                themeButtons[index].setTitleColor(theme?.expensesFontColor, for: .normal)
+            }
         }
+    }
+    
+    @IBAction func themeToggleButtonChanged(_ sender: UIButton) {
+        theme = Theme.init(rawValue: sender.tag)
+        defaults.set(sender.tag, forKey: "SelectedTheme")
+        updateTheme()
+        updateThemeButtons(sender: sender)
         
         if let delegate = delegate {
             delegate.updateUserTheme()
+            delegate.darkenView()
         }
         
         if UIApplication.shared.supportsAlternateIcons {
-            if let alternateIconName = UIApplication.shared.alternateIconName {
-                print("current icon is \(alternateIconName), change to primary icon")
+            if sender.tag == 0 {
                 UIApplication.shared.setAlternateIconName(nil)
-            } else {
-                print("current icon is primary icon, change to alternative icon")
+            } else if sender.tag == 1 {
                 UIApplication.shared.setAlternateIconName("AlternateIcon"){ error in
                     if let error = error {
                         print(error.localizedDescription)
@@ -132,6 +148,9 @@ class SettingsViewController: UIViewController {
     }
     
     @IBAction func exitButtonPressed(_ sender: UIButton) {
+        if let delegate = delegate {
+            delegate.updateUserTheme()
+        }
         moveDown()
     }
     

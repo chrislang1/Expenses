@@ -22,6 +22,8 @@ class TotalCostViewController: UIViewController {
     @IBOutlet var expensePeriodButtons: [UIButton]!
     @IBOutlet weak var expenseTitleLabel: UILabel!
     @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var panLabel: UILabel!
+    @IBOutlet weak var dividerLabel: UILabel!
     
     
     var expenseArray = [Expense]()
@@ -163,6 +165,8 @@ class TotalCostViewController: UIViewController {
         settingsButton.backgroundColor = theme?.buttonColor
         settingsButton.setTitleColor(theme?.expensesFontColor, for: .normal)
         periodButtonSettingsView.layer.backgroundColor = theme?.totalCostViewColor
+        panLabel.backgroundColor = theme?.panAndDividerColor
+        dividerLabel.backgroundColor = theme?.panAndDividerColor
         updateLabels()
     }
     
