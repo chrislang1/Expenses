@@ -191,7 +191,7 @@ class TotalCostViewController: UIViewController {
         currencyFormatter.locale = Locale.current
         let price = totalPrice/timePeriod
         totalExpensesPriceLabel.text = currencyFormatter.string(from: NSNumber(value: price))
-        expensePeriodLabel.text = label.lowercased()
+        expensePeriodLabel.text = "per \(label.lowercased())"
         
         totalExpensesPriceLabel.textColor = theme?.expensesFontColor
         expenseTitleLabel.textColor = theme?.expensesFontColor

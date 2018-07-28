@@ -262,7 +262,7 @@
                                                                     <constraint firstAttribute="height" constant="48" id="6bW-1h-ahC"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                                                <state key="normal" title="Per Day">
+                                                                <state key="normal" title="Day">
                                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 </state>
                                                                 <userDefinedRuntimeAttributes>
@@ -281,7 +281,7 @@
                                                                     <constraint firstAttribute="height" constant="48" id="yNO-Wi-ty8"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                                                <state key="normal" title="Per Week">
+                                                                <state key="normal" title="Week">
                                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 </state>
                                                                 <userDefinedRuntimeAttributes>
@@ -305,7 +305,7 @@
                                                                     <constraint firstAttribute="height" constant="48" id="Kjj-cJ-UBJ"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                                                <state key="normal" title="Per Month">
+                                                                <state key="normal" title="Month">
                                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 </state>
                                                                 <userDefinedRuntimeAttributes>
@@ -324,7 +324,7 @@
                                                                     <constraint firstAttribute="height" constant="48" id="0jZ-bj-2wN"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                                                <state key="normal" title="Per Year">
+                                                                <state key="normal" title="Year">
                                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 </state>
                                                                 <userDefinedRuntimeAttributes>
