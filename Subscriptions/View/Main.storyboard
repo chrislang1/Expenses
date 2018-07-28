@@ -94,7 +94,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="Bud-z0-tbm" firstAttribute="centerY" secondItem="VlT-gX-TgF" secondAttribute="centerY" id="3OW-sy-7Qc"/>
                                     <constraint firstItem="cYa-20-RpG" firstAttribute="leading" secondItem="NqV-ag-c2e" secondAttribute="leading" constant="8" id="4zn-Id-zei"/>
@@ -168,6 +168,7 @@
                         <outlet property="addBarButton" destination="Dc9-of-uHg" id="NU9-z5-gjk"/>
                         <outlet property="bottomColorView" destination="xPJ-56-IJw" id="MY0-0v-RET"/>
                         <outlet property="editBarButton" destination="eYR-dZ-fHX" id="FGY-tW-Nlt"/>
+                        <outlet property="noExpensesLabel" destination="cYa-20-RpG" id="DeV-5T-0gT"/>
                         <outlet property="noExpensesView" destination="NqV-ag-c2e" id="m24-d7-4I2"/>
                         <outlet property="removeExpenseButton" destination="WBD-5v-ImN" id="WXR-zP-0A1"/>
                         <outlet property="removeExpenseConstraint" destination="iU7-lV-dI7" id="isa-d1-1SA"/>

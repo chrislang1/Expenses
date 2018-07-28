@@ -291,19 +291,22 @@ extension AddExpenseViewController: UIPickerViewDelegate, UIPickerViewDataSource
         }
     }
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        switch(component) {
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        var attributedString: NSAttributedString!
+        
+        switch(component){
         case 0:
-            return "Every";
+            attributedString = NSAttributedString(string: "Every", attributes: [NSAttributedStringKey.foregroundColor: theme?.expensesFontColor ?? .black])
         case 1:
-            return String(numberArray[row]);
+            attributedString = NSAttributedString(string: String(numberArray[row]), attributes: [NSAttributedStringKey.foregroundColor: theme?.expensesFontColor ?? .black])
         case 2:
-            return periodLengthArray[row];
+            attributedString = NSAttributedString(string: periodLengthArray[row], attributes: [NSAttributedStringKey.foregroundColor: theme?.expensesFontColor ?? .black])
         default:
-            return ""
+            attributedString = nil
         }
+        return attributedString
     }
-    
+        
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if component == 1 {
             numberOfPeriods = numberArray[row]

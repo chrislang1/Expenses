@@ -21,6 +21,8 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     @IBOutlet weak var removeExpenseButton: UIButton!
     @IBOutlet weak var removeExpenseConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomColorView: UIView!
+    @IBOutlet weak var noExpensesLabel: UILabel!
+    
     
     var expenseArray = [Expense]()
     var editModeExpenseArray = [Expense]()
@@ -108,8 +110,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         removeExpenseButton.setTitleColor(theme?.deleteButtonTextColor, for: .normal)
         tableView.layer.backgroundColor = theme?.applicationBackgroundColor
         tableView.reloadData()
-//        self.view.willRemoveSubview(dimBackgroundView)
-//        dimBackgroundView.removeFromSuperview()
+        noExpensesLabel.textColor = theme?.expensesFontColor
         
         switch theme?.rawValue {
             case 0: return (navigationController?.navigationBar.barStyle = .default)!
@@ -203,10 +204,15 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
                 totalCostVC.moveUp()
                 totalCostVC.updateLabels()
             }
-            let indexSet = IndexSet.init(integer: 0)
-            tableView.reloadSections(indexSet, with: .right)
+//            let indexSet = IndexSet.init(integer: 0)
+//            tableView.reloadSections(indexSet, with: .right)
             //tableView.reloadData()      //Causing issues with the setEditing animation
-            self.tableView.setEditing(false, animated: false)
+            UIView.animate(withDuration: 0.3, animations: {
+                self.tableView.setEditing(false, animated: false)
+            }) { (complete) in
+                self.tableView.reloadData()
+            }
+            
             bottomColorView.isHidden = false
         } else if (self.tableView.isEditing == false) {
             self.tableView.setEditing(true, animated: true)
@@ -237,6 +243,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         }
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
+            self.bottomColorView.isHidden = false
         }
     }
     

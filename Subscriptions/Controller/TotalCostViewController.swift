@@ -64,6 +64,7 @@ class TotalCostViewController: UIViewController {
         
         UIView.animate(withDuration: 0.3) { [weak self] in
             guard let `self` = self else {return}
+            self.buttonSettingStackView.isHidden = true
             let frame = self.view.frame
             self.bottomPadding = self.window?.safeAreaInsets.bottom
             
@@ -74,6 +75,7 @@ class TotalCostViewController: UIViewController {
             }
             
             self.view.frame = CGRect(x: 0, y: self.yComponent, width: frame.width, height: self.expenseFrame.height + self.periodFrame.height)
+            
         }
     }
     
@@ -223,6 +225,7 @@ class TotalCostViewController: UIViewController {
         UIView.animate(withDuration: 0.3) {
             self.view.frame = CGRect(x: 0, y: self.yComponent, width: self.view.frame.width, height: self.view.frame.height)
         }
+        buttonSettingStackView.isHidden = true
     }
     
     //MARK: - Settings Button Action
