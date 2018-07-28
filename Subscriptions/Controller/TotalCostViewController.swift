@@ -51,7 +51,10 @@ class TotalCostViewController: UIViewController {
         
         let gesture = UIPanGestureRecognizer.init(target: self, action: #selector(panGesture))
         view.addGestureRecognizer(gesture)
-        //expensesViewSetup()
+        
+        let tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(costTapGesture))
+        expensesView.addGestureRecognizer(tapGesture)
+        
         buttonSettingStackView.isHidden = true
     }
     
@@ -147,6 +150,32 @@ class TotalCostViewController: UIViewController {
             break;
         }
         
+    }
+    
+    @objc func costTapGesture(recognizer: UITapGestureRecognizer){
+        let minY = self.view.frame.minY
+        let snapToFrame: CGRect
+        if let parent = parent as? ExpensesViewController, let bottomPadding = bottomPadding {
+            let maxHeight = parent.view.frame.height - expenseFrame.height - periodFrame.height - bottomPadding
+            if minY == maxHeight {
+                snapToFrame = CGRect(x: 0, y: yComponent, width: view.frame.width, height: view.frame.height)
+                buttonSettingStackView.alpha = 0
+                buttonSettingStackView.isHidden = true
+            } else {
+                snapToFrame = CGRect(x: 0, y: maxHeight, width: view.frame.width, height: view.frame.height)
+                buttonSettingStackView.alpha = 1
+                buttonSettingStackView.isHidden = false
+            }
+            
+            UIView.animate(withDuration: 0.5,
+                           delay: 0,
+                           usingSpringWithDamping: 0.5,
+                           initialSpringVelocity: 0,
+                           options: .allowUserInteraction,
+                           animations: {
+                self.view.frame = snapToFrame
+            }, completion: nil)
+        }
     }
     
     //MARK: - Setup Expenses View
