@@ -72,7 +72,8 @@ class AddExpenseViewController: UIViewController {
         //Set Button Font
         let fontStyle = UIFont.systemFont(ofSize: 17.0, weight: .medium)
         cancelButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle], for: .normal)
-        doneButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle], for: .normal)
+        doneButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle, NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.514, green: 0.5137254902, blue: 0.5294117647, alpha: 0.5)], for: .disabled)
+        doneButton.tintColor = #colorLiteral(red: 0.5137254902, green: 0.5137254902, blue: 0.5294117647, alpha: 0.5)
         
         //Run Setup
         nameTextField.layer.cornerRadius = 10
@@ -81,6 +82,9 @@ class AddExpenseViewController: UIViewController {
         costTextField.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0);
         customPeriodLabel.clipsToBounds = true
         customPeriodLabel.layer.cornerRadius = 10
+        
+        nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        costTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
         deleteExpenseButton.isHidden = true
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -92,6 +96,8 @@ class AddExpenseViewController: UIViewController {
         {
             nameTextField.text = selectedExpense.name
             costTextField.text = String(selectedExpense.price)
+            
+            self.title = "Edit Expense"
             
             if let periodType = Expense.PeriodType(rawValue: Int(selectedExpense.periodType)){
                 self.periodType = periodType
@@ -142,21 +148,39 @@ class AddExpenseViewController: UIViewController {
         nameTextField.attributedPlaceholder = NSAttributedString(string: "Expense Name", attributes: [NSAttributedStringKey.foregroundColor: theme?.choosePeriodLabelColor ?? UIColor.lightGray])
         
         switch theme?.rawValue {
-        case 0: return (navigationController?.navigationBar.barStyle = .default)!
-        case 1: return (navigationController?.navigationBar.barStyle = .black)!
-        default: return (navigationController?.navigationBar.barStyle = .default)!
+        case 0:
+            (navigationController?.navigationBar.barStyle = .default)!
+            nameTextField.keyboardAppearance = .default
+            costTextField.keyboardAppearance = .default
+            return
+        case 1:
+            (navigationController?.navigationBar.barStyle = .black)!
+            nameTextField.keyboardAppearance = .dark
+            costTextField.keyboardAppearance = .dark
+            return
+        default:
+            (navigationController?.navigationBar.barStyle = .default)!
+            nameTextField.keyboardAppearance = .default
+            costTextField.keyboardAppearance = .default
+            return
         }
         
+    }
+    
+    @objc func textFieldDidChange(_ textField: UITextField){
+        checkDoneButton()
     }
     
     func checkDoneButton(){
         let fontStyle = UIFont.systemFont(ofSize: 17.0, weight: .medium)
         if periodSelected == true && nameTextField.text?.isEmpty == false && costTextField.text?.isEmpty == false {
-            doneButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle, NSAttributedStringKey.foregroundColor: theme!.doneKeyboardButtonColor], for: .normal)
-            doneButton.tintColor = theme?.doneKeyboardButtonColor
+            doneButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle, NSAttributedStringKey.foregroundColor: theme?.doneKeyboardButtonColor ?? #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)], for: .normal)
+            doneButton.tintColor = theme?.doneKeyboardButtonColor ?? #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
+            doneButton.isEnabled = true
         } else {
-            doneButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle, NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.5137254902, green: 0.5137254902, blue: 0.5294117647, alpha: 1)], for: .normal)
-            doneButton.tintColor = #colorLiteral(red: 0.5137254902, green: 0.5137254902, blue: 0.5294117647, alpha: 1)
+            doneButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle, NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.514, green: 0.5137254902, blue: 0.5294117647, alpha: 0.5)], for: .disabled)
+            doneButton.tintColor = #colorLiteral(red: 0.5137254902, green: 0.5137254902, blue: 0.5294117647, alpha: 0.5)
+            doneButton.isEnabled = false
         }
     }
     
@@ -200,7 +224,6 @@ class AddExpenseViewController: UIViewController {
     {
         let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x:0, y:0, width:320, height:44))
         doneToolbar.barStyle = UIBarStyle.default
-        doneToolbar.barTintColor = #colorLiteral(red: 0.7764705882, green: 0.7960784314, blue: 0.831372549, alpha: 1)
         
         let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
         let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.done, target: self, action: #selector(self.keyboardDoneButtonAction))
@@ -213,8 +236,8 @@ class AddExpenseViewController: UIViewController {
         doneToolbar.items = items
         doneToolbar.sizeToFit()
         
-        self.costTextField.inputAccessoryView = doneToolbar
         doneToolbar.barTintColor = theme?.doneToolBarColor
+        self.costTextField.inputAccessoryView = doneToolbar
         self.customPickerTextField.inputView = customPeriodPickerView
         self.customPickerTextField.inputAccessoryView = doneToolbar
     }
