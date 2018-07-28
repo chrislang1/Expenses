@@ -22,6 +22,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     @IBOutlet weak var removeExpenseConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomColorView: UIView!
     @IBOutlet weak var noExpensesLabel: UILabel!
+    @IBOutlet weak var noExpensesImage: UIImageView!
     
     
     var expenseArray = [Expense]()
@@ -111,6 +112,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         tableView.layer.backgroundColor = theme?.applicationBackgroundColor
         tableView.reloadData()
         noExpensesLabel.textColor = theme?.expensesFontColor
+        noExpensesImage.image = theme?.noExpenseBackgroundImage
         
         switch theme?.rawValue {
             case 0: return (navigationController?.navigationBar.barStyle = .default)!

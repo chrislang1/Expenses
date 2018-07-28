@@ -128,6 +128,13 @@ enum Theme: Int, CustomStringConvertible {
         }
     }
     
+    var noExpenseBackgroundImage: UIImage{
+        switch self {
+        case .light: return UIImage.init(named: "AddNewExpense")!
+        case .dark: return UIImage.init(named: "Dark $ Background")!
+        }
+    }
+    
     var textFieldColor: CGColor {
         switch self {
         case .light: return #colorLiteral(red: 0.95, green: 0.96, blue: 0.96, alpha: 1)

@@ -168,6 +168,7 @@
                         <outlet property="addBarButton" destination="Dc9-of-uHg" id="NU9-z5-gjk"/>
                         <outlet property="bottomColorView" destination="xPJ-56-IJw" id="MY0-0v-RET"/>
                         <outlet property="editBarButton" destination="eYR-dZ-fHX" id="FGY-tW-Nlt"/>
+                        <outlet property="noExpensesImage" destination="VlT-gX-TgF" id="xbL-vF-Fo7"/>
                         <outlet property="noExpensesLabel" destination="cYa-20-RpG" id="DeV-5T-0gT"/>
                         <outlet property="noExpensesView" destination="NqV-ag-c2e" id="m24-d7-4I2"/>
                         <outlet property="removeExpenseButton" destination="WBD-5v-ImN" id="WXR-zP-0A1"/>
