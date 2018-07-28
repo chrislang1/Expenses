@@ -24,11 +24,13 @@ class AddExpenseViewController: UIViewController {
     var selectedExpense: Expense?
     
     var identifyingSegue = String()
+    var theme = Theme.init(rawValue: 0) // set in userDefaults
 
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var costTextField: UITextField!
     
     @IBOutlet weak var deleteExpenseButton: UIButton!
+    @IBOutlet weak var billingPeriodLabel: UILabel!
     
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     @IBOutlet weak var doneButton: UIBarButtonItem!
@@ -53,7 +55,7 @@ class AddExpenseViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Set Delegates and DataSource to self
         self.customPeriodPickerView.delegate = self
         self.customPeriodPickerView.dataSource = self
@@ -63,6 +65,9 @@ class AddExpenseViewController: UIViewController {
         //Remove Navigation Bar Border
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
+        
+        //Update all items to selected theme
+        updateTheme()
         
         //Set Button Font
         let fontStyle = UIFont.systemFont(ofSize: 17.0, weight: .medium)
@@ -76,8 +81,7 @@ class AddExpenseViewController: UIViewController {
         costTextField.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0);
         customPeriodLabel.clipsToBounds = true
         customPeriodLabel.layer.cornerRadius = 10
-        customPeriodPickerView.layer.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        addDoneButtonOnKeyboard()
+        
         deleteExpenseButton.isHidden = true
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
@@ -94,8 +98,8 @@ class AddExpenseViewController: UIViewController {
                 if(Int(selectedExpense.periodLength) == 1 && periodType != .year) {
                     periodSelected(periodButtons[periodType.rawValue])
                 } else {
-                    customPeriodLabel.backgroundColor = backgroundColor
-                    customPeriodLabel.textColor = textColor
+                    customPeriodLabel.backgroundColor = theme?.selectedButtonColor
+                    customPeriodLabel.textColor = theme?.selectedButtonTextColor
                     //selectedPeriod = 4
                     numberOfPeriods = numberArray[Int(selectedExpense.periodLength - 1)]
                     
@@ -113,8 +117,47 @@ class AddExpenseViewController: UIViewController {
         let currencySymbol = locale.currencySymbol!
         let currencyCode = locale.currencyCode!
         
-        costTextField.placeholder = "Cost in \(currencySymbol)\(currencyCode)"
+        costTextField.attributedPlaceholder = NSAttributedString(string: "Cost in \(currencySymbol)\(currencyCode)", attributes: [NSAttributedStringKey.foregroundColor: theme?.choosePeriodLabelColor ?? UIColor.lightGray])
+        checkDoneButton()
+    }
+    
+    func updateTheme(){
+        view.layer.backgroundColor = theme?.applicationBackgroundColor
+        //Color Buttons for Theme
+        for index in periodButtons.indices {
+            periodButtons[index].backgroundColor = theme?.buttonColor
+            periodButtons[index].setTitleColor(theme?.expensesFontColor, for: .normal)
+        }
+        customPeriodLabel.backgroundColor = theme?.buttonColor
+        customPeriodLabel.textColor = theme?.expensesFontColor
+        customPeriodPickerView.layer.backgroundColor = theme?.totalCostViewColor
+        nameTextField.layer.backgroundColor = theme?.textFieldColor
+        costTextField.layer.backgroundColor = theme?.textFieldColor
+        nameTextField.textColor = theme?.expensesFontColor
+        costTextField.textColor = theme?.expensesFontColor
+        billingPeriodLabel.textColor = theme?.choosePeriodLabelColor
+        deleteExpenseButton.backgroundColor = theme?.deleteButtonColor
+        deleteExpenseButton.setTitleColor(theme?.deleteButtonTextColor, for: .normal)
+        addDoneButtonOnKeyboard()
+        nameTextField.attributedPlaceholder = NSAttributedString(string: "Expense Name", attributes: [NSAttributedStringKey.foregroundColor: theme?.choosePeriodLabelColor ?? UIColor.lightGray])
         
+        switch theme?.rawValue {
+        case 0: return (navigationController?.navigationBar.barStyle = .default)!
+        case 1: return (navigationController?.navigationBar.barStyle = .black)!
+        default: return (navigationController?.navigationBar.barStyle = .default)!
+        }
+        
+    }
+    
+    func checkDoneButton(){
+        let fontStyle = UIFont.systemFont(ofSize: 17.0, weight: .medium)
+        if periodSelected == true && nameTextField.text?.isEmpty == false && costTextField.text?.isEmpty == false {
+            doneButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle, NSAttributedStringKey.foregroundColor: theme!.doneKeyboardButtonColor], for: .normal)
+            doneButton.tintColor = theme?.doneKeyboardButtonColor
+        } else {
+            doneButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle, NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.5137254902, green: 0.5137254902, blue: 0.5294117647, alpha: 1)], for: .normal)
+            doneButton.tintColor = #colorLiteral(red: 0.5137254902, green: 0.5137254902, blue: 0.5294117647, alpha: 1)
+        }
     }
     
     //MARK: - Dismiss Keyboard
@@ -127,11 +170,11 @@ class AddExpenseViewController: UIViewController {
         let selectedPeriod = periodButtons.index(of: sender)!
             for index in periodButtons.indices {
                 if index == selectedPeriod {
-                    periodButtons[index].backgroundColor = backgroundColor
-                    periodButtons[index].setTitleColor(textColor, for: .normal)
+                    periodButtons[index].backgroundColor = theme?.selectedButtonColor
+                    periodButtons[index].setTitleColor(theme?.selectedButtonTextColor, for: .normal)
                 } else {
-                    periodButtons[index].backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1)
-                    periodButtons[index].setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
+                    periodButtons[index].backgroundColor = theme?.buttonColor
+                    periodButtons[index].setTitleColor(theme?.expensesFontColor, for: .normal)
                 }
             }
         periodType = Expense.PeriodType(rawValue: selectedPeriod)
@@ -145,10 +188,11 @@ class AddExpenseViewController: UIViewController {
         numberOfPeriods = 1
         periodSelected = true
         
-        customPeriodLabel.backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1)
-        customPeriodLabel.textColor = .black
+        customPeriodLabel.backgroundColor = theme?.buttonColor
+        customPeriodLabel.textColor = theme?.expensesFontColor
         customPeriodLabel.text = "Custom Period"
         self.view.endEditing(true)
+        checkDoneButton()
     }
     
     //MARK: - Toolbar Methods
@@ -160,7 +204,7 @@ class AddExpenseViewController: UIViewController {
         
         let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
         let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.done, target: self, action: #selector(self.keyboardDoneButtonAction))
-        done.tintColor = textColor
+        done.tintColor = theme?.doneKeyboardButtonColor
         
         var items = [UIBarButtonItem]()
         items.append(flexSpace)
@@ -170,18 +214,18 @@ class AddExpenseViewController: UIViewController {
         doneToolbar.sizeToFit()
         
         self.costTextField.inputAccessoryView = doneToolbar
-        doneToolbar.barTintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        doneToolbar.barTintColor = theme?.doneToolBarColor
         self.customPickerTextField.inputView = customPeriodPickerView
         self.customPickerTextField.inputAccessoryView = doneToolbar
     }
     
-    @objc func keyboardDoneButtonAction()
-    {
+    @objc func keyboardDoneButtonAction() {
         if costTextField.isFirstResponder == true {
             self.costTextField.resignFirstResponder()
         } else if customPickerTextField.isFirstResponder == true {
             self.customPickerTextField.resignFirstResponder()
         }
+        checkDoneButton()
     }
     
     //MARK: - Navigation Buttons
@@ -247,19 +291,22 @@ extension AddExpenseViewController: UIPickerViewDelegate, UIPickerViewDataSource
         }
     }
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        switch(component) {
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        var attributedString: NSAttributedString!
+        
+        switch(component){
         case 0:
-            return "Every";
+            attributedString = NSAttributedString(string: "Every", attributes: [NSAttributedStringKey.foregroundColor: theme?.expensesFontColor ?? .black])
         case 1:
-            return String(numberArray[row]);
+            attributedString = NSAttributedString(string: String(numberArray[row]), attributes: [NSAttributedStringKey.foregroundColor: theme?.expensesFontColor ?? .black])
         case 2:
-            return periodLengthArray[row];
+            attributedString = NSAttributedString(string: periodLengthArray[row], attributes: [NSAttributedStringKey.foregroundColor: theme?.expensesFontColor ?? .black])
         default:
-            return ""
+            attributedString = nil
         }
+        return attributedString
     }
-    
+        
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if component == 1 {
             numberOfPeriods = numberArray[row]
@@ -273,6 +320,7 @@ extension AddExpenseViewController: UIPickerViewDelegate, UIPickerViewDataSource
         periodType = Expense.PeriodType(typeString: periodLengthTransform)
         customPeriodLabel.text = buttonString
         periodSelected = true
+        checkDoneButton()
     }
 }
 
@@ -281,11 +329,11 @@ extension AddExpenseViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField){
         if textField == customPickerTextField {
             for index in periodButtons.indices {
-                periodButtons[index].backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1)
-                periodButtons[index].setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
+                periodButtons[index].backgroundColor = theme?.buttonColor
+                periodButtons[index].setTitleColor(theme?.expensesFontColor, for: .normal)
             }
-            customPeriodLabel.backgroundColor = backgroundColor
-            customPeriodLabel.textColor = textColor
+            customPeriodLabel.backgroundColor = theme?.selectedButtonColor
+            customPeriodLabel.textColor = theme?.selectedButtonTextColor
             
             if customPeriodLabel.text == "Custom Period"{
                 numberOfPeriods = numberArray[0]
@@ -298,6 +346,7 @@ extension AddExpenseViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        checkDoneButton()
         return true
     }
 }
