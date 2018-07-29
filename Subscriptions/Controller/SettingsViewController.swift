@@ -24,6 +24,8 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var xButton: UIButton!
     @IBOutlet weak var panLabel: UILabel!
     @IBOutlet weak var lightDarkSwitchView: UIView!
+    @IBOutlet weak var settingsViewHeightConstraint: NSLayoutConstraint!
+    
     
     @IBOutlet var themeButtons: [UIButton]!
     
@@ -43,8 +45,10 @@ class SettingsViewController: UIViewController {
         // Do any additional setup after loading the view.
         theme = Theme.init(rawValue: defaults.integer(forKey: "SelectedTheme")) ?? Theme.init(rawValue: 0)
         updateThemeButtons(sender: themeButtons[defaults.integer(forKey: "SelectedTheme")])
-        setupViewShadow()
         updateTheme()
+        if let bottomPadding = self.window?.safeAreaInsets.bottom {
+            settingsViewHeightConstraint.constant = settingsViewHeightConstraint.constant + bottomPadding
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -71,10 +75,15 @@ class SettingsViewController: UIViewController {
 //        }
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setupViewShadow()
+    }
+    
     func setupViewShadow(){
         settingsView.clipsToBounds = false
         settingsView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor
-        settingsView.layer.shadowPath = UIBezierPath(roundedRect: settingsView.bounds, cornerRadius: 10).cgPath // alter path to remove shadow from bottom of view
+        settingsView.layer.shadowPath = UIBezierPath(roundedRect: settingsView.bounds, cornerRadius: 10).cgPath
         settingsView.layer.shadowOpacity = 1
         settingsView.layer.shadowRadius = 5
         settingsView.layer.shadowOffset = CGSize.zero

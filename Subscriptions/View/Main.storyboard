@@ -438,12 +438,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HpN-WL-fVS" userLabel="BackingView">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HSU-8i-pYF">
-                                <rect key="frame" x="0.0" y="44" width="375" height="768"/>
+                                <rect key="frame" x="0.0" y="427" width="375" height="385"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z6Q-1J-TcU">
                                         <rect key="frame" x="170" y="8" width="35" height="4"/>
@@ -677,6 +673,7 @@
                                     <constraint firstAttribute="trailing" secondItem="3sz-1n-SnU" secondAttribute="trailing" constant="17" id="fdH-bV-IUE"/>
                                     <constraint firstItem="e9q-F0-gjN" firstAttribute="top" secondItem="HSU-8i-pYF" secondAttribute="top" constant="23" id="ftF-f3-tex"/>
                                     <constraint firstAttribute="trailing" secondItem="e9q-F0-gjN" secondAttribute="trailing" constant="16" id="mtH-HK-y52"/>
+                                    <constraint firstAttribute="height" constant="385" id="oNt-iI-utN"/>
                                     <constraint firstItem="3sz-1n-SnU" firstAttribute="top" secondItem="BTP-JL-tT0" secondAttribute="bottom" constant="45" id="pFc-91-csL"/>
                                     <constraint firstAttribute="trailing" secondItem="MbG-Oe-Fz6" secondAttribute="trailing" constant="16" id="wNp-bM-s0o"/>
                                     <constraint firstItem="z6Q-1J-TcU" firstAttribute="centerX" secondItem="HSU-8i-pYF" secondAttribute="centerX" id="yty-zi-vDy"/>
@@ -691,13 +688,8 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="HpN-WL-fVS" firstAttribute="top" secondItem="tAy-Cz-lF6" secondAttribute="top" id="OSx-mA-39g"/>
-                            <constraint firstItem="HpN-WL-fVS" firstAttribute="trailing" secondItem="m3g-JV-9tX" secondAttribute="trailing" id="ap8-FJ-s9i"/>
-                            <constraint firstAttribute="bottom" secondItem="HpN-WL-fVS" secondAttribute="bottom" id="bxA-uo-oXK"/>
                             <constraint firstItem="HSU-8i-pYF" firstAttribute="trailing" secondItem="m3g-JV-9tX" secondAttribute="trailing" id="iP7-Rg-B2L"/>
-                            <constraint firstItem="HpN-WL-fVS" firstAttribute="leading" secondItem="m3g-JV-9tX" secondAttribute="leading" id="ncp-Zi-nTa"/>
-                            <constraint firstAttribute="bottom" secondItem="HSU-8i-pYF" secondAttribute="bottom" id="sKx-Mr-sGh"/>
-                            <constraint firstItem="HSU-8i-pYF" firstAttribute="top" secondItem="m3g-JV-9tX" secondAttribute="top" id="sfZ-wE-04K"/>
+                            <constraint firstAttribute="bottom" secondItem="HSU-8i-pYF" secondAttribute="bottom" id="pbu-Sj-KO8"/>
                             <constraint firstItem="HSU-8i-pYF" firstAttribute="leading" secondItem="m3g-JV-9tX" secondAttribute="leading" id="txD-dH-j9t"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="m3g-JV-9tX"/>
@@ -710,6 +702,7 @@
                         <outlet property="rateButton" destination="MbG-Oe-Fz6" id="Vir-Qi-kqy"/>
                         <outlet property="settingsLabel" destination="odv-qf-L3M" id="s2u-2o-Sp8"/>
                         <outlet property="settingsView" destination="HSU-8i-pYF" id="DL7-In-Wr0"/>
+                        <outlet property="settingsViewHeightConstraint" destination="oNt-iI-utN" id="X5g-u3-o0P"/>
                         <outlet property="sortExpensesByLabel" destination="GD6-cW-Hja" id="jNW-z7-S0m"/>
                         <outlet property="sortExpensesOptionLabel" destination="BTP-JL-tT0" id="CEk-cM-6Nz"/>
                         <outlet property="xButton" destination="e9q-F0-gjN" id="NeC-6M-Bqn"/>
