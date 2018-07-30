@@ -34,6 +34,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     var theme = Theme.init(rawValue: 0)
     var dimBackgroundView = UIView()
     var dimNavigationView = UIView()
+    var sortInt = Int()
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let defaults = UserDefaults.standard
@@ -42,6 +43,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         theme = Theme.init(rawValue: defaults.integer(forKey: "SelectedTheme")) ?? Theme.init(rawValue: 0)
+        
         //Remove Navigation Bar Border
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
@@ -77,7 +79,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         dimNavigationView.backgroundColor = UIColor(white: 0, alpha: 0.5)
         dimNavigationView.alpha = 1
         
-        loadExpenses()
+        sortExpeses()
         addTotalCostView()
         //addSettingsView()
         checkExpenseArray()
@@ -212,6 +214,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             UIView.animate(withDuration: 0.3, animations: {
                 self.tableView.setEditing(false, animated: false)
             }) { (complete) in
+                self.sortExpeses()
                 self.tableView.reloadData()
             }
             
@@ -243,6 +246,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             totalCostVC.moveUp()
             totalCostVC.updateLabels()
         }
+        defaults.set(sortInt, forKey: "Sort")
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
             self.bottomColorView.isHidden = false
@@ -256,6 +260,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         expense.price = cost
         expense.periodLength = numberOfPeriods
         expense.billingDate = billingDate
+        expense.nextBillingDate = calculateNextBillingDate(from: expense)
         
         guard let periodType = Expense.PeriodType(rawValue: periodLength) else {return}
         expense.periodType = Int16(periodLength)
@@ -263,6 +268,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         
         expenseArray.append(expense)
         indexExpenseArray()
+        sortExpeses()
         saveExpenses()
         tableView.reloadData()
     }
@@ -275,7 +281,36 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             periodType = .month
             expense.yearPrice = expense.price * (periodType.countPerYear/expense.periodLength)
         }
+        expense.nextBillingDate = calculateNextBillingDate(from: expense)
         saveExpenses()
+    }
+    
+    func calculateNextBillingDate(from expense: Expense) -> Date?{
+        if let billingDate = expense.billingDate {
+            var dateComponents = DateComponents()
+            switch expense.periodType {
+            case 0:
+                dateComponents.day = Int(expense.periodLength)
+            case 1:
+                dateComponents.day = Int(expense.periodLength)*7
+            case 2:
+                dateComponents.day = Int(expense.periodLength)*7*2
+            case 3:
+                dateComponents.month = Int(expense.periodLength)
+            case 4:
+                dateComponents.year = Int(expense.periodLength)
+            default:
+                dateComponents.day = Int(expense.periodLength)
+            }
+            
+            if let nextDate = Calendar.current.date(byAdding: dateComponents, to: billingDate) {
+                return nextDate
+            } else {
+                return nil
+            }
+        } else {
+            return nil
+        }
     }
     
     func deleteExpense(expense: Expense){
@@ -329,9 +364,22 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         }
     }
     
+    func sortExpeses(){
+        sortInt = defaults.integer(forKey: "Sort")
+        var sort: NSSortDescriptor
+        switch sortInt{
+        case 0: sort = NSSortDescriptor(key: "arrayIndex", ascending: true)
+        case 1: sort = NSSortDescriptor(key: "price", ascending: true)
+        case 2: sort = NSSortDescriptor(key: "nextBillingDate", ascending: true)
+        default: sort = NSSortDescriptor(key: "arrayIndex", ascending: true)
+        }
+        
+        loadExpenses(sort: sort)
+        tableView.reloadData()
+    }
+    
     //MARK: - Load and Save Methods
-    func loadExpenses(with request: NSFetchRequest<Expense> = Expense.fetchRequest()){
-        let sort = NSSortDescriptor(key: "arrayIndex", ascending: true)
+    func loadExpenses(with request: NSFetchRequest<Expense> = Expense.fetchRequest(), sort: NSSortDescriptor = NSSortDescriptor(key: "arrayIndex", ascending: true)){
         request.sortDescriptors = [sort]
         do{
             expenseArray = try context.fetch(request)
@@ -446,7 +494,7 @@ extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
         expenseArray.remove(at: fromIndexPath.row)
         expenseArray.insert(rowToMove, at: toIndexPath.row)
         indexExpenseArray()
-        //saveExpenses()
+        sortInt = 0
     }
 }
 

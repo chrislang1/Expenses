@@ -25,9 +25,13 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var panLabel: UILabel!
     @IBOutlet weak var lightDarkSwitchView: UIView!
     @IBOutlet weak var settingsViewHeightConstraint: NSLayoutConstraint!
-    
-    
     @IBOutlet var themeButtons: [UIButton]!
+    
+    @IBOutlet weak var sortTextField: UITextField!
+    
+    
+    let sortOptionsArray = ["None", "Price", "Next Due Date"]
+    var sortPickerView = UIPickerView()
     
     var delegate: TotalCostViewController?
     
@@ -42,10 +46,17 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.sortPickerView.dataSource = self
+        self.sortPickerView.delegate = self
+        
+        sortPickerView.selectRow(defaults.integer(forKey: "Sort"), inComponent: 0, animated: false)
+        sortExpensesOptionLabel.text = sortOptionsArray[defaults.integer(forKey: "Sort")]
+        
         // Do any additional setup after loading the view.
         theme = Theme.init(rawValue: defaults.integer(forKey: "SelectedTheme")) ?? Theme.init(rawValue: 0)
         updateThemeButtons(sender: themeButtons[defaults.integer(forKey: "SelectedTheme")])
         updateTheme()
+        addDoneButtonOnKeyboard()
         if let bottomPadding = self.window?.safeAreaInsets.bottom {
             settingsViewHeightConstraint.constant = settingsViewHeightConstraint.constant + bottomPadding
         }
@@ -115,6 +126,7 @@ class SettingsViewController: UIViewController {
         xButton.setImage(theme?.xIconImage, for: .normal)
         panLabel.backgroundColor = theme?.panAndDividerColor
         lightDarkSwitchView.backgroundColor = theme?.buttonColor
+        sortPickerView.layer.backgroundColor = theme?.totalCostViewColor
     }
     
     func updateThemeButtons(sender: UIButton){
@@ -127,6 +139,30 @@ class SettingsViewController: UIViewController {
                 themeButtons[index].setTitleColor(theme?.expensesFontColor, for: .normal)
             }
         }
+    }
+    
+    func addDoneButtonOnKeyboard(){
+        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x:0, y:0, width:320, height:44))
+        doneToolbar.barStyle = UIBarStyle.default
+        
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.done, target: self, action: #selector(self.keyboardDoneButtonAction))
+        done.tintColor = theme?.doneKeyboardButtonColor
+        
+        var items = [UIBarButtonItem]()
+        items.append(flexSpace)
+        items.append(done)
+        
+        doneToolbar.items = items
+        doneToolbar.sizeToFit()
+        
+        doneToolbar.barTintColor = theme?.doneToolBarColor
+        self.sortTextField.inputAccessoryView = doneToolbar
+        self.sortTextField.inputView = sortPickerView
+    }
+    
+    @objc func keyboardDoneButtonAction(){
+        sortTextField.resignFirstResponder()
     }
     
     @IBAction func themeToggleButtonChanged(_ sender: UIButton) {
@@ -174,6 +210,27 @@ class SettingsViewController: UIViewController {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
+}
+
+extension SettingsViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
     
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return sortOptionsArray.count
+    }
     
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return sortOptionsArray[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        sortExpensesOptionLabel.text = sortOptionsArray[row]
+        defaults.set(row, forKey: "Sort")
+        if let delegate = delegate {
+            let delegateParentVC = delegate.parent as! ExpensesViewController
+            delegateParentVC.sortExpeses()
+        }
+    }
 }

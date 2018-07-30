@@ -647,6 +647,17 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </view>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7BP-kw-XB1">
+                                        <rect key="frame" x="238" y="89" width="120" height="48"/>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="48" id="GrN-Ix-mvf"/>
+                                            <constraint firstAttribute="width" constant="120" id="R1G-25-wSW"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <gestureRecognizers/>
@@ -672,6 +683,8 @@
                                     <constraint firstAttribute="trailing" secondItem="BTP-JL-tT0" secondAttribute="trailing" constant="16" id="eZM-So-DIW"/>
                                     <constraint firstAttribute="trailing" secondItem="3sz-1n-SnU" secondAttribute="trailing" constant="17" id="fdH-bV-IUE"/>
                                     <constraint firstItem="e9q-F0-gjN" firstAttribute="top" secondItem="HSU-8i-pYF" secondAttribute="top" constant="23" id="ftF-f3-tex"/>
+                                    <constraint firstItem="BTP-JL-tT0" firstAttribute="centerY" secondItem="7BP-kw-XB1" secondAttribute="centerY" id="fwh-t7-DEW"/>
+                                    <constraint firstAttribute="trailing" secondItem="7BP-kw-XB1" secondAttribute="trailing" constant="17" id="mD6-kl-5e3"/>
                                     <constraint firstAttribute="trailing" secondItem="e9q-F0-gjN" secondAttribute="trailing" constant="16" id="mtH-HK-y52"/>
                                     <constraint firstAttribute="height" constant="385" id="oNt-iI-utN"/>
                                     <constraint firstItem="3sz-1n-SnU" firstAttribute="top" secondItem="BTP-JL-tT0" secondAttribute="bottom" constant="45" id="pFc-91-csL"/>
@@ -705,6 +718,7 @@
                         <outlet property="settingsViewHeightConstraint" destination="oNt-iI-utN" id="X5g-u3-o0P"/>
                         <outlet property="sortExpensesByLabel" destination="GD6-cW-Hja" id="jNW-z7-S0m"/>
                         <outlet property="sortExpensesOptionLabel" destination="BTP-JL-tT0" id="CEk-cM-6Nz"/>
+                        <outlet property="sortTextField" destination="7BP-kw-XB1" id="mFD-ua-6fN"/>
                         <outlet property="xButton" destination="e9q-F0-gjN" id="NeC-6M-Bqn"/>
                         <outletCollection property="themeButtons" destination="Jl4-nM-U9c" collectionClass="NSMutableArray" id="I2a-W5-S5l"/>
                         <outletCollection property="themeButtons" destination="wtR-U0-7hn" collectionClass="NSMutableArray" id="lbj-bg-eYQ"/>
