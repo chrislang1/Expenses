@@ -9,7 +9,7 @@
 import UIKit
 
 protocol NewExpenseDelegate {
-    func addNewExpense(name: String, cost: Double, numberOfPeriods: Double, periodLength: Int)
+    func addNewExpense(name: String, cost: Double, numberOfPeriods: Double, periodLength: Int, billingDate: Date?)
 }
 
 protocol EditExpenseDelegate{
@@ -110,6 +110,16 @@ class AddExpenseViewController: UIViewController {
             nameTextField.text = selectedExpense.name
             costTextField.text = String(selectedExpense.price)
             
+            if let date = selectedExpense.billingDate{
+                let dateFormatter = DateFormatter()
+                dateFormatter.locale = Locale.current
+                dateFormatter.dateStyle = .medium
+                dateFormatter.timeStyle = .none
+            
+                dateTextField.text = dateFormatter.string(from: date)
+                datePickerView.setDate(date, animated: false)
+            }
+            
             self.title = "Edit Expense"
             
             if let periodType = Expense.PeriodType(rawValue: Int(selectedExpense.periodType)){
@@ -198,14 +208,15 @@ class AddExpenseViewController: UIViewController {
         
         dateTextField.text = dateFormatter.string(from: datePicker.date)
         billingDate = datePicker.date
+        checkDoneButton()
     }
     
     func checkDoneButton(){
         let fontStyle = UIFont.systemFont(ofSize: 17.0, weight: .medium)
-        if periodSelected == true && nameTextField.text?.isEmpty == false && costTextField.text?.isEmpty == false {
-            doneButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle, NSAttributedStringKey.foregroundColor: theme?.doneKeyboardButtonColor ?? #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)], for: .normal)
-            doneButton.tintColor = theme?.doneKeyboardButtonColor ?? #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
+        if periodSelected == true && nameTextField.text?.isEmpty == false && costTextField.text?.isEmpty == false && dateTextField.text?.isEmpty == false {
             doneButton.isEnabled = true
+            doneButton.tintColor = theme?.doneKeyboardButtonColor ??  #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
+            doneButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle, NSAttributedStringKey.foregroundColor: theme?.doneKeyboardButtonColor ?? #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)], for: .normal)
         } else {
             doneButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle, NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.514, green: 0.5137254902, blue: 0.5294117647, alpha: 0.5)], for: .disabled)
             doneButton.tintColor = #colorLiteral(red: 0.5137254902, green: 0.5137254902, blue: 0.5294117647, alpha: 0.5)
@@ -292,6 +303,7 @@ class AddExpenseViewController: UIViewController {
     func updateExpense(){
         selectedExpense?.name = nameTextField.text
         selectedExpense?.price = Double(costTextField.text!)!
+        selectedExpense?.billingDate = billingDate
         selectedExpense?.periodLength = Double(numberOfPeriods)
 
         guard let periodLengthPosition = periodLengthArray.index(of: (periodType?.description)!) else {return}
@@ -309,7 +321,7 @@ class AddExpenseViewController: UIViewController {
         } else {
             //2 If we have a delegate set, call the delegate protocol method
             if identifyingSegue == "goToAddExpense"{
-                delegate?.addNewExpense(name: nameTextField.text!, cost: Double(costTextField.text!)!, numberOfPeriods: Double(numberOfPeriods), periodLength: (periodType?.rawValue)!)
+                delegate?.addNewExpense(name: nameTextField.text!, cost: Double(costTextField.text!)!, numberOfPeriods: Double(numberOfPeriods), periodLength: (periodType?.rawValue)!, billingDate: billingDate)
             } else if identifyingSegue == "goToEditExpense" {
                 updateExpense()
                 delegate2?.updateExpense(expense: selectedExpense!)
@@ -396,6 +408,15 @@ extension AddExpenseViewController: UITextFieldDelegate {
             }
             buttonString = "Every \(numberOfPeriods) \(periodLength)"
             customPeriodLabel.text = buttonString
+        }
+        if textField == dateTextField {
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Locale.current
+            dateFormatter.dateStyle = .medium
+            dateFormatter.timeStyle = .none
+            
+            dateTextField.text = dateFormatter.string(from: datePickerView.date)
+            billingDate = datePickerView.date
         }
     }
     

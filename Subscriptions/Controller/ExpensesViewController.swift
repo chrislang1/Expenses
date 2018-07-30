@@ -250,11 +250,12 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     }
     
     //MARK: - New Expense Delegete Methods
-    func addNewExpense(name: String, cost: Double, numberOfPeriods: Double, periodLength: Int) {
+    func addNewExpense(name: String, cost: Double, numberOfPeriods: Double, periodLength: Int, billingDate: Date?) {
         let expense = Expense(context: context)
         expense.name = name
         expense.price = cost
         expense.periodLength = numberOfPeriods
+        expense.billingDate = billingDate
         
         guard let periodType = Expense.PeriodType(rawValue: periodLength) else {return}
         expense.periodType = Int16(periodLength)
