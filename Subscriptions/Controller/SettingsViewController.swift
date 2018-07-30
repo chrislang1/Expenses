@@ -154,6 +154,12 @@ class SettingsViewController: UIViewController {
     }
     
     @IBAction func exitButtonPressed(_ sender: UIButton) {
+        if let delegate = delegate {
+            let delegateParentVC = delegate.parent as! ExpensesViewController
+            UIView.animate(withDuration: 0.3) {
+                delegateParentVC.navigationController?.view.alpha = 1
+            }
+        }
         dismiss(animated: true, completion: nil)
     }
     

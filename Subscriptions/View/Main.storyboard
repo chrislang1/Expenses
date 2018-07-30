@@ -747,8 +747,52 @@
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oNy-HE-SdO">
+                                <rect key="frame" x="16" y="714" width="343" height="48"/>
+                                <color key="backgroundColor" red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="Coh-zv-hWH"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                <state key="normal" title="Remove Expense">
+                                    <color key="titleColor" red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="deleteButtonPressed:" destination="mA9-u0-UsT" eventType="touchUpInside" id="JPk-b4-Jy2"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Bill Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rwm-kb-mBQ">
+                                <rect key="frame" x="16" y="216" width="225" height="48"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="ceM-48-GZh"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="225" id="pPx-mv-4NC"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                <color key="textColor" red="0.01176470588" green="0.01176470588" blue="0.01176470588" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="u9g-1l-eas">
+                                <rect key="frame" x="16" y="260" width="343" height="48"/>
+                                <color key="backgroundColor" red="0.94901960780000005" green="0.95686274510000002" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="Kbt-qb-rR5"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="MeV-Nx-dhx">
-                                <rect key="frame" x="16" y="265" width="343" height="104"/>
+                                <rect key="frame" x="16" y="362" width="343" height="104"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="npi-rt-7Bw">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="48"/>
@@ -839,7 +883,7 @@
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose a Billing Period" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IsA-Vv-Z2R">
-                                <rect key="frame" x="16" y="219" width="225" height="48"/>
+                                <rect key="frame" x="16" y="316" width="225" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="NUU-SH-lPn"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="225" id="kYN-ED-81M"/>
@@ -849,7 +893,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Custom Period" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vp4-XW-9Xz">
-                                <rect key="frame" x="16" y="377" width="343" height="48"/>
+                                <rect key="frame" x="16" y="474" width="343" height="48"/>
                                 <color key="backgroundColor" red="0.94901960784313721" green="0.95686274509803915" blue="0.96470588235294119" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="YLP-8S-hUn"/>
@@ -859,7 +903,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aHS-Hz-6WH">
-                                <rect key="frame" x="16" y="377" width="343" height="48"/>
+                                <rect key="frame" x="16" y="474" width="343" height="48"/>
                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="s0L-xk-MQt"/>
@@ -868,50 +912,36 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oNy-HE-SdO">
-                                <rect key="frame" x="16" y="714" width="343" height="48"/>
-                                <color key="backgroundColor" red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="48" id="Coh-zv-hWH"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                <state key="normal" title="Remove Expense">
-                                    <color key="titleColor" red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="10"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="deleteButtonPressed:" destination="mA9-u0-UsT" eventType="touchUpInside" id="JPk-b4-Jy2"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="7QN-mR-W5P" firstAttribute="trailing" secondItem="Mf6-Kp-eiG" secondAttribute="trailing" constant="16" id="0Fe-rj-oPH"/>
+                            <constraint firstItem="u9g-1l-eas" firstAttribute="top" secondItem="Mf6-Kp-eiG" secondAttribute="bottom" constant="52" id="0vr-Ac-8He"/>
                             <constraint firstItem="Mf6-Kp-eiG" firstAttribute="leading" secondItem="7QN-mR-W5P" secondAttribute="leading" constant="16" id="10z-pg-jzt"/>
                             <constraint firstItem="oNy-HE-SdO" firstAttribute="leading" secondItem="7QN-mR-W5P" secondAttribute="leading" constant="16" id="8PA-gj-o97"/>
                             <constraint firstItem="Vp4-XW-9Xz" firstAttribute="leading" secondItem="7QN-mR-W5P" secondAttribute="leading" constant="16" id="91W-1o-l7s"/>
                             <constraint firstItem="7QN-mR-W5P" firstAttribute="trailing" secondItem="aHS-Hz-6WH" secondAttribute="trailing" constant="16" id="9Oc-4H-1oh"/>
+                            <constraint firstItem="Vp4-XW-9Xz" firstAttribute="top" secondItem="MeV-Nx-dhx" secondAttribute="bottom" constant="8" id="DgQ-TO-pXb"/>
                             <constraint firstItem="XZ8-RA-uQP" firstAttribute="leading" secondItem="7QN-mR-W5P" secondAttribute="leading" constant="16" id="ErS-Dx-GAw"/>
-                            <constraint firstItem="Vp4-XW-9Xz" firstAttribute="top" secondItem="MeV-Nx-dhx" secondAttribute="bottom" constant="8" id="K7j-ES-OH6"/>
+                            <constraint firstItem="7QN-mR-W5P" firstAttribute="trailing" secondItem="u9g-1l-eas" secondAttribute="trailing" constant="16" id="Jzf-UU-6Ef"/>
+                            <constraint firstItem="IsA-Vv-Z2R" firstAttribute="top" secondItem="u9g-1l-eas" secondAttribute="bottom" constant="8" id="P0M-WL-5eK"/>
                             <constraint firstItem="7QN-mR-W5P" firstAttribute="trailing" secondItem="oNy-HE-SdO" secondAttribute="trailing" constant="16" id="P1J-mY-tb2"/>
                             <constraint firstItem="aHS-Hz-6WH" firstAttribute="leading" secondItem="7QN-mR-W5P" secondAttribute="leading" constant="16" id="SXy-WQ-us7"/>
                             <constraint firstItem="Mf6-Kp-eiG" firstAttribute="top" secondItem="XZ8-RA-uQP" secondAttribute="bottom" constant="16" id="Vce-ue-f0r"/>
                             <constraint firstItem="XZ8-RA-uQP" firstAttribute="top" secondItem="7QN-mR-W5P" secondAttribute="top" constant="8" id="XBm-6Z-Dee"/>
+                            <constraint firstItem="MeV-Nx-dhx" firstAttribute="top" secondItem="u9g-1l-eas" secondAttribute="bottom" constant="54" id="Y5Q-Kg-Lic"/>
                             <constraint firstItem="aHS-Hz-6WH" firstAttribute="centerY" secondItem="Vp4-XW-9Xz" secondAttribute="centerY" id="YOI-P6-MOF"/>
                             <constraint firstItem="aHS-Hz-6WH" firstAttribute="centerX" secondItem="Vp4-XW-9Xz" secondAttribute="centerX" id="ZCe-iR-WaX"/>
                             <constraint firstItem="aHS-Hz-6WH" firstAttribute="centerX" secondItem="Vp4-XW-9Xz" secondAttribute="centerX" id="ZxS-hZ-1fC"/>
                             <constraint firstItem="7QN-mR-W5P" firstAttribute="bottom" secondItem="oNy-HE-SdO" secondAttribute="bottom" constant="16" id="bFj-Sq-pa7"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="IsA-Vv-Z2R" secondAttribute="trailing" constant="20" symbolic="YES" id="eia-Dx-vft"/>
                             <constraint firstItem="7QN-mR-W5P" firstAttribute="trailing" secondItem="Vp4-XW-9Xz" secondAttribute="trailing" constant="16" id="ezg-RA-Qqy"/>
-                            <constraint firstItem="IsA-Vv-Z2R" firstAttribute="top" secondItem="Mf6-Kp-eiG" secondAttribute="bottom" constant="11" id="grD-Si-NGh"/>
-                            <constraint firstItem="MeV-Nx-dhx" firstAttribute="top" secondItem="Mf6-Kp-eiG" secondAttribute="bottom" constant="57" id="iVg-B6-ROZ"/>
                             <constraint firstItem="MeV-Nx-dhx" firstAttribute="leading" secondItem="7QN-mR-W5P" secondAttribute="leading" constant="16" id="nTt-9e-4aS"/>
+                            <constraint firstItem="Rwm-kb-mBQ" firstAttribute="leading" secondItem="7QN-mR-W5P" secondAttribute="leading" constant="16" id="rTl-Cp-72R"/>
                             <constraint firstItem="7QN-mR-W5P" firstAttribute="trailing" secondItem="XZ8-RA-uQP" secondAttribute="trailing" constant="16" id="vPj-Tc-V9d"/>
                             <constraint firstItem="IsA-Vv-Z2R" firstAttribute="leading" secondItem="7QN-mR-W5P" secondAttribute="leading" constant="16" id="vu6-9S-YoY"/>
+                            <constraint firstItem="Rwm-kb-mBQ" firstAttribute="top" secondItem="Mf6-Kp-eiG" secondAttribute="bottom" constant="8" id="wwv-OM-Gi9"/>
+                            <constraint firstItem="u9g-1l-eas" firstAttribute="leading" secondItem="7QN-mR-W5P" secondAttribute="leading" constant="16" id="xZm-MQ-P71"/>
                             <constraint firstItem="7QN-mR-W5P" firstAttribute="trailing" secondItem="MeV-Nx-dhx" secondAttribute="trailing" constant="16" id="xrl-bF-p1y"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="7QN-mR-W5P"/>
@@ -936,6 +966,8 @@
                         <outlet property="costTextField" destination="Mf6-Kp-eiG" id="Fo7-Ud-d9y"/>
                         <outlet property="customPeriodLabel" destination="Vp4-XW-9Xz" id="mfx-eH-fZk"/>
                         <outlet property="customPickerTextField" destination="aHS-Hz-6WH" id="kb6-AU-blR"/>
+                        <outlet property="dateLabel" destination="Rwm-kb-mBQ" id="PfO-Op-DMK"/>
+                        <outlet property="dateTextField" destination="u9g-1l-eas" id="lAw-kO-kNc"/>
                         <outlet property="deleteExpenseButton" destination="oNy-HE-SdO" id="d11-hj-kh2"/>
                         <outlet property="doneButton" destination="4G8-cV-Plg" id="fPd-tp-yOf"/>
                         <outlet property="nameTextField" destination="XZ8-RA-uQP" id="Jt2-Wc-nQn"/>
