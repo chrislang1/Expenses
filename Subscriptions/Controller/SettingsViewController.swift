@@ -221,8 +221,8 @@ extension SettingsViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         return sortOptionsArray.count
     }
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return sortOptionsArray[row]
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        return NSAttributedString(string: String(sortOptionsArray[row]), attributes: [NSAttributedStringKey.foregroundColor: theme?.expensesFontColor ?? .black])
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
