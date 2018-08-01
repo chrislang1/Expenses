@@ -12,13 +12,13 @@ protocol UpdateThemeDelegate {
     func updateUserTheme()
 }
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: UIViewController, SortExpenseDelegate {
 
     @IBOutlet weak var settingsView: UIView!
     @IBOutlet weak var interfaceThemeLabel: UILabel!
     @IBOutlet weak var settingsLabel: UILabel!
     @IBOutlet weak var sortExpensesByLabel: UILabel!
-    @IBOutlet weak var sortExpensesOptionLabel: UILabel!
+//    @IBOutlet weak var sortExpensesOptionLabel: UILabel!
     @IBOutlet weak var feedbackButton: UIButton!
     @IBOutlet weak var rateButton: UIButton!
     @IBOutlet weak var xButton: UIButton!
@@ -26,11 +26,13 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var lightDarkSwitchView: UIView!
     @IBOutlet weak var settingsViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet var themeButtons: [UIButton]!
+    @IBOutlet weak var sortButton: UIButton!
     
-    @IBOutlet weak var sortTextField: UITextField!
+    
+//    @IBOutlet weak var sortTextField: UITextField!
     
     
-    let sortOptionsArray = ["None", "Price", "Next Due Date"]
+    let sortOptionsArray = ["None", "A to Z", "Price", "Next Due"]
     var sortPickerView = UIPickerView()
     
     var delegate: TotalCostViewController?
@@ -46,12 +48,6 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.sortPickerView.dataSource = self
-        self.sortPickerView.delegate = self
-        
-        sortPickerView.selectRow(defaults.integer(forKey: "Sort"), inComponent: 0, animated: false)
-        sortExpensesOptionLabel.text = sortOptionsArray[defaults.integer(forKey: "Sort")]
-        
         // Do any additional setup after loading the view.
         theme = Theme.init(rawValue: defaults.integer(forKey: "SelectedTheme")) ?? Theme.init(rawValue: 0)
         updateThemeButtons(sender: themeButtons[defaults.integer(forKey: "SelectedTheme")])
@@ -60,6 +56,10 @@ class SettingsViewController: UIViewController {
         if let bottomPadding = self.window?.safeAreaInsets.bottom {
             settingsViewHeightConstraint.constant = settingsViewHeightConstraint.constant + bottomPadding
         }
+        sortButton.setTitle(sortOptionsArray[defaults.integer(forKey: "Sort")], for: .normal)
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(exitViewTapped))
+        view.addGestureRecognizer(gesture)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -118,7 +118,7 @@ class SettingsViewController: UIViewController {
         interfaceThemeLabel.textColor = theme?.expensesFontColor
         settingsLabel.textColor = theme?.expensesFontColor
         sortExpensesByLabel.textColor = theme?.expensesFontColor
-        sortExpensesOptionLabel.textColor = theme?.expensesFontColor
+        //sortExpensesOptionLabel.textColor = theme?.expensesFontColor
         feedbackButton.backgroundColor = theme?.buttonColor
         feedbackButton.setTitleColor(theme?.expensesFontColor, for: .normal)
         rateButton.backgroundColor = theme?.buttonColor
@@ -126,7 +126,9 @@ class SettingsViewController: UIViewController {
         xButton.setImage(theme?.xIconImage, for: .normal)
         panLabel.backgroundColor = theme?.panAndDividerColor
         lightDarkSwitchView.backgroundColor = theme?.buttonColor
-        sortPickerView.layer.backgroundColor = theme?.totalCostViewColor
+        //sortPickerView.layer.backgroundColor = theme?.totalCostViewColor
+        
+        sortButton.setTitleColor(theme?.expensesFontColor, for: .normal)
     }
     
     func updateThemeButtons(sender: UIButton){
@@ -157,12 +159,12 @@ class SettingsViewController: UIViewController {
         doneToolbar.sizeToFit()
         
         doneToolbar.barTintColor = theme?.doneToolBarColor
-        self.sortTextField.inputAccessoryView = doneToolbar
-        self.sortTextField.inputView = sortPickerView
+//        self.sortTextField.inputAccessoryView = doneToolbar
+//        self.sortTextField.inputView = sortPickerView
     }
     
     @objc func keyboardDoneButtonAction(){
-        sortTextField.resignFirstResponder()
+//        sortTextField.resignFirstResponder()
     }
     
     @IBAction func themeToggleButtonChanged(_ sender: UIButton) {
@@ -189,7 +191,22 @@ class SettingsViewController: UIViewController {
         }
     }
     
-    @IBAction func exitButtonPressed(_ sender: UIButton) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToSortView"{
+            let destinationVC = segue.destination as! SortExpensesViewController
+            destinationVC.delegate = self
+        }
+    }
+    
+    func sortLabelAndExpenses(){
+        sortButton.setTitle(sortOptionsArray[defaults.integer(forKey: "Sort")], for: .normal)
+        if let delegate = delegate {
+            let delegateParentVC = delegate.parent as! ExpensesViewController
+            delegateParentVC.sortExpeses()
+        }
+    }
+    
+    func exitSettings(){
         if let delegate = delegate {
             let delegateParentVC = delegate.parent as! ExpensesViewController
             UIView.animate(withDuration: 0.3) {
@@ -197,6 +214,14 @@ class SettingsViewController: UIViewController {
             }
         }
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func exitViewTapped(){
+        exitSettings()
+    }
+    
+    @IBAction func exitButtonPressed(_ sender: UIButton) {
+        exitSettings()
     }
     
     @IBAction func feedbackButtonPressed(_ sender: UIButton) {
@@ -208,29 +233,6 @@ class SettingsViewController: UIViewController {
     @IBAction func rateButtonPressed(_ sender: UIButton) {
         if let url = URL(string: "itms-apps://itunes.apple.com/app/id1401279619"){
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
-    }
-}
-
-extension SettingsViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return sortOptionsArray.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-        return NSAttributedString(string: String(sortOptionsArray[row]), attributes: [NSAttributedStringKey.foregroundColor: theme?.expensesFontColor ?? .black])
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        sortExpensesOptionLabel.text = sortOptionsArray[row]
-        defaults.set(row, forKey: "Sort")
-        if let delegate = delegate {
-            let delegateParentVC = delegate.parent as! ExpensesViewController
-            delegateParentVC.sortExpeses()
         }
     }
 }

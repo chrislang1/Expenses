@@ -369,8 +369,9 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         var sort: NSSortDescriptor
         switch sortInt{
         case 0: sort = NSSortDescriptor(key: "arrayIndex", ascending: true)
-        case 1: sort = NSSortDescriptor(key: "price", ascending: true)
-        case 2: sort = NSSortDescriptor(key: "nextBillingDate", ascending: true)
+        case 1: sort = NSSortDescriptor(key: "name", ascending: true)
+        case 2: sort = NSSortDescriptor(key: "price", ascending: true)
+        case 3: sort = NSSortDescriptor(key: "nextBillingDate", ascending: true)
         default: sort = NSSortDescriptor(key: "arrayIndex", ascending: true)
         }
         
