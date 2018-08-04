@@ -38,6 +38,13 @@ enum Theme: Int, CustomStringConvertible {
         }
     }
     
+    var settingsOptionsFontColor: UIColor {
+        switch self {
+        case .light: return #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.6)
+        case .dark: return #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        }
+    }
+    
     var selectedButtonColor: UIColor {
         switch self {
         case .light: return #colorLiteral(red: 0.46, green: 0.29, blue: 0.96, alpha: 0.2)
@@ -125,6 +132,13 @@ enum Theme: Int, CustomStringConvertible {
         switch self {
         case .light: return UIImage.init(named: "XIcon")!
         case .dark: return UIImage.init(named: "XIconWhite")!
+        }
+    }
+    
+    var backIconImage: UIImage{
+        switch self {
+        case .light: return UIImage.init(named: "BackArrow")!
+        case .dark: return UIImage.init(named: "BackArrow")!
         }
     }
     

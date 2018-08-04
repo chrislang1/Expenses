@@ -18,11 +18,8 @@ class SortExpensesViewController: UIViewController {
     @IBOutlet weak var sortView: UIView!
     @IBOutlet var sortButtons: [UIButton]!
     @IBOutlet var tickImages: [UIImageView]!
-    @IBOutlet weak var sortViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var xIconButton: UIButton!
     
-    var bottomPadding: CGFloat?
-    let window = UIApplication.shared.keyWindow
     var yComponent = CGFloat()
     var theme = Theme.init(rawValue: 0)
     let defaults = UserDefaults.standard
@@ -35,9 +32,6 @@ class SortExpensesViewController: UIViewController {
         // Do any additional setup after loading the view.
         theme = Theme.init(rawValue: defaults.integer(forKey: "SelectedTheme")) ?? Theme.init(rawValue: 0)
         updateTheme()
-        if let bottomPadding = self.window?.safeAreaInsets.bottom {
-            sortViewHeightConstraint.constant = sortViewHeightConstraint.constant + bottomPadding
-        }
         
         sortTypeSelected(sortButtons[defaults.integer(forKey: "Sort")])
     }
@@ -48,7 +42,7 @@ class SortExpensesViewController: UIViewController {
             sortButtons[index].setTitleColor(theme?.expensesFontColor, for: .normal)
         }
         sortView.layer.backgroundColor = theme?.totalCostViewColor
-        xIconButton.setImage(theme?.xIconImage, for: .normal)
+        xIconButton.setImage(theme?.backIconImage, for: .normal)
     }
     
     @IBAction func sortTypeSelected(_ sender: UIButton) {
@@ -65,7 +59,7 @@ class SortExpensesViewController: UIViewController {
     }
     
     @IBAction func xButtonPressed(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        navigationController?.popToRootViewController(animated: true)
     }
 
 }

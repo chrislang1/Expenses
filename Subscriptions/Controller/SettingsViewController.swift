@@ -24,7 +24,6 @@ class SettingsViewController: UIViewController, SortExpenseDelegate {
     @IBOutlet weak var xButton: UIButton!
     @IBOutlet weak var panLabel: UILabel!
     @IBOutlet weak var lightDarkSwitchView: UIView!
-    @IBOutlet weak var settingsViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet var themeButtons: [UIButton]!
     @IBOutlet weak var sortButton: UIButton!
     
@@ -35,11 +34,9 @@ class SettingsViewController: UIViewController, SortExpenseDelegate {
     let sortOptionsArray = ["None", "A to Z", "Price", "Next Due"]
     var sortPickerView = UIPickerView()
     
-    var delegate: TotalCostViewController?
+    var delegate: SetupSettingsViewController?
     
 //    var settingsViewFrame = CGRect()
-    var bottomPadding: CGFloat?
-    let window = UIApplication.shared.keyWindow
     var yComponent = CGFloat()
     var theme = Theme.init(rawValue: 0)
     
@@ -53,9 +50,7 @@ class SettingsViewController: UIViewController, SortExpenseDelegate {
         updateThemeButtons(sender: themeButtons[defaults.integer(forKey: "SelectedTheme")])
         updateTheme()
         addDoneButtonOnKeyboard()
-        if let bottomPadding = self.window?.safeAreaInsets.bottom {
-            settingsViewHeightConstraint.constant = settingsViewHeightConstraint.constant + bottomPadding
-        }
+
         sortButton.setTitle(sortOptionsArray[defaults.integer(forKey: "Sort")], for: .normal)
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(exitViewTapped))
@@ -118,7 +113,6 @@ class SettingsViewController: UIViewController, SortExpenseDelegate {
         interfaceThemeLabel.textColor = theme?.expensesFontColor
         settingsLabel.textColor = theme?.expensesFontColor
         sortExpensesByLabel.textColor = theme?.expensesFontColor
-        //sortExpensesOptionLabel.textColor = theme?.expensesFontColor
         feedbackButton.backgroundColor = theme?.buttonColor
         feedbackButton.setTitleColor(theme?.expensesFontColor, for: .normal)
         rateButton.backgroundColor = theme?.buttonColor
@@ -126,9 +120,7 @@ class SettingsViewController: UIViewController, SortExpenseDelegate {
         xButton.setImage(theme?.xIconImage, for: .normal)
         panLabel.backgroundColor = theme?.panAndDividerColor
         lightDarkSwitchView.backgroundColor = theme?.buttonColor
-        //sortPickerView.layer.backgroundColor = theme?.totalCostViewColor
-        
-        sortButton.setTitleColor(theme?.expensesFontColor, for: .normal)
+        sortButton.setTitleColor(theme?.settingsOptionsFontColor, for: .normal)
     }
     
     func updateThemeButtons(sender: UIButton){
@@ -173,7 +165,7 @@ class SettingsViewController: UIViewController, SortExpenseDelegate {
         updateTheme()
         updateThemeButtons(sender: sender)
         if let delegate = delegate {
-            delegate.updateUserTheme()
+            delegate.delegate?.updateUserTheme()
         }
         
         if UIApplication.shared.supportsAlternateIcons {
@@ -201,14 +193,14 @@ class SettingsViewController: UIViewController, SortExpenseDelegate {
     func sortLabelAndExpenses(){
         sortButton.setTitle(sortOptionsArray[defaults.integer(forKey: "Sort")], for: .normal)
         if let delegate = delegate {
-            let delegateParentVC = delegate.parent as! ExpensesViewController
+            let delegateParentVC = delegate.delegate?.parent as! ExpensesViewController
             delegateParentVC.sortExpeses()
         }
     }
     
     func exitSettings(){
         if let delegate = delegate {
-            let delegateParentVC = delegate.parent as! ExpensesViewController
+            let delegateParentVC = delegate.delegate?.parent as! ExpensesViewController
             UIView.animate(withDuration: 0.3) {
                 delegateParentVC.navigationController?.view.alpha = 1
             }
