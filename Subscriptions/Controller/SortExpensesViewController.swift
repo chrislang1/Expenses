@@ -37,12 +37,12 @@ class SortExpensesViewController: UIViewController {
     }
     
     func updateTheme(){
-        titleLabel.textColor = theme?.expensesFontColor
+        //titleLabel.textColor = theme?.expensesFontColor
         for index in sortButtons.indices {
             sortButtons[index].setTitleColor(theme?.expensesFontColor, for: .normal)
         }
         sortView.layer.backgroundColor = theme?.totalCostViewColor
-        xIconButton.setImage(theme?.backIconImage, for: .normal)
+        //xIconButton.setImage(theme?.backIconImage, for: .normal)
     }
     
     @IBAction func sortTypeSelected(_ sender: UIButton) {

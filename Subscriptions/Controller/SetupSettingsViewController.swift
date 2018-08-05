@@ -24,6 +24,9 @@ class SetupSettingsViewController: UIViewController {
         if let bottomPadding = self.window?.safeAreaInsets.bottom {
             containerViewHeight.constant = containerViewHeight.constant + bottomPadding
         }
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(dismissView))
+        view.addGestureRecognizer(gesture)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -32,5 +35,11 @@ class SetupSettingsViewController: UIViewController {
         destinationVC.delegate = self
     }
     
+    @objc func dismissView(){
+        if let delegate = delegate {
+            delegate.parent?.navigationController?.view.alpha = 1
+        }
+        dismiss(animated: true, completion: nil)
+    }
 
 }

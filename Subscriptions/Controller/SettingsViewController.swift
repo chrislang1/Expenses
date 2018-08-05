@@ -16,16 +16,15 @@ class SettingsViewController: UIViewController, SortExpenseDelegate {
 
     @IBOutlet weak var settingsView: UIView!
     @IBOutlet weak var interfaceThemeLabel: UILabel!
-    @IBOutlet weak var settingsLabel: UILabel!
     @IBOutlet weak var sortExpensesByLabel: UILabel!
 //    @IBOutlet weak var sortExpensesOptionLabel: UILabel!
     @IBOutlet weak var feedbackButton: UIButton!
     @IBOutlet weak var rateButton: UIButton!
-    @IBOutlet weak var xButton: UIButton!
-    @IBOutlet weak var panLabel: UILabel!
+    @IBOutlet weak var xButton: UIBarButtonItem!
     @IBOutlet weak var lightDarkSwitchView: UIView!
     @IBOutlet var themeButtons: [UIButton]!
     @IBOutlet weak var sortButton: UIButton!
+    @IBOutlet weak var appIconLabel: UILabel!
     
     
 //    @IBOutlet weak var sortTextField: UITextField!
@@ -53,8 +52,9 @@ class SettingsViewController: UIViewController, SortExpenseDelegate {
 
         sortButton.setTitle(sortOptionsArray[defaults.integer(forKey: "Sort")], for: .normal)
         
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(exitViewTapped))
-        view.addGestureRecognizer(gesture)
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -111,16 +111,18 @@ class SettingsViewController: UIViewController, SortExpenseDelegate {
     func updateTheme(){
         settingsView.layer.backgroundColor = theme?.totalCostViewColor
         interfaceThemeLabel.textColor = theme?.expensesFontColor
-        settingsLabel.textColor = theme?.expensesFontColor
+        //settingsLabel.textColor = theme?.expensesFontColor
         sortExpensesByLabel.textColor = theme?.expensesFontColor
         feedbackButton.backgroundColor = theme?.buttonColor
         feedbackButton.setTitleColor(theme?.expensesFontColor, for: .normal)
         rateButton.backgroundColor = theme?.buttonColor
         rateButton.setTitleColor(theme?.expensesFontColor, for: .normal)
-        xButton.setImage(theme?.xIconImage, for: .normal)
-        panLabel.backgroundColor = theme?.panAndDividerColor
+        xButton.setBackgroundImage(theme?.xIconImage, for: .normal, barMetrics: .default)
         lightDarkSwitchView.backgroundColor = theme?.buttonColor
+        appIconLabel.textColor = theme?.expensesFontColor
         sortButton.setTitleColor(theme?.settingsOptionsFontColor, for: .normal)
+        navigationController?.navigationBar.tintColor = theme?.expensesFontColor
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: theme?.expensesFontColor ?? UIColor.black]
     }
     
     func updateThemeButtons(sender: UIButton){
@@ -208,11 +210,7 @@ class SettingsViewController: UIViewController, SortExpenseDelegate {
         dismiss(animated: true, completion: nil)
     }
     
-    @objc func exitViewTapped(){
-        exitSettings()
-    }
-    
-    @IBAction func exitButtonPressed(_ sender: UIButton) {
+    @IBAction func exitButtonPressed(_ sender: UIBarButtonItem) {
         exitSettings()
     }
     
