@@ -23,7 +23,6 @@
 		83A4E01C21171DC000472250 /* LightWhite@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83A4E01A21171DC000472250 /* LightWhite@3x.png */; };
 		83A4E01F21171DEA00472250 /* DarkPurple@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83A4E01D21171DEA00472250 /* DarkPurple@3x.png */; };
 		83A4E02021171DEA00472250 /* DarkPurple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83A4E01E21171DEA00472250 /* DarkPurple@2x.png */; };
-		83A4E0222117248100472250 /* AlternateLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83A4E0212117248100472250 /* AlternateLaunchScreen.storyboard */; };
 		83F661A221119AC800E1F1B1 /* SortExpensesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F661A121119AC800E1F1B1 /* SortExpensesViewController.swift */; };
 		83F661A42115A43500E1F1B1 /* SetupSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F661A32115A43500E1F1B1 /* SetupSettingsViewController.swift */; };
 		83FEE0E220EDC42A0084D533 /* TotalCostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FEE0E120EDC42A0084D533 /* TotalCostViewController.swift */; };
@@ -49,7 +48,6 @@
 		83A4E01A21171DC000472250 /* LightWhite@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LightWhite@3x.png"; sourceTree = "<group>"; };
 		83A4E01D21171DEA00472250 /* DarkPurple@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DarkPurple@3x.png"; sourceTree = "<group>"; };
 		83A4E01E21171DEA00472250 /* DarkPurple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DarkPurple@2x.png"; sourceTree = "<group>"; };
-		83A4E0212117248100472250 /* AlternateLaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AlternateLaunchScreen.storyboard; sourceTree = "<group>"; };
 		83F661A121119AC800E1F1B1 /* SortExpensesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortExpensesViewController.swift; sourceTree = "<group>"; };
 		83F661A32115A43500E1F1B1 /* SetupSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupSettingsViewController.swift; sourceTree = "<group>"; };
 		83FEE0E120EDC42A0084D533 /* TotalCostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalCostViewController.swift; sourceTree = "<group>"; };
@@ -127,7 +125,6 @@
 			children = (
 				839A128720CFE193004B3A9B /* Main.storyboard */,
 				839DE4A320BFF4F300FB4E4D /* LaunchScreen.storyboard */,
-				83A4E0212117248100472250 /* AlternateLaunchScreen.storyboard */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -226,7 +223,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83A4E0222117248100472250 /* AlternateLaunchScreen.storyboard in Resources */,
 				83A4E02021171DEA00472250 /* DarkPurple@2x.png in Resources */,
 				83A4E01B21171DC000472250 /* LightWhite@2x.png in Resources */,
 				839DE4A520BFF4F300FB4E4D /* LaunchScreen.storyboard in Resources */,
