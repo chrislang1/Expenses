@@ -9,7 +9,7 @@
 import UIKit
 
 protocol NewExpenseDelegate {
-    func addNewExpense(name: String, cost: Double, numberOfPeriods: Double, periodLength: Int)
+    func addNewExpense(name: String, cost: Double, numberOfPeriods: Double, periodLength: Int, billingDate: Date?)
 }
 
 protocol EditExpenseDelegate{
@@ -35,8 +35,13 @@ class AddExpenseViewController: UIViewController {
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     @IBOutlet weak var doneButton: UIBarButtonItem!
     
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var dateTextField: UITextField!
+    
+    
     @IBOutlet weak var customPickerTextField: UITextField! // Invisible text field to cause picker view to present modally
     let customPeriodPickerView = UIPickerView()
+    let datePickerView = UIDatePicker()
     @IBOutlet weak var customPeriodLabel: UILabel!
     
     var periodSelected = false
@@ -44,6 +49,7 @@ class AddExpenseViewController: UIViewController {
     var periodLength = String()
     var buttonString = String()
     var periodType = Expense.PeriodType(rawValue: 0)
+    var billingDate = Date()
     
     let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
     let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
@@ -61,6 +67,7 @@ class AddExpenseViewController: UIViewController {
         self.customPeriodPickerView.dataSource = self
         self.customPickerTextField.delegate = self
         self.nameTextField.delegate = self
+        self.dateTextField.delegate = self
         
         //Remove Navigation Bar Border
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
@@ -80,11 +87,17 @@ class AddExpenseViewController: UIViewController {
         costTextField.layer.cornerRadius = 10
         nameTextField.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0);
         costTextField.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0);
+        dateTextField.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0)
         customPeriodLabel.clipsToBounds = true
         customPeriodLabel.layer.cornerRadius = 10
         
         nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         costTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        dateTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
+        datePickerView.datePickerMode = .date
+        self.dateTextField.inputView = datePickerView
+        datePickerView.addTarget(self, action: #selector(self.datePickerValueChanged(datePicker:)), for: .valueChanged)
         
         deleteExpenseButton.isHidden = true
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -96,6 +109,16 @@ class AddExpenseViewController: UIViewController {
         {
             nameTextField.text = selectedExpense.name
             costTextField.text = String(selectedExpense.price)
+            
+            if let date = selectedExpense.billingDate{
+                let dateFormatter = DateFormatter()
+                dateFormatter.locale = Locale.current
+                dateFormatter.dateStyle = .medium
+                dateFormatter.timeStyle = .none
+            
+                dateTextField.text = dateFormatter.string(from: date)
+                datePickerView.setDate(date, animated: false)
+            }
             
             self.title = "Edit Expense"
             
@@ -137,15 +160,21 @@ class AddExpenseViewController: UIViewController {
         customPeriodLabel.backgroundColor = theme?.buttonColor
         customPeriodLabel.textColor = theme?.expensesFontColor
         customPeriodPickerView.layer.backgroundColor = theme?.totalCostViewColor
+        datePickerView.layer.backgroundColor = theme?.totalCostViewColor
+        datePickerView.setValue(theme?.expensesFontColor, forKey: "textColor")
         nameTextField.layer.backgroundColor = theme?.textFieldColor
         costTextField.layer.backgroundColor = theme?.textFieldColor
+        dateTextField.layer.backgroundColor = theme?.textFieldColor
         nameTextField.textColor = theme?.expensesFontColor
         costTextField.textColor = theme?.expensesFontColor
+        dateTextField.textColor = theme?.expensesFontColor
         billingPeriodLabel.textColor = theme?.choosePeriodLabelColor
+        dateLabel.textColor = theme?.choosePeriodLabelColor
         deleteExpenseButton.backgroundColor = theme?.deleteButtonColor
         deleteExpenseButton.setTitleColor(theme?.deleteButtonTextColor, for: .normal)
         addDoneButtonOnKeyboard()
         nameTextField.attributedPlaceholder = NSAttributedString(string: "Expense Name", attributes: [NSAttributedStringKey.foregroundColor: theme?.choosePeriodLabelColor ?? UIColor.lightGray])
+        dateTextField.attributedPlaceholder = NSAttributedString(string: "Date", attributes: [NSAttributedStringKey.foregroundColor: theme?.choosePeriodLabelColor ?? UIColor.lightGray])
         
         switch theme?.rawValue {
         case 0:
@@ -171,12 +200,23 @@ class AddExpenseViewController: UIViewController {
         checkDoneButton()
     }
     
+    @objc func datePickerValueChanged(datePicker: UIDatePicker){
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale.current
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        
+        dateTextField.text = dateFormatter.string(from: datePicker.date)
+        billingDate = datePicker.date
+        checkDoneButton()
+    }
+    
     func checkDoneButton(){
         let fontStyle = UIFont.systemFont(ofSize: 17.0, weight: .medium)
-        if periodSelected == true && nameTextField.text?.isEmpty == false && costTextField.text?.isEmpty == false {
-            doneButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle, NSAttributedStringKey.foregroundColor: theme?.doneKeyboardButtonColor ?? #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)], for: .normal)
-            doneButton.tintColor = theme?.doneKeyboardButtonColor ?? #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
+        if periodSelected == true && nameTextField.text?.isEmpty == false && costTextField.text?.isEmpty == false && dateTextField.text?.isEmpty == false {
             doneButton.isEnabled = true
+            doneButton.tintColor = theme?.doneKeyboardButtonColor ??  #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
+            doneButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle, NSAttributedStringKey.foregroundColor: theme?.doneKeyboardButtonColor ?? #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)], for: .normal)
         } else {
             doneButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle, NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.514, green: 0.5137254902, blue: 0.5294117647, alpha: 0.5)], for: .disabled)
             doneButton.tintColor = #colorLiteral(red: 0.5137254902, green: 0.5137254902, blue: 0.5294117647, alpha: 0.5)
@@ -240,6 +280,7 @@ class AddExpenseViewController: UIViewController {
         self.costTextField.inputAccessoryView = doneToolbar
         self.customPickerTextField.inputView = customPeriodPickerView
         self.customPickerTextField.inputAccessoryView = doneToolbar
+        self.dateTextField.inputAccessoryView = doneToolbar
     }
     
     @objc func keyboardDoneButtonAction() {
@@ -247,6 +288,8 @@ class AddExpenseViewController: UIViewController {
             self.costTextField.resignFirstResponder()
         } else if customPickerTextField.isFirstResponder == true {
             self.customPickerTextField.resignFirstResponder()
+        } else if dateTextField.isFirstResponder == true {
+            self.dateTextField.resignFirstResponder()
         }
         checkDoneButton()
     }
@@ -260,6 +303,7 @@ class AddExpenseViewController: UIViewController {
     func updateExpense(){
         selectedExpense?.name = nameTextField.text
         selectedExpense?.price = Double(costTextField.text!)!
+        selectedExpense?.billingDate = billingDate
         selectedExpense?.periodLength = Double(numberOfPeriods)
 
         guard let periodLengthPosition = periodLengthArray.index(of: (periodType?.description)!) else {return}
@@ -277,7 +321,7 @@ class AddExpenseViewController: UIViewController {
         } else {
             //2 If we have a delegate set, call the delegate protocol method
             if identifyingSegue == "goToAddExpense"{
-                delegate?.addNewExpense(name: nameTextField.text!, cost: Double(costTextField.text!)!, numberOfPeriods: Double(numberOfPeriods), periodLength: (periodType?.rawValue)!)
+                delegate?.addNewExpense(name: nameTextField.text!, cost: Double(costTextField.text!)!, numberOfPeriods: Double(numberOfPeriods), periodLength: (periodType?.rawValue)!, billingDate: billingDate)
             } else if identifyingSegue == "goToEditExpense" {
                 updateExpense()
                 delegate2?.updateExpense(expense: selectedExpense!)
@@ -364,6 +408,15 @@ extension AddExpenseViewController: UITextFieldDelegate {
             }
             buttonString = "Every \(numberOfPeriods) \(periodLength)"
             customPeriodLabel.text = buttonString
+        }
+        if textField == dateTextField {
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Locale.current
+            dateFormatter.dateStyle = .medium
+            dateFormatter.timeStyle = .none
+            
+            dateTextField.text = dateFormatter.string(from: datePickerView.date)
+            billingDate = datePickerView.date
         }
     }
     

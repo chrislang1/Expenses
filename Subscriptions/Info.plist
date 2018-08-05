@@ -19,6 +19,20 @@
 					<string>AlternateIcon</string>
 				</array>
 			</dict>
+			<key>DarkPurple</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>DarkPurple</string>
+				</array>
+			</dict>
+			<key>LightWhite</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>LightWhite</string>
+				</array>
+			</dict>
 		</dict>
 		<key>CFBundlePrimaryIcon</key>
 		<dict>
@@ -52,7 +66,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.1</string>
 	<key>CFBundleVersion</key>
-	<string>4</string>
+	<string>9</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

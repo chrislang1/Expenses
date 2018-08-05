@@ -12,28 +12,30 @@ protocol UpdateThemeDelegate {
     func updateUserTheme()
 }
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: UIViewController, SortExpenseDelegate {
 
     @IBOutlet weak var settingsView: UIView!
     @IBOutlet weak var interfaceThemeLabel: UILabel!
-    @IBOutlet weak var settingsLabel: UILabel!
     @IBOutlet weak var sortExpensesByLabel: UILabel!
-    @IBOutlet weak var sortExpensesOptionLabel: UILabel!
+//    @IBOutlet weak var sortExpensesOptionLabel: UILabel!
     @IBOutlet weak var feedbackButton: UIButton!
     @IBOutlet weak var rateButton: UIButton!
-    @IBOutlet weak var xButton: UIButton!
-    @IBOutlet weak var panLabel: UILabel!
+    @IBOutlet weak var xButton: UIBarButtonItem!
     @IBOutlet weak var lightDarkSwitchView: UIView!
-    @IBOutlet weak var settingsViewHeightConstraint: NSLayoutConstraint!
-    
-    
     @IBOutlet var themeButtons: [UIButton]!
+    @IBOutlet weak var sortButton: UIButton!
+    @IBOutlet weak var appIconLabel: UILabel!
     
-    var delegate: TotalCostViewController?
+    
+//    @IBOutlet weak var sortTextField: UITextField!
+    
+    
+    let sortOptionsArray = ["None", "A to Z", "Price", "Next Due"]
+    var sortPickerView = UIPickerView()
+    
+    var delegate: SetupSettingsViewController?
     
 //    var settingsViewFrame = CGRect()
-    var bottomPadding: CGFloat?
-    let window = UIApplication.shared.keyWindow
     var yComponent = CGFloat()
     var theme = Theme.init(rawValue: 0)
     
@@ -46,9 +48,13 @@ class SettingsViewController: UIViewController {
         theme = Theme.init(rawValue: defaults.integer(forKey: "SelectedTheme")) ?? Theme.init(rawValue: 0)
         updateThemeButtons(sender: themeButtons[defaults.integer(forKey: "SelectedTheme")])
         updateTheme()
-        if let bottomPadding = self.window?.safeAreaInsets.bottom {
-            settingsViewHeightConstraint.constant = settingsViewHeightConstraint.constant + bottomPadding
-        }
+        addDoneButtonOnKeyboard()
+
+        sortButton.setTitle(sortOptionsArray[defaults.integer(forKey: "Sort")], for: .normal)
+        
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -105,16 +111,18 @@ class SettingsViewController: UIViewController {
     func updateTheme(){
         settingsView.layer.backgroundColor = theme?.totalCostViewColor
         interfaceThemeLabel.textColor = theme?.expensesFontColor
-        settingsLabel.textColor = theme?.expensesFontColor
+        //settingsLabel.textColor = theme?.expensesFontColor
         sortExpensesByLabel.textColor = theme?.expensesFontColor
-        sortExpensesOptionLabel.textColor = theme?.expensesFontColor
         feedbackButton.backgroundColor = theme?.buttonColor
         feedbackButton.setTitleColor(theme?.expensesFontColor, for: .normal)
         rateButton.backgroundColor = theme?.buttonColor
         rateButton.setTitleColor(theme?.expensesFontColor, for: .normal)
-        xButton.setImage(theme?.xIconImage, for: .normal)
-        panLabel.backgroundColor = theme?.panAndDividerColor
+        xButton.setBackgroundImage(theme?.xIconImage, for: .normal, barMetrics: .default)
         lightDarkSwitchView.backgroundColor = theme?.buttonColor
+        appIconLabel.textColor = theme?.expensesFontColor
+        sortButton.setTitleColor(theme?.settingsOptionsFontColor, for: .normal)
+        navigationController?.navigationBar.tintColor = theme?.expensesFontColor
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: theme?.expensesFontColor ?? UIColor.black]
     }
     
     func updateThemeButtons(sender: UIButton){
@@ -129,32 +137,68 @@ class SettingsViewController: UIViewController {
         }
     }
     
+    func addDoneButtonOnKeyboard(){
+        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x:0, y:0, width:320, height:44))
+        doneToolbar.barStyle = UIBarStyle.default
+        
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.done, target: self, action: #selector(self.keyboardDoneButtonAction))
+        done.tintColor = theme?.doneKeyboardButtonColor
+        
+        var items = [UIBarButtonItem]()
+        items.append(flexSpace)
+        items.append(done)
+        
+        doneToolbar.items = items
+        doneToolbar.sizeToFit()
+        
+        doneToolbar.barTintColor = theme?.doneToolBarColor
+//        self.sortTextField.inputAccessoryView = doneToolbar
+//        self.sortTextField.inputView = sortPickerView
+    }
+    
+    @objc func keyboardDoneButtonAction(){
+//        sortTextField.resignFirstResponder()
+    }
+    
     @IBAction func themeToggleButtonChanged(_ sender: UIButton) {
         theme = Theme.init(rawValue: sender.tag)
         defaults.set(sender.tag, forKey: "SelectedTheme")
         updateTheme()
         updateThemeButtons(sender: sender)
         if let delegate = delegate {
-            delegate.updateUserTheme()
-        }
-        
-        if UIApplication.shared.supportsAlternateIcons {
-            if sender.tag == 0 {
-                UIApplication.shared.setAlternateIconName(nil)
-            } else if sender.tag == 1 {
-                UIApplication.shared.setAlternateIconName("AlternateIcon"){ error in
-                    if let error = error {
-                        print(error.localizedDescription)
-                    } else {
-                        print("Done!")
-                    }
-                }
-            }
+            delegate.delegate?.updateUserTheme()
+            delegate.updateTheme()
         }
     }
     
-    @IBAction func exitButtonPressed(_ sender: UIButton) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToSortView"{
+            let destinationVC = segue.destination as! SortExpensesViewController
+            destinationVC.delegate = self
+        }
+    }
+    
+    func sortLabelAndExpenses(){
+        sortButton.setTitle(sortOptionsArray[defaults.integer(forKey: "Sort")], for: .normal)
+        if let delegate = delegate {
+            let delegateParentVC = delegate.delegate?.parent as! ExpensesViewController
+            delegateParentVC.sortExpeses()
+        }
+    }
+    
+    func exitSettings(){
+        if let delegate = delegate {
+            let delegateParentVC = delegate.delegate?.parent as! ExpensesViewController
+            UIView.animate(withDuration: 0.3) {
+                delegateParentVC.navigationController?.view.alpha = 1
+            }
+        }
         dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func exitButtonPressed(_ sender: UIBarButtonItem) {
+        exitSettings()
     }
     
     @IBAction func feedbackButtonPressed(_ sender: UIButton) {
@@ -168,6 +212,4 @@ class SettingsViewController: UIViewController {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
-    
-    
 }

@@ -265,11 +265,15 @@ class TotalCostViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destinationVC = segue.destination as! SettingsViewController
+        let destinationVC = segue.destination as! SetupSettingsViewController
         destinationVC.delegate = self
+        
+        let parentVC = parent as! ExpensesViewController
         UIView.animate(withDuration: 0.3) {
             self.moveUp()
+            parentVC.navigationController?.view.alpha = 0.3
         }
+        
     }
 }
 
