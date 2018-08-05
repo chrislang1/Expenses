@@ -18,6 +18,12 @@
 		839DE4A020BFF4F000FB4E4D /* Subscriptions.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 839DE49E20BFF4F000FB4E4D /* Subscriptions.xcdatamodeld */; };
 		839DE4A220BFF4F300FB4E4D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 839DE4A120BFF4F300FB4E4D /* Assets.xcassets */; };
 		839DE4A520BFF4F300FB4E4D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 839DE4A320BFF4F300FB4E4D /* LaunchScreen.storyboard */; };
+		83A4E0162117181D00472250 /* AppIconViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A4E0152117181D00472250 /* AppIconViewController.swift */; };
+		83A4E01B21171DC000472250 /* LightWhite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83A4E01921171DC000472250 /* LightWhite@2x.png */; };
+		83A4E01C21171DC000472250 /* LightWhite@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83A4E01A21171DC000472250 /* LightWhite@3x.png */; };
+		83A4E01F21171DEA00472250 /* DarkPurple@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83A4E01D21171DEA00472250 /* DarkPurple@3x.png */; };
+		83A4E02021171DEA00472250 /* DarkPurple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83A4E01E21171DEA00472250 /* DarkPurple@2x.png */; };
+		83A4E0222117248100472250 /* AlternateLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83A4E0212117248100472250 /* AlternateLaunchScreen.storyboard */; };
 		83F661A221119AC800E1F1B1 /* SortExpensesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F661A121119AC800E1F1B1 /* SortExpensesViewController.swift */; };
 		83F661A42115A43500E1F1B1 /* SetupSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F661A32115A43500E1F1B1 /* SetupSettingsViewController.swift */; };
 		83FEE0E220EDC42A0084D533 /* TotalCostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FEE0E120EDC42A0084D533 /* TotalCostViewController.swift */; };
@@ -38,6 +44,12 @@
 		839DE4A120BFF4F300FB4E4D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		839DE4A420BFF4F300FB4E4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		839DE4A620BFF4F300FB4E4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		83A4E0152117181D00472250 /* AppIconViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconViewController.swift; sourceTree = "<group>"; };
+		83A4E01921171DC000472250 /* LightWhite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LightWhite@2x.png"; sourceTree = "<group>"; };
+		83A4E01A21171DC000472250 /* LightWhite@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LightWhite@3x.png"; sourceTree = "<group>"; };
+		83A4E01D21171DEA00472250 /* DarkPurple@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DarkPurple@3x.png"; sourceTree = "<group>"; };
+		83A4E01E21171DEA00472250 /* DarkPurple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DarkPurple@2x.png"; sourceTree = "<group>"; };
+		83A4E0212117248100472250 /* AlternateLaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AlternateLaunchScreen.storyboard; sourceTree = "<group>"; };
 		83F661A121119AC800E1F1B1 /* SortExpensesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortExpensesViewController.swift; sourceTree = "<group>"; };
 		83F661A32115A43500E1F1B1 /* SetupSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupSettingsViewController.swift; sourceTree = "<group>"; };
 		83FEE0E120EDC42A0084D533 /* TotalCostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalCostViewController.swift; sourceTree = "<group>"; };
@@ -83,6 +95,8 @@
 		839DE49620BFF4F000FB4E4D /* Subscriptions */ = {
 			isa = PBXGroup;
 			children = (
+				83A4E01821171D7300472250 /* LightWhite */,
+				83A4E01721171D6A00472250 /* DarkPurple */,
 				839075652107076800263E49 /* AlternateIcon */,
 				839DE4AE20BFF52300FB4E4D /* Model */,
 				839DE4AD20BFF51A00FB4E4D /* View */,
@@ -103,6 +117,7 @@
 				839075632104E63900263E49 /* SettingsViewController.swift */,
 				83F661A121119AC800E1F1B1 /* SortExpensesViewController.swift */,
 				83F661A32115A43500E1F1B1 /* SetupSettingsViewController.swift */,
+				83A4E0152117181D00472250 /* AppIconViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -112,6 +127,7 @@
 			children = (
 				839A128720CFE193004B3A9B /* Main.storyboard */,
 				839DE4A320BFF4F300FB4E4D /* LaunchScreen.storyboard */,
+				83A4E0212117248100472250 /* AlternateLaunchScreen.storyboard */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -132,6 +148,24 @@
 				839DE4A120BFF4F300FB4E4D /* Assets.xcassets */,
 			);
 			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		83A4E01721171D6A00472250 /* DarkPurple */ = {
+			isa = PBXGroup;
+			children = (
+				83A4E01E21171DEA00472250 /* DarkPurple@2x.png */,
+				83A4E01D21171DEA00472250 /* DarkPurple@3x.png */,
+			);
+			path = DarkPurple;
+			sourceTree = "<group>";
+		};
+		83A4E01821171D7300472250 /* LightWhite */ = {
+			isa = PBXGroup;
+			children = (
+				83A4E01921171DC000472250 /* LightWhite@2x.png */,
+				83A4E01A21171DC000472250 /* LightWhite@3x.png */,
+			);
+			path = LightWhite;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -192,9 +226,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83A4E0222117248100472250 /* AlternateLaunchScreen.storyboard in Resources */,
+				83A4E02021171DEA00472250 /* DarkPurple@2x.png in Resources */,
+				83A4E01B21171DC000472250 /* LightWhite@2x.png in Resources */,
 				839DE4A520BFF4F300FB4E4D /* LaunchScreen.storyboard in Resources */,
 				8333E56721070909007E286E /* AlternateIcon@2x.png in Resources */,
+				83A4E01F21171DEA00472250 /* DarkPurple@3x.png in Resources */,
 				839A128820CFE193004B3A9B /* Main.storyboard in Resources */,
+				83A4E01C21171DC000472250 /* LightWhite@3x.png in Resources */,
 				839DE4A220BFF4F300FB4E4D /* Assets.xcassets in Resources */,
 				8333E56621070909007E286E /* AlternateIcon@3x.png in Resources */,
 			);
@@ -208,6 +247,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8394C9ED2101CEFA0060E4E9 /* ThemeSelector.swift in Sources */,
+				83A4E0162117181D00472250 /* AppIconViewController.swift in Sources */,
 				835A2FBF20C0DAAC004960D7 /* AddExpenseViewController.swift in Sources */,
 				839DE4A020BFF4F000FB4E4D /* Subscriptions.xcdatamodeld in Sources */,
 				A1B575B220D65C8C00E8BAB6 /* Expense+Helper.swift in Sources */,

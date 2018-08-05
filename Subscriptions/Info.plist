@@ -12,6 +12,20 @@
 	<dict>
 		<key>CFBundleAlternateIcons</key>
 		<dict>
+			<key>DarkPurple</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>DarkPurple</string>
+				</array>
+			</dict>
+			<key>LightWhite</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>LightWhite</string>
+				</array>
+			</dict>
 			<key>AlternateIcon</key>
 			<dict>
 				<key>CFBundleIconFiles</key>

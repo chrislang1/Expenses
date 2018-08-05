@@ -168,20 +168,7 @@ class SettingsViewController: UIViewController, SortExpenseDelegate {
         updateThemeButtons(sender: sender)
         if let delegate = delegate {
             delegate.delegate?.updateUserTheme()
-        }
-        
-        if UIApplication.shared.supportsAlternateIcons {
-            if sender.tag == 0 {
-                UIApplication.shared.setAlternateIconName(nil)
-            } else if sender.tag == 1 {
-                UIApplication.shared.setAlternateIconName("AlternateIcon"){ error in
-                    if let error = error {
-                        print(error.localizedDescription)
-                    } else {
-                        print("Done!")
-                    }
-                }
-            }
+            delegate.updateTheme()
         }
     }
     

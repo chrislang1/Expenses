@@ -12,11 +12,15 @@ class SetupSettingsViewController: UIViewController {
 
     @IBOutlet weak var containerViewHeight: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var pullLabelView: UIView!
+    @IBOutlet weak var pullLabel: UILabel!
     
     var bottomPadding: CGFloat?
     let window = UIApplication.shared.keyWindow
     var delegate: TotalCostViewController?
     var settingsView: SettingsViewController?
+    var theme = Theme.init(rawValue: 0)
+    var defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,12 +31,23 @@ class SetupSettingsViewController: UIViewController {
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(dismissView))
         view.addGestureRecognizer(gesture)
+        
+        theme = Theme.init(rawValue: defaults.integer(forKey: "SelectedTheme")) ?? Theme.init(rawValue: 0)
+        updateTheme()
+        
+        pullLabelView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let navigationVC = segue.destination as! UINavigationController
         let destinationVC = navigationVC.topViewController as! SettingsViewController
         destinationVC.delegate = self
+    }
+    
+    func updateTheme(){
+        theme = Theme.init(rawValue: defaults.integer(forKey: "SelectedTheme"))
+        pullLabelView.layer.backgroundColor = theme?.totalCostViewColor
+        pullLabel.backgroundColor = theme?.panAndDividerColor
     }
     
     @objc func dismissView(){

@@ -27,7 +27,7 @@ enum Theme: Int, CustomStringConvertible {
     var applicationBackgroundColor: CGColor {
         switch self {
         case .light: return #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        case .dark: return #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        case .dark: return #colorLiteral(red: 0.08, green: 0.08, blue: 0.08, alpha: 1)
         }
     }
     
@@ -62,14 +62,14 @@ enum Theme: Int, CustomStringConvertible {
     var buttonColor: UIColor {
         switch self {
         case .light: return #colorLiteral(red: 0.95, green: 0.96, blue: 0.96, alpha: 1)
-        case .dark: return #colorLiteral(red: 0.17, green: 0.17, blue: 0.17, alpha: 1)
+        case .dark: return #colorLiteral(red: 0.22, green: 0.22, blue: 0.22, alpha: 1)
         }
     }
     
     var totalCostViewColor: CGColor {
         switch self {
         case .light: return #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        case .dark: return #colorLiteral(red: 0.08, green: 0.08, blue: 0.08, alpha: 1) // colour darkened as simulator gave a brighter colour - increases button visability
+        case .dark: return #colorLiteral(red: 0.12, green: 0.12, blue: 0.12, alpha: 1)
         }
     }
     
