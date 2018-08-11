@@ -29,8 +29,8 @@ class SetupSettingsViewController: UIViewController {
             containerViewHeight.constant = containerViewHeight.constant + bottomPadding
         }
         
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(dismissView))
-        view.addGestureRecognizer(gesture)
+//        let gesture = UITapGestureRecognizer(target: self, action: #selector(dismissView))
+//        view.addGestureRecognizer(gesture)
         
         theme = Theme.init(rawValue: defaults.integer(forKey: "SelectedTheme")) ?? Theme.init(rawValue: 0)
         updateTheme()
