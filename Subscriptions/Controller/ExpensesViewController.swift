@@ -12,6 +12,7 @@ import CoreData
 class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseDelegate {
     
     var totalCostVC: TotalCostViewController?
+    var settingsVC: SettingsViewController?
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var editBarButton: UIBarButtonItem!
@@ -19,6 +20,10 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     @IBOutlet weak var noExpensesView: UIView!
     @IBOutlet weak var removeExpenseButton: UIButton!
     @IBOutlet weak var removeExpenseConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomColorView: UIView!
+    @IBOutlet weak var noExpensesLabel: UILabel!
+    @IBOutlet weak var noExpensesImage: UIImageView!
+    
     
     var expenseArray = [Expense]()
     var editModeExpenseArray = [Expense]()
@@ -26,9 +31,10 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     var periodSelectionHidden = true
     var periodType = Expense.PeriodType.day
     var doneBarButton = UIBarButtonItem()
-    
-    let textColor = #colorLiteral(red: 0.5377323031, green: 0.4028604627, blue: 0.9699184299, alpha: 1)
-    let backgroundColor = #colorLiteral(red: 0.4588235294, green: 0.2862745098, blue: 0.9607843137, alpha: 0.2)
+    var theme = Theme.init(rawValue: 0)
+    var dimBackgroundView = UIView()
+    var dimNavigationView = UIView()
+    var sortInt = Int()
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let defaults = UserDefaults.standard
@@ -36,11 +42,13 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        theme = Theme.init(rawValue: defaults.integer(forKey: "SelectedTheme")) ?? Theme.init(rawValue: 0)
         
         //Remove Navigation Bar Border
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         
+        tableView.layer.backgroundColor = theme?.applicationBackgroundColor
         
         let fontStyle = UIFont.systemFont(ofSize: 17.0, weight: .medium)
         editBarButton.setTitleTextAttributes([NSAttributedStringKey.font: fontStyle], for: .normal)
@@ -63,22 +71,55 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         let gesture = UITapGestureRecognizer(target: self, action: #selector(noExpensesViewTapped))
         noExpensesView.addGestureRecognizer(gesture)
         
-        loadExpenses()
+        //Setup dimming view
+        dimBackgroundView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        dimBackgroundView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        dimBackgroundView.alpha = 1
+        dimNavigationView.frame = CGRect(x: 0, y: 0, width: (navigationController?.view.frame.width)!, height: (navigationController?.view.frame.height)!)
+        dimNavigationView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        dimNavigationView.alpha = 1
+        
+        sortExpeses()
         addTotalCostView()
+        //addSettingsView()
         checkExpenseArray()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         checkExpenseArray()
         setTotalCost()
+        updateTheme()
         
         if let index = tableView.indexPathForSelectedRow,
             let cell = tableView.cellForRow(at: index) {
             tableView.deselectRow(at: index, animated: true)
-            cell.backgroundColor = .white
-            cell.textLabel?.textColor = .black
-            cell.detailTextLabel?.textColor = .black
+            cell.backgroundColor = .clear
+            cell.textLabel?.textColor = theme?.expensesFontColor
+            cell.detailTextLabel?.textColor = theme?.expensesFontColor
             tableView.reloadData()
+        }
+    }
+    
+    func updateThemeFromUser() {
+        theme = Theme.init(rawValue: defaults.integer(forKey: "theme"))
+        updateTheme()
+    }
+    
+    func updateTheme(){
+        view.layer.backgroundColor = theme?.applicationBackgroundColor
+        bottomColorView.layer.backgroundColor = theme?.totalCostViewColor
+        addBarButton.image = theme?.addBarButtonImage
+        removeExpenseButton.backgroundColor = theme?.deleteButtonColor
+        removeExpenseButton.setTitleColor(theme?.deleteButtonTextColor, for: .normal)
+        tableView.layer.backgroundColor = theme?.applicationBackgroundColor
+        tableView.reloadData()
+        noExpensesLabel.textColor = theme?.expensesFontColor
+        noExpensesImage.image = theme?.noExpenseBackgroundImage
+        
+        switch theme?.rawValue {
+            case 0: return (navigationController?.navigationBar.barStyle = .default)!
+            case 1: return (navigationController?.navigationBar.barStyle = .black)!
+            default: return (navigationController?.navigationBar.barStyle = .default)!
         }
     }
     
@@ -117,6 +158,21 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         }
     }
     
+    //MARK: - Add Settings View to bottom of screen
+    func addSettingsView(){
+        settingsVC = storyboard?.instantiateViewController(withIdentifier: "SettingsViewController") as? SettingsViewController
+        if let settingsVC = settingsVC {
+            
+            self.addChildViewController(settingsVC)
+            self.view.addSubview(settingsVC.view)
+            settingsVC.didMove(toParentViewController: self)
+            
+            let height = view.frame.height
+            let width = view.frame.width
+            settingsVC.view.frame = CGRect(x: 0, y: self.view.frame.maxY, width: width, height: height)
+        }
+    }
+    
     @objc func noExpensesViewTapped(){
         performSegue(withIdentifier: "goToAddExpense", sender: self)
     }
@@ -152,10 +208,17 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
                 totalCostVC.moveUp()
                 totalCostVC.updateLabels()
             }
-            let indexSet = IndexSet.init(integer: 0)
-            tableView.reloadSections(indexSet, with: .right)
+//            let indexSet = IndexSet.init(integer: 0)
+//            tableView.reloadSections(indexSet, with: .right)
             //tableView.reloadData()      //Causing issues with the setEditing animation
-            self.tableView.setEditing(false, animated: false)
+            UIView.animate(withDuration: 0.3, animations: {
+                self.tableView.setEditing(false, animated: false)
+            }) { (complete) in
+                self.sortExpeses()
+                self.tableView.reloadData()
+            }
+            
+            bottomColorView.isHidden = false
         } else if (self.tableView.isEditing == false) {
             self.tableView.setEditing(true, animated: true)
             self.editBarButton.title = "Cancel"
@@ -164,6 +227,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             if let totalCostVC = totalCostVC {
                 totalCostVC.moveDown()
             }
+            bottomColorView.isHidden = true
         }
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
@@ -182,17 +246,21 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             totalCostVC.moveUp()
             totalCostVC.updateLabels()
         }
+        defaults.set(sortInt, forKey: "Sort")
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
+            self.bottomColorView.isHidden = false
         }
     }
     
     //MARK: - New Expense Delegete Methods
-    func addNewExpense(name: String, cost: Double, numberOfPeriods: Double, periodLength: Int) {
+    func addNewExpense(name: String, cost: Double, numberOfPeriods: Double, periodLength: Int, billingDate: Date?) {
         let expense = Expense(context: context)
         expense.name = name
         expense.price = cost
         expense.periodLength = numberOfPeriods
+        expense.billingDate = billingDate
+        expense.nextBillingDate = calculateNextBillingDate(from: expense)
         
         guard let periodType = Expense.PeriodType(rawValue: periodLength) else {return}
         expense.periodType = Int16(periodLength)
@@ -200,6 +268,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         
         expenseArray.append(expense)
         indexExpenseArray()
+        sortExpeses()
         saveExpenses()
         tableView.reloadData()
     }
@@ -212,7 +281,36 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             periodType = .month
             expense.yearPrice = expense.price * (periodType.countPerYear/expense.periodLength)
         }
+        expense.nextBillingDate = calculateNextBillingDate(from: expense)
         saveExpenses()
+    }
+    
+    func calculateNextBillingDate(from expense: Expense) -> Date?{
+        if let billingDate = expense.billingDate {
+            var dateComponents = DateComponents()
+            switch expense.periodType {
+            case 0:
+                dateComponents.day = Int(expense.periodLength)
+            case 1:
+                dateComponents.day = Int(expense.periodLength)*7
+            case 2:
+                dateComponents.day = Int(expense.periodLength)*7*2
+            case 3:
+                dateComponents.month = Int(expense.periodLength)
+            case 4:
+                dateComponents.year = Int(expense.periodLength)
+            default:
+                dateComponents.day = Int(expense.periodLength)
+            }
+            
+            if let nextDate = Calendar.current.date(byAdding: dateComponents, to: billingDate) {
+                return nextDate
+            } else {
+                return nil
+            }
+        } else {
+            return nil
+        }
     }
     
     func deleteExpense(expense: Expense){
@@ -238,6 +336,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
                 
                 destinationVC.delegate = self
                 destinationVC.identifyingSegue = segue.identifier!
+                destinationVC.theme = theme
             }
             
             if segue.identifier == "goToEditExpense" {
@@ -252,6 +351,7 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
                     selectedExpense = indexPath.row
                     destinationVC.periodSelected = true
                 }
+                destinationVC.theme = theme
             }
         }
     }
@@ -264,9 +364,23 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
         }
     }
     
+    func sortExpeses(){
+        sortInt = defaults.integer(forKey: "Sort")
+        var sort: NSSortDescriptor
+        switch sortInt{
+        case 0: sort = NSSortDescriptor(key: "arrayIndex", ascending: true)
+        case 1: sort = NSSortDescriptor(key: "name", ascending: true)
+        case 2: sort = NSSortDescriptor(key: "price", ascending: true)
+        case 3: sort = NSSortDescriptor(key: "nextBillingDate", ascending: true)
+        default: sort = NSSortDescriptor(key: "arrayIndex", ascending: true)
+        }
+        
+        loadExpenses(sort: sort)
+        tableView.reloadData()
+    }
+    
     //MARK: - Load and Save Methods
-    func loadExpenses(with request: NSFetchRequest<Expense> = Expense.fetchRequest()){
-        let sort = NSSortDescriptor(key: "arrayIndex", ascending: true)
+    func loadExpenses(with request: NSFetchRequest<Expense> = Expense.fetchRequest(), sort: NSSortDescriptor = NSSortDescriptor(key: "arrayIndex", ascending: true)){
         request.sortDescriptors = [sort]
         do{
             expenseArray = try context.fetch(request)
@@ -282,6 +396,29 @@ class ExpensesViewController: UIViewController, NewExpenseDelegate, EditExpenseD
             print("Error saving context \(error)")
         }
         
+    }
+    
+    //MARK: - Bring Up Settings View
+    func showSettingsView() {
+        if let settingsVC = settingsVC {
+            settingsVC.moveUp()
+        }
+    }
+    
+    //Set Theme from Settings View
+    func updateUserTheme() {
+        let rawValue = defaults.integer(forKey: "SelectedTheme")
+        theme = Theme.init(rawValue: rawValue)
+        updateTheme()
+        if let totalCostVC = totalCostVC {
+            totalCostVC.theme = theme
+            totalCostVC.updateTheme()
+        }
+    }
+    
+    func darkenView(){
+        //view.insertSubview(dimBackgroundView, at: 2)
+        //self.view.backgroundColor = UIColor.black.withAlphaComponent(0.7)
     }
     
 }
@@ -307,9 +444,11 @@ extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
         let price = subscription.price
         cell.detailTextLabel?.text = currencyFormatter.string(from: NSNumber(value: price))
         let backgroundView = UIView()
-        backgroundView.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        backgroundView.backgroundColor = .clear
         cell.selectedBackgroundView = backgroundView
         cell.tintColor = #colorLiteral(red: 0.46, green: 0.29, blue: 0.96, alpha: 1)
+        cell.textLabel?.textColor = theme?.expensesFontColor
+        cell.detailTextLabel?.textColor = theme?.expensesFontColor
         return cell
     }
     
@@ -317,15 +456,15 @@ extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
         if tableView.isEditing != true,
             let cell = tableView.cellForRow(at: indexPath) {
             let backgroundView = UIView(), holderView = UIView()
-            backgroundView.backgroundColor = backgroundColor
+            backgroundView.backgroundColor = theme?.selectedExpenseColor
             backgroundView.frame = CGRect(x: 8, y: 0, width: cell.frame.width - 16, height: cell.frame.height)
             backgroundView.layer.cornerRadius = 10
             holderView.addSubview(backgroundView)
             cell.selectedBackgroundView = holderView
             cell.backgroundView = holderView
             cell.tintColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-            cell.textLabel?.textColor = textColor
-            cell.detailTextLabel?.textColor = textColor
+            cell.textLabel?.textColor = theme?.selectedExpenseFontColor
+            cell.detailTextLabel?.textColor = theme?.selectedExpenseFontColor
             DispatchQueue.main.async() { () -> Void in
                 self.performSegue(withIdentifier: "goToEditExpense", sender: self)
             }
@@ -356,7 +495,7 @@ extension ExpensesViewController: UITableViewDelegate, UITableViewDataSource {
         expenseArray.remove(at: fromIndexPath.row)
         expenseArray.insert(rowToMove, at: toIndexPath.row)
         indexExpenseArray()
-        //saveExpenses()
+        sortInt = 0
     }
 }
 
