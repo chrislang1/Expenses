@@ -695,10 +695,9 @@
                                         </constraints>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cBo-kO-aMB">
-                                        <rect key="frame" x="247" y="85" width="150" height="48"/>
+                                        <rect key="frame" x="16" y="85" width="381" height="48"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="48" id="7hE-mO-Eue"/>
-                                            <constraint firstAttribute="width" constant="150" id="BXI-h4-1mT"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                         <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="15" maxY="0.0"/>
@@ -727,10 +726,9 @@
                                         </constraints>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MY5-oG-7Xa">
-                                        <rect key="frame" x="297" y="223" width="100" height="48"/>
+                                        <rect key="frame" x="16" y="223" width="381" height="48"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="48" id="j5f-c4-jNF"/>
-                                            <constraint firstAttribute="width" constant="100" id="u1G-z6-f8E"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                         <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="15" maxY="0.0"/>
@@ -754,6 +752,7 @@
                                     <constraint firstItem="GD6-cW-Hja" firstAttribute="top" secondItem="MJh-K4-axo" secondAttribute="bottom" id="AZ1-tG-F1B"/>
                                     <constraint firstItem="9Bh-LH-aLw" firstAttribute="leading" secondItem="HSU-8i-pYF" secondAttribute="leading" constant="16" id="EmU-JV-RDS"/>
                                     <constraint firstItem="DGR-QA-jlE" firstAttribute="leading" secondItem="HSU-8i-pYF" secondAttribute="leading" constant="16" id="EnL-9s-5Fw"/>
+                                    <constraint firstItem="cBo-kO-aMB" firstAttribute="leading" secondItem="HSU-8i-pYF" secondAttribute="leading" constant="16" id="Hgt-8K-ViL"/>
                                     <constraint firstItem="cBo-kO-aMB" firstAttribute="centerY" secondItem="GD6-cW-Hja" secondAttribute="centerY" id="Jb7-nE-aBW"/>
                                     <constraint firstItem="MJh-K4-axo" firstAttribute="leading" secondItem="HSU-8i-pYF" secondAttribute="leading" constant="16" id="KMF-sh-SVs"/>
                                     <constraint firstItem="909-dk-cXv" firstAttribute="leading" secondItem="HSU-8i-pYF" secondAttribute="leading" constant="16" id="Kps-fs-r7R"/>
@@ -763,6 +762,7 @@
                                     <constraint firstItem="MJh-K4-axo" firstAttribute="top" secondItem="HSU-8i-pYF" secondAttribute="top" constant="61" id="XBb-hP-8lB"/>
                                     <constraint firstItem="9Bh-LH-aLw" firstAttribute="top" secondItem="909-dk-cXv" secondAttribute="bottom" id="XEI-dE-bJ5"/>
                                     <constraint firstAttribute="trailing" secondItem="hOk-4z-5aH" secondAttribute="trailing" constant="17" id="Xec-uu-IN5"/>
+                                    <constraint firstItem="MY5-oG-7Xa" firstAttribute="leading" secondItem="HSU-8i-pYF" secondAttribute="leading" constant="16" id="cBg-8x-iTg"/>
                                     <constraint firstItem="GD6-cW-Hja" firstAttribute="leading" secondItem="HSU-8i-pYF" secondAttribute="leading" constant="16" id="cNx-ih-7Xa"/>
                                     <constraint firstItem="DGR-QA-jlE" firstAttribute="top" secondItem="sKX-gK-n2P" secondAttribute="bottom" constant="8" id="cd9-nR-gXu"/>
                                     <constraint firstItem="hBn-Kw-35R" firstAttribute="leading" secondItem="HSU-8i-pYF" secondAttribute="leading" constant="16" id="cvz-Zf-gfe"/>
@@ -815,7 +815,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="En3-5v-O7K" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3520.8000000000002" y="933.62068965517244"/>
+            <point key="canvasLocation" x="3520.289855072464" y="933.01630434782612"/>
         </scene>
         <!--App Icon-->
         <scene sceneID="un3-0y-pjo">

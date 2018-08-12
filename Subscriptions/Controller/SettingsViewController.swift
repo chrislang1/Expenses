@@ -202,7 +202,7 @@ class SettingsViewController: UIViewController, SortExpenseDelegate {
     }
     
     @IBAction func feedbackButtonPressed(_ sender: UIButton) {
-        if let url = NSURL(string: "http://www.alexvanderzon.com/expenses/"){
+        if let url = NSURL(string: "http://christopherlang.com.au/expenses/"){
             UIApplication.shared.open(url as URL, options: [:], completionHandler: nil)
         }
     }
